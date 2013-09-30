@@ -1,30 +1,13 @@
-/**
- *  \file IMP/isd/MultivariateFNormalSufficient.h
- *  \brief Normal distribution of Function
- *
- *  Copyright 2007-2013 IMP Inventors. All rights reserved.
- */
+#ifndef MULTIVARIATE_FNORMAL_SUFFICIENT_H
+#define MULTIVARIATE_FNORMAL_SUFFICIENT_H
 
-#ifndef IMPISD_MULTIVARIATE_FNORMAL_SUFFICIENT_H
-#define IMPISD_MULTIVARIATE_FNORMAL_SUFFICIENT_H
-
-#include <IMP/isd/isd_config.h>
-#include "internal/timer.h"
-#include <IMP/macros.h>
-#include <IMP/kernel/Model.h>
-#include <IMP/constants.h>
-#include <IMP/base/Object.h>
-#include <math.h>
+#include "macros.h"
+#include <vector>
 #include <Eigen/Dense>
 #include <Eigen/Cholesky>
-#include <IMP/isd/internal/cg_eigen.h>
 
-IMPISD_BEGIN_NAMESPACE
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
-
-//IMP_MVN_TIMER_NFUNCS is the number of functions used by the timer
-#define IMP_MVN_TIMER_NFUNCS 11
 
 //! MultivariateFNormalSufficient
 /** Probability density function and -log(p) of multivariate normal
@@ -85,7 +68,7 @@ using Eigen::VectorXd;
  *
  */
 
-class IMPISDEXPORT MultivariateFNormalSufficient : public base::Object
+class MultivariateFNormalSufficient
 {
 
 private:
@@ -102,14 +85,7 @@ private:
        flag_W_, flag_Sigma_, flag_epsilon_,
        flag_PW_, flag_P_, flag_ldlt_, flag_norms_,
        flag_Peps_;
-  //cg-related variables
-  MatrixXd precond_;
-  bool use_cg_, first_PW_, first_PWP_;
-  double cg_tol_;
   double factor_;
-  base::Pointer<internal::ConjugateGradientEigen> cg_;
-
-  internal::CallTimer<IMP_MVN_TIMER_NFUNCS> timer_;
 
  public:
      /** Initialize with all observed data
@@ -191,9 +167,6 @@ private:
   //if you want to force a recomputation of all stored variables
   void reset_flags();
 
-  // use conjugate gradients (default false)
-  void set_use_cg(bool use, double tol);
-
   // print runtime statistics
   void stats() const;
 
@@ -221,18 +194,7 @@ private:
    */
   double get_minus_log_normalization() const;
 
-  /* remaining stuff */
-  IMP_OBJECT_METHODS(MultivariateFNormalSufficient);
-  /*IMP_OBJECT_INLINE(MultivariateFNormalSufficient,
-          out << "MultivariateFNormalSufficient: "
-          << N_ << " observations of "
-          <<  M_ << " variables " <<std::endl,
-          {});*/
-
  private:
-
-  //conjugate gradient init
-  void setup_cg();
 
   //precision matrix
   MatrixXd get_P() const;
@@ -241,7 +203,6 @@ private:
   //precision * W
   MatrixXd get_PW() const;
   MatrixXd compute_PW_direct() const;
-  MatrixXd compute_PW_cg() const;
   void set_PW(const MatrixXd& PW);
 
   //precision * epsilon
@@ -276,6 +237,4 @@ private:
 
 };
 
-IMPISD_END_NAMESPACE
-
-#endif  /* IMPISD_MULTIVARIATE_FNORMAL_SUFFICIENT_H */
+#endif  /* MULTIVARIATE_FNORMAL_SUFFICIENT_H */

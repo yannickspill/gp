@@ -1,31 +1,25 @@
-/**
- *  \file test_MultivariateFNormalSufficient.cpp
- *  \brief testing of the Multivariate FNormal.
- *
- *  Copyright 2007-2013 IMP Inventors. All rights reserved.
- *
- */
-#include <IMP/isd/MultivariateFNormalSufficient.h>
-#include <IMP/isd/FNormal.h>
-#include <IMP/macros.h>
-#include <IMP/base/Pointer.h>
-#include <IMP/base/exception.h>
+#include "MultivariateFNormalSufficient.h"
+#include "FNormal.h"
+#include "macros.h"
 #include <math.h>
-#include <IMP/base/random.h>
+#include <boost/random.hpp>
+#include <boost/generator_iterator.hpp>
+#include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_real.hpp>
 #include <Eigen/Dense>
 
 namespace {
 
-using namespace IMP::isd;
-
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using Eigen::VectorXi;
 
-boost::uniform_real<> uniform(0,1);
+typedef boost::mt19937 RNGType;
+RNGType generator;
 
-#define rand() uniform(IMP::base::random_number_generator)
+boost::uniform_real<> uniform(0,1);
+boost::variate_generator< RNGType, boost::uniform_real<> > 
+    rand(generator, uniform);
 
 #define FAIL(str) {std::cout << str << std::endl; return false;}
 
@@ -70,8 +64,8 @@ bool naeq(double a, double b, double delta=1e-7){
 //test when M=100 and N=10
 bool test_sanity(){
     //observation matrix
-    int M=1+floor(rand()*100);
-    int N=1+floor(rand()*100);
+    int M=1+int(floor(rand()*100));
+    int N=1+int(floor(rand()*100));
     MatrixXd FA(N,M);
     for (int i=0; i<N; i++){
         for (int j=0; j<M; j++){
@@ -91,7 +85,7 @@ bool test_sanity(){
             Sigma(i,i)=1+rand()*10;
     }
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
     //mv->set_was_used(true);
 
     {
@@ -135,9 +129,9 @@ bool test_degenerate(){
     MatrixXd Sigma(1,1);
     Sigma(0,0)=1.0+rand();
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
     //mv->set_was_used(true);
-    IMP_NEW(IMP::isd::FNormal, fn, (FA(0,0),JA,FM(0),sqrt(Sigma(0,0))));
+    NEWPTR(FNormal, fn, (FA(0,0),JA,FM(0),sqrt(Sigma(0,0))));
     //fn->set_was_used(true);
 
     {
@@ -188,13 +182,13 @@ bool test_degenerate_N2M1(){
     MatrixXd Sigma(1,1);
     Sigma(0,0)=1.0+rand();
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
     //double mean =(FA(0,0)+FA(1,0))/2.0;
-    //double ss = (IMP::square(FA(0,0) - mean) + IMP::square(FA(1,0) - mean));
+    //double ss = (SQUARE(FA(0,0) - mean) + SQUARE(FA(1,0) - mean));
     //PRINT(" epsilon " << mean-FM(0) << " ss " << ss);
     //mv->set_was_used(true);
-    IMP_NEW(IMP::isd::FNormal, fn, (FA(0,0),JA,FM(0),sqrt(Sigma(0,0))));
-    IMP_NEW(IMP::isd::FNormal, fn2, (FA(1,0),JA,FM(0),sqrt(Sigma(0,0))));
+    NEWPTR(FNormal, fn, (FA(0,0),JA,FM(0),sqrt(Sigma(0,0))));
+    NEWPTR(FNormal, fn2, (FA(1,0),JA,FM(0),sqrt(Sigma(0,0))));
     //fn->set_was_used(true);
 
     {
@@ -202,9 +196,9 @@ bool test_degenerate_N2M1(){
     double observed=mv->evaluate();
     double expected=fn->evaluate()+fn2->evaluate();
     //double mean =(FA(0,0)+FA(1,0))/2.0;
-    //double meandist = 2.0*IMP::square(mean-FM(0))/Sigma(0,0);
-    //double ss = (IMP::square(FA(0,0) - mean)
-    //  + IMP::square(FA(1,0) - mean))/Sigma(0,0);
+    //double meandist = 2.0*SQUARE(mean-FM(0))/Sigma(0,0);
+    //double ss = (SQUARE(FA(0,0) - mean)
+    //  + SQUARE(FA(1,0) - mean))/Sigma(0,0);
     //PRINT(" eval " << observed << " " << expected
     //      << " " << meandist << " " << ss);
     if (naeq(observed,expected)) FAIL("evaluate");
@@ -252,13 +246,13 @@ bool test_degenerate_N1M2(){
     Sigma << 1.0+rand(), 0.0,
              0.0, 1.0+rand();
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
     //double mean =(FA(0,0)+FA(1,0))/2.0;
-    //double ss = (IMP::square(FA(0,0) - mean) + IMP::square(FA(1,0) - mean));
+    //double ss = (SQUARE(FA(0,0) - mean) + SQUARE(FA(1,0) - mean));
     //PRINT(" epsilon " << mean-FM(0) << " ss " << ss);
     //mv->set_was_used(true);
-    IMP_NEW(IMP::isd::FNormal, fn, (FA(0,0),JA,FM(0),sqrt(Sigma(0,0))));
-    IMP_NEW(IMP::isd::FNormal, fn2, (FA(0,1),JA,FM(1),sqrt(Sigma(1,1))));
+    NEWPTR(FNormal, fn, (FA(0,0),JA,FM(0),sqrt(Sigma(0,0))));
+    NEWPTR(FNormal, fn2, (FA(0,1),JA,FM(1),sqrt(Sigma(1,1))));
     //fn->set_was_used(true);
 
     {
@@ -266,9 +260,9 @@ bool test_degenerate_N1M2(){
     double observed=mv->evaluate();
     double expected=fn->evaluate()+fn2->evaluate();
     //double mean =(FA(0,0)+FA(1,0))/2.0;
-    //double meandist = 2.0*IMP::square(mean-FM(0))/Sigma(0,0);
-    //double ss = (IMP::square(FA(0,0) - mean)
-    //              + IMP::square(FA(1,0) - mean))/Sigma(0,0);
+    //double meandist = 2.0*SQUARE(mean-FM(0))/Sigma(0,0);
+    //double ss = (SQUARE(FA(0,0) - mean)
+    //              + SQUARE(FA(1,0) - mean))/Sigma(0,0);
     //PRINT(" eval " << observed << " " << expected
     //              << " " << meandist << " " << ss);
     if (naeq(observed,expected)) FAIL("evaluate");
@@ -316,10 +310,10 @@ bool test_1D(int N){
     MatrixXd Sigma(1,1);
     Sigma(0,0) = rand()*10;
 
-    IMP_NEW(IMP::isd::FNormal, fn, (FA(0,0),JA,FM(0),sqrt(Sigma(0,0))));
-    //IMP_NEW(IMP::isd::FNormal, fn2, (FA(0,1),JA,FM(1),sqrt(Sigma(0,0))));
+    NEWPTR(FNormal, fn, (FA(0,0),JA,FM(0),sqrt(Sigma(0,0))));
+    //NEWPTR(FNormal, fn2, (FA(0,1),JA,FM(1),sqrt(Sigma(0,0))));
     //fn->set_was_used(true);
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
     //mv->set_was_used(true);
 
     //compute sufficient statistics
@@ -329,15 +323,15 @@ bool test_1D(int N){
     }
     double sum_squares = 0;
     for (int i=0; i<N; i++){
-        sum_squares += IMP::square(FA(i,0) - sample_mean);
+        sum_squares += SQUARE(FA(i,0) - sample_mean);
     }
 
     {
     //test evaluate()
     double observed=mv->evaluate();
     double sigma=sqrt(Sigma(0,0));
-    double expected=double(N)*log((sqrt(2*IMP::PI)*sigma)) +
-        1/(2*sigma*sigma) * (double(N)*IMP::square(sample_mean - FM(0))
+    double expected=double(N)*log((sqrt(2*PI)*sigma)) +
+        1/(2*sigma*sigma) * (double(N)*SQUARE(sample_mean - FM(0))
                 + sum_squares);
     //PRINT("evaluate " << observed << " " << expected << " "
     //          << fn->evaluate() + fn2->evaluate());
@@ -347,8 +341,8 @@ bool test_1D(int N){
     {
     //test density()
     double observed = mv->density();
-    double expected=pow(2*IMP::PI*Sigma(0,0),-N/2.0) * exp(
-            -0.5/Sigma(0,0)*( (double)N*IMP::square(sample_mean - FM(0))
+    double expected=pow(2*PI*Sigma(0,0),-N/2.0) * exp(
+            -0.5/Sigma(0,0)*( (double)N*SQUARE(sample_mean - FM(0))
                     + sum_squares ));
     //PRINT("density " << observed << " " << expected << " " << fn->density());
     if (naeq(observed,expected)) FAIL("density");
@@ -366,8 +360,8 @@ bool test_1D(int N){
     //test evaluate_derivative_Sigma()
     MatrixXd observed = mv->evaluate_derivative_Sigma();
     double expected = (double)N/(2.0*Sigma(0,0))
-        - 0.5 / IMP::square(Sigma(0,0))
-            * ((double)N*IMP::square(sample_mean - FM(0)) + sum_squares);
+        - 0.5 / SQUARE(Sigma(0,0))
+            * ((double)N*SQUARE(sample_mean - FM(0)) + sum_squares);
     //PRINT("Sigma " << observed(0,0) << " " << expected
     //          << " " << fn->evaluate_derivative_sigma()/(2*sqrt(Sigma(0,0))));
     if (naeq(observed(0,0),expected)) FAIL("evaluate_derivative_Sigma");
@@ -406,15 +400,15 @@ bool test_2D(){
     //P(0,1)=factor*rho/(sigma1*sigma2);
     //P(1,0)=factor*rho/(sigma1*sigma2);
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
     //mv->set_was_used(true);
 
     {
     //evaluate
     double observed=mv->evaluate();
-    double expected=log(2*IMP::PI*sigma1*sigma2*sqrt(1-rho*rho)) +
-        1/(2*(1-rho*rho)) * ( IMP::square(FA(0,0) - FM(0))/(sigma1*sigma1)
-                + IMP::square(FA(0,1)-FM(1))/(sigma2*sigma2)
+    double expected=log(2*PI*sigma1*sigma2*sqrt(1-rho*rho)) +
+        1/(2*(1-rho*rho)) * ( SQUARE(FA(0,0) - FM(0))/(sigma1*sigma1)
+                + SQUARE(FA(0,1)-FM(1))/(sigma2*sigma2)
                 - 2*rho*(FA(0,0)-FM(0))*(FA(0,1)-FM(1))/(sigma1*sigma2));
     if (naeq(observed,expected)) FAIL("evaluate");
     }
@@ -422,9 +416,9 @@ bool test_2D(){
     {
     //density
     double observed=mv->density();
-    double expected=1/(2*IMP::PI*sigma1*sigma2*sqrt(1-rho*rho))*exp(
-        -1/(2*(1-rho*rho)) * ( IMP::square(FA(0,0) - FM(0))/(sigma1*sigma1)
-            + IMP::square(FA(0,1)-FM(1))/(sigma2*sigma2)
+    double expected=1/(2*PI*sigma1*sigma2*sqrt(1-rho*rho))*exp(
+        -1/(2*(1-rho*rho)) * ( SQUARE(FA(0,0) - FM(0))/(sigma1*sigma1)
+            + SQUARE(FA(0,1)-FM(1))/(sigma2*sigma2)
                 - 2*rho*(FA(0,0)-FM(0))*(FA(0,1)-FM(1))/(sigma1*sigma2)));
     if (naeq(observed,expected)) FAIL("density");
     }
@@ -446,20 +440,20 @@ bool test_2D(){
     double eps1=FA(0,0)-FM(0);
     double eps2=FA(0,1)-FM(1);
     MatrixXd observed=mv->evaluate_derivative_Sigma();
-    double expected=0.5/IMP::square(det)
-        * (   IMP::square(Sigma(1,1)) * (Sigma(0,0) - IMP::square(eps1))
-            - IMP::square(Sigma(0,1)) * (Sigma(1,1) + IMP::square(eps2))
+    double expected=0.5/SQUARE(det)
+        * (   SQUARE(Sigma(1,1)) * (Sigma(0,0) - SQUARE(eps1))
+            - SQUARE(Sigma(0,1)) * (Sigma(1,1) + SQUARE(eps2))
             + 2*Sigma(0,1)*Sigma(1,1)*eps1*eps2 );
     if (naeq(observed(0,0),expected)) FAIL("derivative_Sigma(0,0)");
-    expected=0.5/IMP::square(det)
-        * (   IMP::square(Sigma(0,0)) * (Sigma(1,1) - IMP::square(eps2))
-            - IMP::square(Sigma(1,0)) * (Sigma(0,0) + IMP::square(eps1))
+    expected=0.5/SQUARE(det)
+        * (   SQUARE(Sigma(0,0)) * (Sigma(1,1) - SQUARE(eps2))
+            - SQUARE(Sigma(1,0)) * (Sigma(0,0) + SQUARE(eps1))
             + 2*Sigma(1,0)*Sigma(0,0)*eps2*eps1 );
     if (naeq(observed(1,1),expected)) FAIL("derivative_Sigma(1,1)");
-    expected=0.5/IMP::square(det)
+    expected=0.5/SQUARE(det)
         * ( Sigma(0,1)*(-det
-                     +Sigma(1,1)*IMP::square(eps1)+Sigma(0,0)*IMP::square(eps2))
-            - eps1*eps2*(IMP::square(Sigma(1,0))+Sigma(0,0)*Sigma(1,1)) );
+                     +Sigma(1,1)*SQUARE(eps1)+Sigma(0,0)*SQUARE(eps2))
+            - eps1*eps2*(SQUARE(Sigma(1,0))+Sigma(0,0)*Sigma(1,1)) );
     if (naeq(observed(0,1),expected)) FAIL("derivative_Sigma(0,1)");
     if (naeq(observed(1,0),expected)) FAIL("derivative_Sigma(1,0)");
     }
@@ -489,7 +483,7 @@ bool test_100D(){
             Sigma(i,i)=1.0;
     }
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
     //mv->set_was_used(true);
 
     {
@@ -527,9 +521,9 @@ bool test_factor(){
 
     double factor = 10*(rand()+1);
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,
                                                     factor*factor*Sigma));
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mvf, (FA,JA,FM,
+    NEWPTR(MultivariateFNormalSufficient, mvf, (FA,JA,FM,
                                                     Sigma,factor));
     //mv->set_was_used(true);
 
@@ -558,7 +552,7 @@ bool test_factor(){
     //change factor and test again
     factor = 10*(rand()+1);
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv2, (FA,JA,FM,
+    NEWPTR(MultivariateFNormalSufficient, mv2, (FA,JA,FM,
                                                     factor*factor*Sigma));
     mvf->set_factor(factor);
 
@@ -612,9 +606,9 @@ bool test_sparseness(){
             Sigma(i,i)+=1;
     }
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mvsp, (FA,JA,FM,Sigma));
+    NEWPTR(MultivariateFNormalSufficient, mvsp, (FA,JA,FM,Sigma));
     mvsp->set_W_nonzero(true,1e-7);
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,Sigma));
 
     {
     //evaluate
@@ -667,7 +661,7 @@ bool gen_2D(){
     P(0,1)=factor*rho/(sigma1*sigma2);
     P(1,0)=factor*rho/(sigma1*sigma2);
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,P));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,P));
     //mv->set_was_used(true);
 
     for (int i=0; i<1000; i++){
@@ -700,14 +694,14 @@ bool test_degenerate_2(int N){
     //Precision matrix
     MatrixXd P(1,1,1.0+rand());
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,P));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,P));
     //mv->set_was_used(true);
-    base::Pointer<IMP::isd::MultivariateFNormalSufficient> * fn;
-    fn = new base::Pointer<IMP::isd::MultivariateFNormalSufficient> (N);
+    base::Pointer<MultivariateFNormalSufficient> * fn;
+    fn = new base::Pointer<MultivariateFNormalSufficient> (N);
     for (int i=0; i< N; i++){
         MatrixXd a(1,1,FA(i,0));
         VectorXd m(1,FM(i));
-        fn(i) = new IMP::isd::MultivariateFNormalSufficient(a,JA,m,P);
+        fn(i) = new MultivariateFNormalSufficient(a,JA,m,P);
         //fn(i)->set_was_used(true);
     }
 
@@ -768,18 +762,18 @@ bool test_mu(int N){
     //Precision matrix
     MatrixXd P(1,1,1.1);
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,P));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,P));
     //mv->set_was_used(true);
-    base::Pointer<IMP::isd::MultivariateFNormalSufficient> * fn;
-    base::Pointer<IMP::isd::FNormal> * fn2;
-    fn = new base::Pointer<IMP::isd::MultivariateFNormalSufficient> (N);
-    fn2 = new base::Pointer<IMP::isd::FNormal> (N);
+    base::Pointer<MultivariateFNormalSufficient> * fn;
+    base::Pointer<FNormal> * fn2;
+    fn = new base::Pointer<MultivariateFNormalSufficient> (N);
+    fn2 = new base::Pointer<FNormal> (N);
     for (int i=0; i< N; i++){
         MatrixXd a(1,1,FA(i,0));
         VectorXd m(1,FM(i));
-        fn(i) = new IMP::isd::MultivariateFNormalSufficient(a,JA,m,P);
+        fn(i) = new MultivariateFNormalSufficient(a,JA,m,P);
         //fn(i)->set_was_used(true);
-        fn2(i) = new IMP::isd::FNormal(a(0,0),JA,m(0),1/sqrt(P(0,0)));
+        fn2(i) = new FNormal(a(0,0),JA,m(0),1/sqrt(P(0,0)));
         //fn2(i)->set_was_used(true);
     }
 
@@ -824,18 +818,18 @@ bool test_test(int N){
     //Precision matrix
     MatrixXd P(1,1,1.1);
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,P));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,P));
     //mv->set_was_used(true);
-    base::Pointer<IMP::isd::MultivariateFNormalSufficient> * fn;
-    base::Pointer<IMP::isd::FNormal> * fn2;
-    fn = new base::Pointer<IMP::isd::MultivariateFNormalSufficient> (N);
-    fn2 = new base::Pointer<IMP::isd::FNormal> (N);
+    base::Pointer<MultivariateFNormalSufficient> * fn;
+    base::Pointer<FNormal> * fn2;
+    fn = new base::Pointer<MultivariateFNormalSufficient> (N);
+    fn2 = new base::Pointer<FNormal> (N);
     for (int i=0; i< N; i++){
         MatrixXd a(1,1,FA(i,0));
         VectorXd m(1,FM(i));
-        fn(i) = new IMP::isd::MultivariateFNormalSufficient(a,JA,m,P);
+        fn(i) = new MultivariateFNormalSufficient(a,JA,m,P);
         //fn(i)->set_was_used(true);
-        fn2(i) = new IMP::isd::FNormal(a(0,0),JA,m(0),1/sqrt(P(0,0)));
+        fn2(i) = new FNormal(a(0,0),JA,m(0),1/sqrt(P(0,0)));
         //fn2(i)->set_was_used(true);
     }
 
@@ -875,12 +869,12 @@ bool test_degenerate_N(int N){
     //Precision matrix
     MatrixXd P(1,1,1.0+rand());
 
-    IMP_NEW(IMP::isd::MultivariateFNormalSufficient, mv, (FA,JA,FM,P));
+    NEWPTR(MultivariateFNormalSufficient, mv, (FA,JA,FM,P));
     //mv->set_was_used(true);
-    base::Pointer<IMP::isd::FNormal> * fn;
-    fn = new base::Pointer<IMP::isd::FNormal> (N);
+    base::Pointer<FNormal> * fn;
+    fn = new base::Pointer<FNormal> (N);
     for (int i=0; i< N; i++){
-        fn(i) = new IMP::isd::FNormal(FA(i,0),JA,FM(i),sqrt(1.0/P(0,0)));
+        fn(i) = new FNormal(FA(i,0),JA,FM(i),sqrt(1.0/P(0,0)));
         //fn(i)->set_was_used(true);
     }
 
@@ -931,7 +925,6 @@ bool test_degenerate_N(int N){
 }
 
 int main(int, char *[]) {
-    try {
     //test_mu(20);
     //return 0;
     //for (int i=1; i<100; i++){
@@ -973,7 +966,4 @@ int main(int, char *[]) {
     //PRINT("setting values");
     //RUNTEST(test_setval,1);
     return 0;
-    } catch (const IMP::base::ExceptionBase &e) {
-        std::cerr << e.what() << std::endl;
-    }
 }
