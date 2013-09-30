@@ -13,7 +13,7 @@
 *.a
 
 #build folder
-build/
+build/*
 
 #vim swap files
 *.swp
