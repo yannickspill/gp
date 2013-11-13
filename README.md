@@ -1,5 +1,18 @@
-Gaussian Process implementation without IMP dependency
+Standalone Gaussian Process implementation
 ==
+
+Aim
+=
+
+- Depend only on open-source libraries
+  - Eigen (matrix manipulation)
+  - GSL (optimization)
+- Be easily interfaceable
+  - R module
+  - IMP module
+
+Build
+=
 
 To build without comments:
 ```
