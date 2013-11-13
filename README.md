@@ -1,9 +1,11 @@
-Standalone Gaussian Process implementation
-==
+C++ Gaussian Process library
+===
 
 Aim
-=
+---
 
+- Be fast
+- Scale well
 - Depend only on open-source libraries
   - Eigen (matrix manipulation)
   - GSL (optimization)
@@ -12,7 +14,7 @@ Aim
   - IMP module
 
 Build
-=
+---
 
 In what follows, the repository is expected to be in ./src and the library will
 be built in ./build
