@@ -17,10 +17,10 @@ if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
     add_definitions(-DLOGGING)
 endif()
 
-include_directories(src bin)
+include_directories(include src bin)
 
 add_library(MVN
-    src/MultivariateFNormalSufficient.h src/MultivariateFNormalSufficient.cpp)
+    include/MultivariateFNormalSufficient.h src/MultivariateFNormalSufficient.cpp)
 
 #test MVN
 add_executable(TestMVN bin/test_MultivariateFNormalSufficient.cpp)
