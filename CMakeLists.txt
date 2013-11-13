@@ -5,10 +5,10 @@ project (GaussianProcess)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CmakeModules/")
 
 #dependencies
+find_package(Boost REQUIRED)
+include_directories(${BOOST_INCLUDE_DIR})
 find_package(Eigen3 3.2.0 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
-#INCLUDE(FindPkgConfig)
-#PKG_CHECK_MODULES(Eigen3 "Eigen >= 3.2.0")
 find_package(GSL REQUIRED)
 include_directories(${GSL_INCLUDE_DIRS})
 #target_link_libraries(GaussianProcess ${GSL_LIBRARIES})
