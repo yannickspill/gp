@@ -14,17 +14,20 @@ Aim
 Build
 =
 
+In what follows, the repository is expected to be in ./src and the library will
+be built in ./build
+
 To build without comments:
 ```
 cd build
-cmake ../ -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake ../src -G Ninja -DCMAKE_BUILD_TYPE=Release
 ninja
 ```
 
 To build with logging
 ```
 cd build
-cmake ../ -G Ninja -DCMAKE_BUILD_TYPE=Debug
+cmake ../src -G Ninja -DCMAKE_BUILD_TYPE=Debug
 ninja
 ```
 
