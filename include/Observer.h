@@ -7,16 +7,18 @@ template <typename T> class Observer;
 
 //Subject of an observer pattern
 //stores a value and informs observers if it changed.
+//must be subclassed and define a protected setval() method
 template <typename T> class Subject
 {
     public:
         Subject(T value) : value_(value) {};
 
-        T get_value() const { return value_; }
+        T get() const { return value_; }
 
-        //notify observers when value changes
-        void set_value(T value) {
-            value_ = value;
+        void set(T value) {
+            //set value, operation happens in child
+            setval(value);
+            //notify observers when value changes
             typename std::set<Observer<T> *>::iterator it;
             for (it = observers_.begin(); it != observers_.end(); ++it)
                 (*it)->notify(this);
@@ -34,12 +36,18 @@ template <typename T> class Subject
 
         virtual ~Subject() {};
 
-    private:
+    protected:
+        //these two are used in the child.
+        virtual void setval(T value) = 0;
         T value_;
+
+    private:
         typename std::set<Observer<T> *> observers_;
 };
 
-
+//Observer of an observer pattern
+//has a notify() call that takes a subject as parameter
+//must be subclassed and implement notify
 template <typename T> class Observer
 {
     public:
