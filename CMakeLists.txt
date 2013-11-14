@@ -25,7 +25,8 @@ add_library(MVN
 
 #test subject/observer
 add_executable(TestObserver bin/test_Observer.cpp)
-
+#test Scalar
+add_executable(TestScalar bin/test_Scalar.cpp)
 #test MVN
 add_executable(TestMVN bin/test_MultivariateFNormalSufficient.cpp)
 target_link_libraries(TestMVN MVN)
