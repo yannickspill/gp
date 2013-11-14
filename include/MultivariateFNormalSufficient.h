@@ -68,173 +68,168 @@ using Eigen::VectorXd;
  *
  */
 
-class MultivariateFNormalSufficient
-{
+class MultivariateFNormalSufficient {
 
-private:
+   private:
+    VectorXd FM_, Fbar_, epsilon_, Peps_;
+    double JF_, lJF_, norm_, lnorm_;
+    MatrixXd P_, W_, Sigma_, FX_, PW_;
+    int N_;  // number of repetitions
+    int M_;  // number of variables
+    // Eigen::LLT<MatrixXd, Eigen::Upper> ldlt_;
+    Eigen::LDLT<MatrixXd, Eigen::Upper> ldlt_;
+    // flags are true if the corresponding object is up to date.
+    bool flag_FM_, flag_FX_, flag_Fbar_, flag_W_, flag_Sigma_, flag_epsilon_,
+        flag_PW_, flag_P_, flag_ldlt_, flag_norms_, flag_Peps_;
+    double factor_;
 
-  VectorXd FM_, Fbar_, epsilon_,Peps_;
-  double JF_,lJF_,norm_,lnorm_;
-  MatrixXd P_,W_,Sigma_,FX_,PW_;
-  int N_; //number of repetitions
-  int M_; //number of variables
-  //Eigen::LLT<MatrixXd, Eigen::Upper> ldlt_;
-  Eigen::LDLT<MatrixXd, Eigen::Upper> ldlt_;
-  //flags are true if the corresponding object is up to date.
-  bool flag_FM_, flag_FX_, flag_Fbar_,
-       flag_W_, flag_Sigma_, flag_epsilon_,
-       flag_PW_, flag_P_, flag_ldlt_, flag_norms_,
-       flag_Peps_;
-  double factor_;
+   public:
+    /** Initialize with all observed data
+* \param [in] FX F(X) matrix of observations with M columns and N rows.
+* \param [in] JF J(F) determinant of Jacobian of F with respect to
+*                 observation matrix X.
+* \param [in] FM F(M) mean vector \f$F(\mu)\f$ of size M.
+* \param [in] Sigma : MxM variance-covariance matrix \f$\Sigma\f$.
+* \param [in] factor : multiplicative factor (default 1)
+* */
+    MultivariateFNormalSufficient(const MatrixXd& FX, double JF,
+                                  const VectorXd& FM, const MatrixXd& Sigma,
+                                  double factor = 1);
 
- public:
-     /** Initialize with all observed data
- * \param [in] FX F(X) matrix of observations with M columns and N rows.
- * \param [in] JF J(F) determinant of Jacobian of F with respect to
- *                 observation matrix X.
- * \param [in] FM F(M) mean vector \f$F(\mu)\f$ of size M.
- * \param [in] Sigma : MxM variance-covariance matrix \f$\Sigma\f$.
- * \param [in] factor : multiplicative factor (default 1)
- * */
-  MultivariateFNormalSufficient(const MatrixXd& FX, double JF,
-            const VectorXd& FM, const MatrixXd& Sigma, double factor=1);
+    /** Initialize with sufficient statistics
+* \param [in] Fbar : M-dimensional vector of mean observations.
+* \param [in] JF J(F) determinant of Jacobian of F with respect to observation
+*                  matrix X.
+* \param [in] FM F(M) : M-dimensional true mean vector \f$\mu\f$.
+* \param [in] Nobs : number of observations for each variable.
+* \param [in] W : MxM matrix of sample variance-covariances.
+* \param [in] Sigma : MxM variance-covariance matrix Sigma.
+* \param [in] factor : multiplicative factor (default 1)
+* */
+    MultivariateFNormalSufficient(const VectorXd& Fbar, double JF,
+                                  const VectorXd& FM, int Nobs,
+                                  const MatrixXd& W, const MatrixXd& Sigma,
+                                  double factor = 1);
 
-     /** Initialize with sufficient statistics
- * \param [in] Fbar : M-dimensional vector of mean observations.
- * \param [in] JF J(F) determinant of Jacobian of F with respect to observation
- *                  matrix X.
- * \param [in] FM F(M) : M-dimensional true mean vector \f$\mu\f$.
- * \param [in] Nobs : number of observations for each variable.
- * \param [in] W : MxM matrix of sample variance-covariances.
- * \param [in] Sigma : MxM variance-covariance matrix Sigma.
- * \param [in] factor : multiplicative factor (default 1)
- * */
-  MultivariateFNormalSufficient(const VectorXd& Fbar, double JF,
-            const VectorXd& FM, int Nobs,  const MatrixXd& W,
-            const MatrixXd& Sigma, double factor=1);
+    /* probability density function */
+    double density() const;
 
-  /* probability density function */
-  double density() const;
+    /* energy (score) functions, aka -log(p) */
+    double evaluate() const;
 
-  /* energy (score) functions, aka -log(p) */
-  double evaluate() const;
+    /* gradient of the energy wrt the mean F(M) */
+    VectorXd evaluate_derivative_FM() const;
 
-  /* gradient of the energy wrt the mean F(M) */
-  VectorXd evaluate_derivative_FM() const;
+    /* gradient of the energy wrt the variance-covariance matrix Sigma */
+    MatrixXd evaluate_derivative_Sigma() const;
 
-  /* gradient of the energy wrt the variance-covariance matrix Sigma */
-  MatrixXd evaluate_derivative_Sigma() const;
+    // derivative wrt scalar factor
+    double evaluate_derivative_factor() const;
 
-  // derivative wrt scalar factor
-  double evaluate_derivative_factor() const;
+    /* second derivative wrt FM and FM */
+    MatrixXd evaluate_second_derivative_FM_FM() const;
 
-  /* second derivative wrt FM and FM */
-  MatrixXd evaluate_second_derivative_FM_FM() const;
+    /* second derivative wrt FM(l) and Sigma
+     * row and column indices in the matrix returned are for Sigma
+     */
+    MatrixXd evaluate_second_derivative_FM_Sigma(unsigned l) const;
 
-  /* second derivative wrt FM(l) and Sigma
-   * row and column indices in the matrix returned are for Sigma
-   */
-  MatrixXd evaluate_second_derivative_FM_Sigma(unsigned l) const;
+    /* second derivative wrt Sigma and Sigma(k,l) */
+    MatrixXd evaluate_second_derivative_Sigma_Sigma(unsigned k,
+                                                    unsigned l) const;
 
-  /* second derivative wrt Sigma and Sigma(k,l) */
-  MatrixXd evaluate_second_derivative_Sigma_Sigma(unsigned k, unsigned l) const;
+    /* change of parameters */
+    void set_FX(const MatrixXd& f);
+    MatrixXd get_FX() const;
 
+    void set_Fbar(const VectorXd& f);
+    VectorXd get_Fbar() const;
 
-  /* change of parameters */
-  void set_FX(const MatrixXd& f);
-  MatrixXd get_FX() const;
+    void set_jacobian(double f);
+    double get_jacobian() const;
+    void set_minus_log_jacobian(double f);  //-log(J)
+    double get_minus_log_jacobian() const;
 
-  void set_Fbar(const VectorXd& f);
-  VectorXd get_Fbar() const;
+    void set_FM(const VectorXd& f);
+    VectorXd get_FM() const;
 
-  void set_jacobian(double f);
-  double get_jacobian() const;
-  void set_minus_log_jacobian(double f); //-log(J)
-  double get_minus_log_jacobian() const;
+    void set_W(const MatrixXd& f);
+    MatrixXd get_W() const;
 
-  void set_FM(const VectorXd& f);
-  VectorXd get_FM() const;
+    void set_Sigma(const MatrixXd& f);
+    MatrixXd get_Sigma() const;
 
-  void set_W(const MatrixXd& f);
-  MatrixXd get_W() const;
+    void set_factor(double f);
+    double get_factor() const;
 
-  void set_Sigma(const MatrixXd& f);
-  MatrixXd get_Sigma() const;
+    // if you want to force a recomputation of all stored variables
+    void reset_flags();
 
-  void set_factor(double f);
-  double get_factor() const;
+    // print runtime statistics
+    void stats() const;
 
-  //if you want to force a recomputation of all stored variables
-  void reset_flags();
+    // return Sigma's eigenvalues from smallest to biggest
+    VectorXd get_Sigma_eigenvalues() const;
 
-  // print runtime statistics
-  void stats() const;
+    // return Sigma's condition number
+    double get_Sigma_condition_number() const;
 
-  //return Sigma's eigenvalues from smallest to biggest
-  VectorXd get_Sigma_eigenvalues() const;
+    // Solve for Sigma*X = B, yielding X
+    MatrixXd solve(MatrixXd B) const;
 
-  //return Sigma's condition number
-  double get_Sigma_condition_number() const;
+    /* return transpose(epsilon)*P*epsilon */
+    double get_mean_square_residuals() const;
 
-  //Solve for Sigma*X = B, yielding X
-  MatrixXd solve(MatrixXd B) const;
+    /* return minus exponent
+     *  \f[-\frac{1}{2\sigma^2}
+     *   \sum_{i=1}^N {}^t(F(\mu) - F(x_i))\Sigma^{-1}(F(\mu)-F(x_i)) \f]
+     */
+    double get_minus_exponent() const;
 
-  /* return transpose(epsilon)*P*epsilon */
-  double get_mean_square_residuals() const;
+    /* return minus log normalization
+     * \f[\frac{N}{2}\left(\log(2\pi\sigma^2) + \log |\Sigma|\right)
+     * -\log J(F) \f]
+     */
+    double get_minus_log_normalization() const;
 
-  /* return minus exponent
-   *  \f[-\frac{1}{2\sigma^2}
-   *   \sum_{i=1}^N {}^t(F(\mu) - F(x_i))\Sigma^{-1}(F(\mu)-F(x_i)) \f]
-   */
-  double get_minus_exponent() const;
+   private:
+    // precision matrix
+    MatrixXd get_P() const;
+    void set_P(const MatrixXd& P);
 
-  /* return minus log normalization
-   * \f[\frac{N}{2}\left(\log(2\pi\sigma^2) + \log |\Sigma|\right)
-   * -\log J(F) \f]
-   */
-  double get_minus_log_normalization() const;
+    // precision * W
+    MatrixXd get_PW() const;
+    MatrixXd compute_PW_direct() const;
+    void set_PW(const MatrixXd& PW);
 
- private:
+    // precision * epsilon
+    VectorXd get_Peps() const;
+    void set_Peps(const VectorXd& Peps);
 
-  //precision matrix
-  MatrixXd get_P() const;
-  void set_P(const MatrixXd& P);
+    // epsilon = Fbar - FM
+    VectorXd get_epsilon() const;
+    void set_epsilon(const VectorXd& eps);
 
-  //precision * W
-  MatrixXd get_PW() const;
-  MatrixXd compute_PW_direct() const;
-  void set_PW(const MatrixXd& PW);
+    // gets factorization object
+    // Eigen::LLT<MatrixXd, Eigen::Upper> get_ldlt() const;
+    Eigen::LDLT<MatrixXd, Eigen::Upper> get_ldlt() const;
+    void set_ldlt(const Eigen::LDLT<MatrixXd, Eigen::Upper>& ldlt);
 
-  //precision * epsilon
-  VectorXd get_Peps() const;
-  void set_Peps(const VectorXd& Peps);
+    // compute determinant and norm
+    void set_norms(double norm, double lnorm);
+    std::vector<double> get_norms() const;
 
-  // epsilon = Fbar - FM
-  VectorXd get_epsilon() const;
-  void set_epsilon(const VectorXd& eps);
+    /* return trace(W.P) */
+    double trace_WP() const;
 
-  // gets factorization object
-  //Eigen::LLT<MatrixXd, Eigen::Upper> get_ldlt() const;
-  Eigen::LDLT<MatrixXd, Eigen::Upper> get_ldlt() const;
-  void set_ldlt(const Eigen::LDLT<MatrixXd, Eigen::Upper>& ldlt);
+    /* return P*epsilon*transpose(P*epsilon) */
+    MatrixXd compute_PTP() const;
 
-  // compute determinant and norm
-  void set_norms(double norm, double lnorm);
-  std::vector<double> get_norms() const;
+    /* return P * W * P, O(M^2) */
+    MatrixXd compute_PWP() const;
 
-  /* return trace(W.P) */
-  double trace_WP() const;
-
-  /* return P*epsilon*transpose(P*epsilon) */
-  MatrixXd compute_PTP() const;
-
-  /* return P * W * P, O(M^2) */
-  MatrixXd compute_PWP() const;
-
-  /*computes the discrepancy vector*/
-  void compute_epsilon();
-
-
+    /*computes the discrepancy vector*/
+    void compute_epsilon();
 };
 
-#endif  /* MULTIVARIATE_FNORMAL_SUFFICIENT_H */
+#endif /* MULTIVARIATE_FNORMAL_SUFFICIENT_H */

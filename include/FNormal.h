@@ -18,59 +18,47 @@
  *  program will not check for that.
  */
 
-class FNormal
-{
- public:
-  FNormal(double FA, double JA, double FM, double sigma) :
-    FA_(FA),
-    JA_(JA),
-    FM_(FM),
-    sigma_(sigma) {}
+class FNormal {
+   public:
+    FNormal(double FA, double JA, double FM, double sigma)
+        : FA_(FA), JA_(JA), FM_(FM), sigma_(sigma) {}
 
-  /* energy (score) functions, aka -log(p) */
-  virtual double evaluate() const
-  {
-      return -log(JA_/sigma_) + 0.5*log(2*PI)
-            + 1/(2*SQUARE(sigma_))*SQUARE(FA_-FM_);
-  }
+    /* energy (score) functions, aka -log(p) */
+    virtual double evaluate() const {
+        return -log(JA_ / sigma_) + 0.5 * log(2 * PI) +
+               1 / (2 * SQUARE(sigma_)) * SQUARE(FA_ - FM_);
+    }
 
-  //derivative of score wrt F(A)
-  virtual double evaluate_derivative_FA() const
-  { return (FA_-FM_)/SQUARE(sigma_); }
+    // derivative of score wrt F(A)
+    virtual double evaluate_derivative_FA() const {
+        return (FA_ - FM_) / SQUARE(sigma_);
+    }
 
-  virtual double evaluate_derivative_JA() const
-  { return -1/JA_; }
+    virtual double evaluate_derivative_JA() const { return -1 / JA_; }
 
-  //derivative wrt F(M)
-  virtual double evaluate_derivative_FM() const
-  { return (FM_-FA_)/SQUARE(sigma_); }
+    // derivative wrt F(M)
+    virtual double evaluate_derivative_FM() const {
+        return (FM_ - FA_) / SQUARE(sigma_);
+    }
 
-  virtual double evaluate_derivative_sigma() const
-  { return 1/sigma_ - SQUARE(FA_-FM_)/pow(sigma_,3); }
+    virtual double evaluate_derivative_sigma() const {
+        return 1 / sigma_ - SQUARE(FA_ - FM_) / pow(sigma_, 3);
+    }
 
-  /* probability density function */
-  virtual double density() const
-  {
-      return JA_/(sqrt(2*PI)*sigma_)*
-          exp(-SQUARE(FA_-FM_)/(2*SQUARE(sigma_)));
-  }
+    /* probability density function */
+    virtual double density() const {
+        return JA_ / (sqrt(2 * PI) * sigma_) *
+               exp(-SQUARE(FA_ - FM_) / (2 * SQUARE(sigma_)));
+    }
 
-  /* change of parameters */
-  void set_FA(double f) {
-    FA_=f;
-  }
-  void set_JA(double f) {
-    JA_=f;
-  }
-  void set_FM(double f) {
-    FM_=f;
-  }
-  void set_sigma(double f) {
-    sigma_=f;
-  }
+    /* change of parameters */
+    void set_FA(double f) { FA_ = f; }
+    void set_JA(double f) { JA_ = f; }
+    void set_FM(double f) { FM_ = f; }
+    void set_sigma(double f) { sigma_ = f; }
 
- private:
-  double FA_,JA_,FM_,sigma_;
+   private:
+    double FA_, JA_, FM_, sigma_;
 };
 
-#endif  /* FNORMAL_H */
+#endif /* FNORMAL_H */
