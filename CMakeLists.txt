@@ -19,8 +19,12 @@ endif()
 
 include_directories(include src bin)
 
+#build libraries
 add_library(MVN
     include/MultivariateFNormalSufficient.h src/MultivariateFNormalSufficient.cpp)
+
+#test subject/observer
+add_executable(TestObserver bin/test_Observer.cpp)
 
 #test MVN
 add_executable(TestMVN bin/test_MultivariateFNormalSufficient.cpp)
