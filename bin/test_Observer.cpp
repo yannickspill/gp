@@ -1,38 +1,30 @@
 #include "Observer.h"
 
-#include <boost/scoped_ptr.hpp>
+class IntGetter : public Observer<int> {   
+   public:
+    IntGetter() { val_ = 0; }
 
-class IntGetter : public Observer<int>
-{
-    public:
-    IntGetter() {val_=0;}
+    virtual void notify(Subject<int>* s) { val_ = s->get(); }
 
-    virtual void notify(Subject<int> *s){
-        val_ = s->get();
-    }
+    int get() {
+        return val_;
+    };
 
-    int get() { return val_; };
-
-    private:
+   private:
     int val_;
 };
 
-class IntSetter : public Subject<int>
-{
-    public:
-        IntSetter(int val) : Subject(val) {};
+class IntSetter : public Subject<int> {
+   public:
+    IntSetter(int val) : Subject(val) {};
 
-    protected:
-        virtual void setval(int value) {
-            value_ = value;
-        }
+   protected:
+    virtual void setval(int value) { value_ = value; }
 };
 
-int main(int, char *[]) {
-    boost::scoped_ptr<IntGetter> obs(new IntGetter());
-    boost::scoped_ptr<IntSetter> subj(new IntSetter(1));
-    //NEWPTR(IntGetter, obs, () );
-    //NEWPTR(IntSetter, subj, (1) );
+int main(int, char * []) {
+    IntGetter obs();
+    IntSetter subj(1);
 
     if (obs->get() != 0) return 1;
 
