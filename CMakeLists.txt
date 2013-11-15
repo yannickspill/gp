@@ -17,7 +17,7 @@ if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
     add_definitions(-DLOGGING)
 endif()
 
-include_directories(include src bin test)
+include_directories(include src bench test)
 
 #build libraries
 add_library(MVN
@@ -34,7 +34,7 @@ add_executable(TestMVN test/test_MultivariateFNormalSufficient.cpp)
 target_link_libraries(TestMVN MVN)
 
 #MVN benchmark
-add_executable(MVNBench bin/bench_mvn.cpp)
+add_executable(MVNBench bench/bench_mvn.cpp)
 target_link_libraries(MVNBench MVN)
 
 #debugging w/ or w/o valgrind
