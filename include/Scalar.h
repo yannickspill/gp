@@ -5,7 +5,7 @@
 class Scalar {
    public:
     Scalar(double value)
-        : has_upper_(false), has_lower_(false) {};
+        : value_(value), has_upper_(false), has_lower_(false) {};
 
     bool has_lower() const { return has_lower_; }
     bool has_upper() const { return has_upper_; }
@@ -35,12 +35,13 @@ class Scalar {
         double target = value;
         if (has_lower() and(get_lower() > value)) target = get_lower();
         if (has_upper() and(get_upper() < value)) target = get_upper();
-        value_ = value;
+        value_ = target;
     }
 
    private:
+    double value_;
     bool has_upper_, has_lower_;
-    double upper_, lower_, value_;
+    double upper_, lower_;
 };
 
 #endif /* SCALAR_H */
