@@ -17,20 +17,20 @@ if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
     add_definitions(-DLOGGING)
 endif()
 
-include_directories(include src bin)
+include_directories(include src bin test)
 
 #build libraries
 add_library(MVN
     include/MultivariateFNormalSufficient.h src/MultivariateFNormalSufficient.cpp)
 
 #test subject/observer
-#add_executable(TestObserver bin/test_Observer.cpp)
+#add_executable(TestObserver test/test_Observer.cpp)
 #test Scalar
-#add_executable(TestScalar bin/test_Scalar.cpp)
+#add_executable(TestScalar test/test_Scalar.cpp)
 #test epsilon
-add_executable(TestEpsilon bin/test_mvn_EpsilonVector.cpp)
+add_executable(TestEpsilon test/test_mvn_EpsilonVector.cpp)
 #test MVN
-add_executable(TestMVN bin/test_MultivariateFNormalSufficient.cpp)
+add_executable(TestMVN test/test_MultivariateFNormalSufficient.cpp)
 target_link_libraries(TestMVN MVN)
 
 #MVN benchmark
