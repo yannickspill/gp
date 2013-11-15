@@ -21,13 +21,13 @@ class Subject {
         // set value, operation happens in child
         setval(value);
         // notify observers when value changes
-        typename std::set<Observer<T>*>::iterator it;
+        typename std::set<Observer<T>& >::iterator it;
         for (it = observers_.begin(); it != observers_.end(); ++it)
             (*it)->notify(this);
     }
 
     // register observer. Returns false if already registered.
-    bool register_observer(Observer<T>* o) {
+    bool register_observer(Observer<T>& o) {
         return observers_.insert(o).second;
     }
 
@@ -54,7 +54,7 @@ class Subject {
 template <typename T>
 class Observer {
    public:
-    virtual void notify(Subject<T>* s) = 0;
+    virtual void notify(Subject<T>& s) = 0;
     virtual ~Observer() {};
 };
 
