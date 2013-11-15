@@ -29,6 +29,8 @@ add_library(MVN
 add_executable(TestScalar test/test_Scalar.cpp)
 #test epsilon
 add_executable(TestEpsilon test/test_mvn_EpsilonVector.cpp)
+#test Linear1DFunction
+add_executable(TestLinear1DFunction test/test_Linear1DFunction.cpp)
 #test MVN
 add_executable(TestMVN test/test_MultivariateFNormalSufficient.cpp)
 target_link_libraries(TestMVN MVN)
