@@ -8,7 +8,8 @@ class Observer;
 
 // Subject of an observer pattern
 // stores a value and informs observers if it changed.
-// must be subclassed and define a protected setval() method
+// must be subclassed and define the protected method
+// virtual void setval(T value)
 template <typename T>
 class Subject {
    public:
@@ -48,7 +49,8 @@ class Subject {
 
 // Observer of an observer pattern
 // has a notify() call that takes a subject as parameter
-// must be subclassed and implement notify
+// must be subclassed and define the public method
+// virtual void notify(Subject<T>* s)
 template <typename T>
 class Observer {
    public:
