@@ -26,7 +26,7 @@ add_library(MVN
 #test subject/observer
 #add_executable(TestObserver test/test_Observer.cpp)
 #test Scalar
-#add_executable(TestScalar test/test_Scalar.cpp)
+add_executable(TestScalar test/test_Scalar.cpp)
 #test epsilon
 add_executable(TestEpsilon test/test_mvn_EpsilonVector.cpp)
 #test MVN
