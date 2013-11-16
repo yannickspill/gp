@@ -1,7 +1,6 @@
 #ifndef PRIOR_COVARIANCE_MATRIX_H
 #define PRIOR_COVARIANCE_MATRIX_H
 
-#include "Scalar.h"
 #include <Eigen/Dense>
 
 //! Build a covariance matrix from a covariance function
