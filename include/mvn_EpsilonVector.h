@@ -14,7 +14,7 @@ class EpsilonVector {
     MEANFUNC mu_;
 
    public:
-    EpsilonVector(MatrixXd& X, VectorXd& y, MEANFUNC& mu)
+    EpsilonVector(const MatrixXd& X, const VectorXd& y, MEANFUNC mu)
         : X_(X), y_(y), mu_(mu) {}
 
     VectorXd operator()() const { return y_ - get_mean(); }
