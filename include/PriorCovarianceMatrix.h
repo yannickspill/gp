@@ -1,5 +1,5 @@
-#ifndef COVARIANCE_MATRIX_H
-#define COVARIANCE_MATRIX_H
+#ifndef PRIOR_COVARIANCE_MATRIX_H
+#define PRIOR_COVARIANCE_MATRIX_H
 
 #include "Scalar.h"
 #include <Eigen/Dense>
@@ -7,7 +7,7 @@
 //! Build a covariance matrix from a covariance function
 // Only the upper corner of the matrix is used.
 template <class COVFUNC>
-class CovarianceMatrix {
+class PriorCovarianceMatrix {
     Eigen::MatrixXd X_;
     COVFUNC cov_;
 
@@ -15,7 +15,7 @@ class CovarianceMatrix {
     //! constructor
     // X : input coordinates (each coord is a RowVectorXd)
     // cov : covariance function, compatible with X's shape.
-    CovarianceMatrix(const Eigen::MatrixXd& X, COVFUNC cov)
+    PriorCovarianceMatrix(const Eigen::MatrixXd& X, COVFUNC cov)
         : X_(X), cov_(cov) {}
 
     Eigen::MatrixXd operator()() const { return get_covariance(); }
@@ -30,4 +30,4 @@ class CovarianceMatrix {
     }
 };
 
-#endif /* COVARIANCE_MATRIX_H */
+#endif /* PRIOR_COVARIANCE_MATRIX_H */

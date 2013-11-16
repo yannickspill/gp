@@ -1,4 +1,4 @@
-#include "CovarianceMatrix.h"
+#include "PriorCovarianceMatrix.h"
 #include <Eigen/Dense>
 
 class ConstantCov {
@@ -12,7 +12,7 @@ class ConstantCov {
 int main(int, char * []) {
     Eigen::MatrixXd X(Eigen::MatrixXd::Random(10, 3));
     ConstantCov cc;
-    CovarianceMatrix<ConstantCov> cov(X, cc);
+    PriorCovarianceMatrix<ConstantCov> cov(X, cc);
     Eigen::MatrixXd observed(cov());
     Eigen::MatrixXd expected(Eigen::MatrixXd::Ones(10,10));
     if (observed != expected) return 1;
