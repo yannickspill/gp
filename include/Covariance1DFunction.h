@@ -36,8 +36,9 @@ class Covariance1DFunction {
         }
         return SQUARE(get_tau_value()) * std::exp(-0.5 * ret);
     }
-    double operator()(Eigen::Vector2d x) const {
-        return operator()(x(0), x(1));
+    double operator()(Eigen::Matrix<double, 1, 1> x,
+                      Eigen::Matrix<double, 1, 1> y) const {
+        return operator()(x(0), y(0));
     }
 
    private:
