@@ -33,6 +33,8 @@ add_executable(TestEpsilon test/test_mvn_EpsilonVector.cpp)
 add_executable(TestLinear1DFunction test/test_Linear1DFunction.cpp)
 #test integration of Linear1D with epsilon
 add_executable(TestLinearEpsilon test/test_epsilon_mean_integration.cpp)
+#test Covariance1DFunction
+add_executable(TestCovariance1DFunction test/test_Covariance1DFunction.cpp)
 #test MVN
 add_executable(TestMVN test/test_MultivariateFNormalSufficient.cpp)
 target_link_libraries(TestMVN MVN)
