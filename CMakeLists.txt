@@ -39,6 +39,8 @@ add_executable(TestCovariance1DFunction test/test_Covariance1DFunction.cpp)
 add_executable(TestPriorCovarianceMatrix test/test_PriorCovarianceMatrix.cpp)
 #test PosteriorCovarianceMatrix
 add_executable(TestPosteriorCovarianceMatrix test/test_PosteriorCovarianceMatrix.cpp)
+#test LDLT
+add_executable(TestLDLT test/test_LDLT.cpp)
 #test MVN
 add_executable(TestMVN test/test_MultivariateFNormalSufficient.cpp)
 target_link_libraries(TestMVN MVN)
