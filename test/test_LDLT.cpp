@@ -15,7 +15,7 @@ class ConstantCov {
 int main(int, char * []) {
     ConstantCov cc;
     LDLT<ConstantCov> ldlt(cc);
-    if (ldlt.get_minus_log_determinant() != -std::log(0.75)) return 1;
+    if (ldlt.get_log_determinant() != std::log(0.75)) return 1;
     return 0;
 }
 

@@ -25,8 +25,8 @@ class LDLT {
         return get_ldlt();
     }
 
-    double get_minus_log_determinant() const {
-        return -get_ldlt().vectorD().array().abs().log().sum();
+    double get_log_determinant() const {
+        return get_ldlt().vectorD().array().abs().log().sum();
     }
 
     //! solve for Sigma X = B, returning X = Sigma^{-1} B
