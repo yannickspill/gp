@@ -8,20 +8,16 @@
 
 //! Build the LDLT (Cholesky) decomposition of a matrix
 //  Sigma = LDL^T
-//  where
-//  W is a prior covariance matrix
-//  sigma is a Scalar
-//  S is a data covariance matrix
 //  Only the upper corner of the matrix is used.
-template <typename COVMAT>
+template <typename MATRIX>
 class LDLT {
-    COVMAT cov_;
+    MATRIX cov_;
 
    public:
     //! constructor
-    LDLT(COVMAT cov) : cov_(cov) {}
+    LDLT(MATRIX cov) : cov_(cov) {}
 
-    Eigen::LDLT<Eigen::MatrixXd, Eigen::Upper> operator()() const {
+    Eigen::LDLT<decltype(cov_.get()), Eigen::Upper> get() const {
         return get_ldlt();
     }
 
@@ -33,10 +29,13 @@ class LDLT {
     Eigen::MatrixXd solve(const Eigen::MatrixXd& B) const {
         return get_ldlt().solve(B);
     }
+    Eigen::VectorXd solve(const Eigen::VectorXd& B) const {
+        return get_ldlt().solve(B);
+    }
 
    private:
-    Eigen::LDLT<Eigen::MatrixXd, Eigen::Upper> get_ldlt() const {
-        return Eigen::LDLT<Eigen::MatrixXd, Eigen::Upper>(cov_());
+    Eigen::LDLT<decltype(cov_.get()), Eigen::Upper> get_ldlt() const {
+        return Eigen::LDLT<decltype(cov_.get()), Eigen::Upper>(cov_.get());
     }
 };
 

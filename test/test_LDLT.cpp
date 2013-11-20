@@ -5,7 +5,7 @@
 
 class ConstantCov {
    public:
-    Eigen::MatrixXd operator()() const {
+    Eigen::MatrixXd get() const {
         Eigen::MatrixXd m(2, 2);
         m << 1, .5, .5, 1;
         return m;
