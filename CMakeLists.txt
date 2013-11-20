@@ -21,7 +21,7 @@ endif()
 include_directories(include src bench test)
 
 #build libraries
-add_library(MVN
+add_library(Multivariate
     include/MultivariateFNormalSufficient.h src/MultivariateFNormalSufficient.cpp)
 
 #test subject/observer
@@ -48,13 +48,13 @@ add_executable(TestPosteriorCovarianceMatrix
 add_executable(TestLDLT test/test_LDLT.cpp)
 #test old MVN
 add_executable(TestMultivariate test/test_MultivariateFNormalSufficient.cpp)
-target_link_libraries(TestMultivariate MVN)
+target_link_libraries(TestMultivariate Multivariate)
 #test new MVN
 add_executable(TestMVN test/test_MVN.cpp)
 
 #old MVN benchmark
-add_executable(MVNBench bench/bench_mvn.cpp)
-target_link_libraries(MVNBench MVN)
+add_executable(BenchMultivariate bench/bench_old_mvn.cpp)
+target_link_libraries(BenchMultivariate Multivariate)
 
 #debugging w/ or w/o valgrind
 enable_testing()
