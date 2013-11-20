@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 2.6)
 project (GaussianProcess)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CmakeModules/")
+ADD_DEFINITIONS("-std=c++0x") 
 
 #dependencies
 find_package(Boost REQUIRED)
@@ -27,32 +28,42 @@ add_library(MVN
 #add_executable(TestObserver test/test_Observer.cpp)
 #test Scalar
 add_executable(TestScalar test/test_Scalar.cpp)
-#test epsilon
-add_executable(TestEpsilon test/test_mvn_EpsilonVector.cpp)
 #test Linear1DFunction
 add_executable(TestLinear1DFunction test/test_Linear1DFunction.cpp)
 #test integration of Linear1D with epsilon
-add_executable(TestLinearEpsilon test/test_epsilon_mean_integration.cpp)
+add_executable(TestEpsilonMeanIntegration
+    test/test_epsilon_mean_integration.cpp)
 #test Covariance1DFunction
 add_executable(TestCovariance1DFunction test/test_Covariance1DFunction.cpp)
-#test PriorCovarianceMatrix
-add_executable(TestPriorCovarianceMatrix test/test_PriorCovarianceMatrix.cpp)
+#test VectorFromFunction
+add_executable(TestVectorFromFunction
+    test/test_VectorFromFunction.cpp)
+#test SymmetricMatrixFromFunction
+add_executable(TestSymmetricMatrixFromFunction
+    test/test_SymmetricMatrixFromFunction.cpp)
 #test PosteriorCovarianceMatrix
-add_executable(TestPosteriorCovarianceMatrix test/test_PosteriorCovarianceMatrix.cpp)
+add_executable(TestPosteriorCovarianceMatrix
+    test/test_posterior_covariance_matrix.cpp)
 #test LDLT
 add_executable(TestLDLT test/test_LDLT.cpp)
-#test MVN
-add_executable(TestMVN test/test_MultivariateFNormalSufficient.cpp)
-target_link_libraries(TestMVN MVN)
+#test old MVN
+add_executable(TestMultivariate test/test_MultivariateFNormalSufficient.cpp)
+target_link_libraries(TestMultivariate MVN)
+#test new MVN
+add_executable(TestMVN test/test_MVN.cpp)
 
-#MVN benchmark
+#old MVN benchmark
 add_executable(MVNBench bench/bench_mvn.cpp)
 target_link_libraries(MVNBench MVN)
 
 #debugging w/ or w/o valgrind
 enable_testing()
-set(CTEST_MEMORYCHECK_COMMAND "/usr/bin/valgrind")
-set(CTEST_MEMORYCHECK_COMMAND_OPTIONS, "--trace-children=yes --leak-check=full")
-add_test(BasicTest TestMVN)
-add_test(BenchTest MVNBench data/toy.dat data/fitting_protocol2.dat)
+#set(CTEST_MEMORYCHECK_COMMAND "/usr/bin/valgrind")
+#set(CTEST_MEMORYCHECK_COMMAND_OPTIONS, "--trace-children=yes --leak-check=full")
+add_test(BasicTest TestMultivariate TestLDLT TestPosteriorCovarianceMatrix
+    TestPriorCovarianceMatrix TestLinearEpsilon TestLinear1DFunction TestEpsilon
+    TestScalar)
+add_test(TestOldMVN TestMultivariate)
+add_test(TestMVN TestMVN)
+add_test(BenchTest MVNBench "${CMAKE_SOURCE_DIR}/data/toy.dat" "${CMAKE_SOURCE_DIR}/data/fitting_protocol2.dat")
 
