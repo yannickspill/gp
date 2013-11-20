@@ -1,4 +1,4 @@
-#include "MultivariateFNormalSufficient.h"
+#include "MVN.h"
 #include "FNormal.h"
 #include "macros.h"
 
@@ -168,11 +168,8 @@ int main(int argc, char* argv[]) {
     MatrixXd Sigma(get_covariance_matrix(x_values, S, params[0]));
 
     // create MVN object
-    const double JA = 1.0;  // jacobian is 1 for normal distribution
-    const unsigned N = 1;  // just one M-dimensional gaussian
-    const MatrixXd W(Eigen::MatrixXd::Zero(x_values.rows(), x_values.rows()));
-    MultivariateFNormalSufficient* mvn =
-        new MultivariateFNormalSufficient(y_values, JA, mu, N, W, Sigma);
+    const double lJA = 0.0;  // log jacobian is 0 for normal distribution
+    MVN mvn(y_values, mu, lJA, Sigma);
 
     // loop over parameter lists
     std::cout << "START " << params.size() << " steps for dataset of size "
