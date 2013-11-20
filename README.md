@@ -8,7 +8,8 @@ Aim
 - Scale well
 - Depend only on open-source libraries
   - Eigen (matrix manipulation)
-  - GSL (optimization)
+  - GSL (optimization, TODO)
+  - Celero (benchmarking, TODO)
 - Be easily interfaceable
   - R module
   - IMP module
