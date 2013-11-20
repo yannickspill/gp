@@ -33,10 +33,10 @@ class MVN {
 
     Eigen::MatrixXd get_derivative_Sigma() const { return deriv_Sigma(); }
 
-    void set_FX(VECTORX FX) { FX_(FX); }
-    void set_FM(VECTORM FM) { FM_(FM); }
-    void set_lJF(VECTORM lJF) { lJF_(lJF); }
-    void set_Sigma(MATRIX Sigma) { Sigma_(Sigma); }
+    void set_FX(VECTORX FX) { FX_ = FX; }
+    void set_FM(VECTORM FM) { FM_ = FM; }
+    void set_lJF(VECTORM lJF) { lJF_ = lJF; }
+    void set_Sigma(MATRIX Sigma) { Sigma_ = Sigma; }
 
    private:
     double evaluate() const {

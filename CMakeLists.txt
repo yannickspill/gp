@@ -56,6 +56,9 @@ add_executable(TestMVN test/test_MVN.cpp)
 add_executable(BenchMultivariate bench/bench_old_mvn.cpp)
 target_link_libraries(BenchMultivariate Multivariate)
 
+#new MVN benchmark
+add_executable(BenchMVN bench/bench_mvn.cpp)
+
 #debugging w/ or w/o valgrind
 enable_testing()
 #set(CTEST_MEMORYCHECK_COMMAND "/usr/bin/valgrind")
@@ -65,5 +68,5 @@ add_test(BasicTest TestMultivariate TestLDLT TestPosteriorCovarianceMatrix
     TestScalar)
 add_test(TestOldMVN TestMultivariate)
 add_test(TestMVN TestMVN)
-add_test(BenchTest MVNBench "${CMAKE_SOURCE_DIR}/data/toy.dat" "${CMAKE_SOURCE_DIR}/data/fitting_protocol2.dat")
+#add_test(BenchTest MVNBench "${CMAKE_SOURCE_DIR}/data/toy.dat" "${CMAKE_SOURCE_DIR}/data/fitting_protocol2.dat")
 
