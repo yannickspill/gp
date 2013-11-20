@@ -16,11 +16,11 @@ class Linear1DFunction {
    public:
     Linear1DFunction(Scalar a, Scalar b) : a_(a), b_(b) {}
 
-    double operator()(double x) const {
+    double eval(double x) const {
         return get_a_value() * x + get_b_value();
     }
-    double operator()(Eigen::Matrix<double, 1, 1> x) const {
-        return operator()(x(0));
+    double eval(Eigen::Matrix<double, 1, 1> x) const {
+        return eval(x(0));
     }
 
    private:

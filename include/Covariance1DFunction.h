@@ -26,7 +26,7 @@ class Covariance1DFunction {
             if (lambda_.get_lower() < 0) lambda_.set_lower(0);
         }
 
-    double operator()(double x, double y) const {
+    double eval(double x, double y) const {
         double dist = std::abs(x-y);
         double ret = dist/get_lambda_value();
         if (alpha_ == 2) {
@@ -36,9 +36,9 @@ class Covariance1DFunction {
         }
         return SQUARE(get_tau_value()) * std::exp(-0.5 * ret);
     }
-    double operator()(Eigen::Matrix<double, 1, 1> x,
+    double eval(Eigen::Matrix<double, 1, 1> x,
                       Eigen::Matrix<double, 1, 1> y) const {
-        return operator()(x(0), y(0));
+        return eval(x(0), y(0));
     }
 
    private:
