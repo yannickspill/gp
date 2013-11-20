@@ -36,7 +36,8 @@ class Scalar {
     double get_lower() const { return data_->lower_; }
     double get_upper() const { return data_->upper_; }
 
-    double get() const { return data_->value_; }
+    typedef double return_type;
+    return_type get() const { return data_->value_; }
 
     void set(double value) {
         double target = value;
