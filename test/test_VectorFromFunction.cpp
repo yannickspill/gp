@@ -20,7 +20,7 @@ int main(int, char * []) {
     ConstFunc cc;
     VectorFromFunction<ConstVec, ConstFunc> cov(X, cc);
     Eigen::VectorXd observed(cov.get());
-    Eigen::VectorXd expected(Eigen::VectorXd::Ones(10, 10));
+    Eigen::VectorXd expected(Eigen::VectorXd::Ones(10));
     if (observed != expected) return 1;
     return 0;
 }

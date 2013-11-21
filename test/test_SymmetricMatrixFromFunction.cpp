@@ -2,6 +2,7 @@
 #include "ConstEigenObject.h"
 
 #include <Eigen/Dense>
+#include <iostream>
 
 namespace{
 typedef ConstEigenObject<Eigen::MatrixXd> ConstMat;
@@ -9,8 +10,8 @@ typedef ConstEigenObject<Eigen::MatrixXd> ConstMat;
 
 class ConstCov {
    public:
-    double eval(Eigen::Matrix<double, 1, 1> x,
-                Eigen::Matrix<double, 1, 1> y) const {
+    double eval(Eigen::Matrix<double, 1, 3> x,
+                Eigen::Matrix<double, 1, 3> y) const {
         return 1.;
     }
 };
