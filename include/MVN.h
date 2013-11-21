@@ -3,7 +3,6 @@
 
 #include "MatrixDifference.h"
 #include "LDLT.h"
-#include "mvn_MVNEvaluate.h"
 
 #include <Eigen/Dense>
 
