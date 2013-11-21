@@ -39,7 +39,7 @@ int main(int, char*[]){
         std::vector<double> params(NUM_PARAMS, 0.);
         params[PARAM_TAU] = 1.;
         params[PARAM_LAMBDA] = 0.1;
-        Mat Sigma(get_prior_covariance(x, params));
+        Mat Sigma(get_prior_covariance(x, params, 0.01));
         //lead MVN to a benchmarkable state
         // - nop -
         //perform benchmark

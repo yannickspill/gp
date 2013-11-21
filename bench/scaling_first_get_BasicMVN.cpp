@@ -1,6 +1,6 @@
 #include "benchmark_helpers.h"
 #include "macros.h"
-#include "MultivariateFNormalSufficient.h"
+#include "BasicMVN.h"
 
 #include <Eigen/Dense>
 #include <iostream>
@@ -17,14 +17,14 @@ typedef Eigen::VectorXd EigenVec;
 typedef Eigen::MatrixXd EigenMat;
 typedef EigenVec Vec;
 typedef EigenMat Mat;
-typedef MultivariateFNormalSufficient Multivariate;
+typedef BasicMVN<> Multivariate;
 
 // Examine the scaling of MVN::get() when called for the first time
 int main(int, char*[]){
     //dimensions which will be tried
     const std::vector<unsigned> ndims {2,3,5,8,10,
         12,15,18,20,25,30,40,50,60,70,80,90,100,150,200,250,300,350,400,450,
-        500,600,700,800,900,1000,1100,1200,1500,2000,5000,10000};
+        500,600,700,800,900,1000,1100,1200,1500,2000};
     //maximum time spent on a single dimension
     const time_duration maxtime=seconds(1);
     //minimum number of calls to make for a single dimension
@@ -47,13 +47,14 @@ int main(int, char*[]){
         unsigned ncalls = 0;
         ptime run = microsec_clock::local_time();
         do{
-            ptime start = microsec_clock::local_time();
+            Multivariate mvn(y,m,0.0,Sigma);
             //
             // BENCHMARK
-            Multivariate mvn(y.transpose(),1.0,m,Sigma);
-            //
-            //
+            ptime start = microsec_clock::local_time();
+            mvn.get();
             ptime end = microsec_clock::local_time();
+            //
+            //
             thisrun.push_back(end-start);
         } while ((++ncalls < mincalls) ||
                  (microsec_clock::local_time() - run < maxtime));

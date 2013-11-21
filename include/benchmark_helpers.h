@@ -110,7 +110,8 @@ inline double get_covariance_function(double x1, double x2, double lambda,
 }
 
 MatrixXd get_prior_covariance(VectorXd x_values,
-                              const std::vector<double> params) {
+                              const std::vector<double> params,
+                              double jitter=0.) {
     unsigned M = x_values.rows();
     MatrixXd retval(M, M);
     double tausq = SQUARE(params[PARAM_TAU]);
@@ -120,6 +121,7 @@ MatrixXd get_prior_covariance(VectorXd x_values,
         for (unsigned j = i; j < M; j++)
             retval(i, j) = get_covariance_function(x_values(i), x_values(j),
                                                    lambda, tausq);
+    retval += MatrixXd::Identity(M,M)*jitter*tausq;
     return MatrixXd(retval.selfadjointView<Eigen::Upper>());
 }
 
