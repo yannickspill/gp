@@ -12,7 +12,6 @@ find_package(Eigen3 3.2.0 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 find_package(GSL REQUIRED)
 include_directories(${GSL_INCLUDE_DIRS})
-#target_link_libraries(GaussianProcess ${GSL_LIBRARIES})
 
 if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
     add_definitions(-DLOGGING)
@@ -49,6 +48,8 @@ add_executable(TestLDLT test/test_LDLT.cpp)
 #test old MVN
 add_executable(TestMultivariate test/test_MultivariateFNormalSufficient.cpp)
 target_link_libraries(TestMultivariate Multivariate)
+#test basic MVN
+add_executable(TestBasicMVN test/test_BasicMVN.cpp)
 #test new MVN
 add_executable(TestMVN test/test_MVN.cpp)
 
@@ -56,6 +57,8 @@ add_executable(TestMVN test/test_MVN.cpp)
 add_executable(BenchMultivariate bench/bench_old_mvn.cpp)
 target_link_libraries(BenchMultivariate Multivariate)
 
+#basic MVN benchmark
+add_executable(BenchBasicMVN bench/bench_basic_mvn.cpp)
 #new MVN benchmark
 add_executable(BenchMVN bench/bench_mvn.cpp)
 
