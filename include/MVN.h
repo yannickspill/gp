@@ -35,7 +35,7 @@ class MVN {
 
     void set_FX(VECTORX FX) { FX_ = FX; }
     void set_FM(VECTORM FM) { FM_ = FM; }
-    void set_lJF(VECTORM lJF) { lJF_ = lJF; }
+    void set_lJF(double lJF) { lJF_ = lJF; }
     void set_Sigma(MATRIX Sigma) { Sigma_ = Sigma; }
 
    private:
