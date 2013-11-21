@@ -1,5 +1,3 @@
-#include "MVN.h"
-#include "ConstEigenObject.h"
 #include "macros.h"
 
 #include <boost/random.hpp>
@@ -29,12 +27,6 @@
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using Eigen::VectorXi;
-
-namespace {
-typedef ConstEigenObject<VectorXd> ConstVec;
-typedef ConstEigenObject<MatrixXd> ConstMat;
-typedef MVN<ConstVec, ConstVec, ConstMat> Multivariate;
-}
 
 void read_input_parameters(char* fname,
                            std::vector<std::vector<double> >& params,
@@ -89,16 +81,16 @@ void read_input_data(char* fname, std::vector<std::vector<double> >& data) {
     return;
 }
 
-ConstVec get_vector_column(const std::vector<std::vector<double> >& data,
+VectorXd get_vector_column(const std::vector<std::vector<double> >& data,
                            const unsigned colno) {
     VectorXd retval(data.size());
     for (unsigned i = 0; i < data.size(); i++) retval(i) = data[i][colno];
-    return ConstVec(retval);
+    return retval;
 }
 
-ConstVec get_mean_vector(ConstVec x_values, const std::vector<double> params) {
+VectorXd get_mean_vector(VectorXd x_values, const std::vector<double> params) {
     double A = params[0];
-    return ConstVec(VectorXd::Constant(x_values.get().rows(), A));
+    return VectorXd::Constant(x_values.rows(), A);
 }
 
 inline double get_covariance_function(double x1, double x2, double lambda,
@@ -120,11 +112,11 @@ MatrixXd get_prior_covariance(VectorXd x_values,
     return MatrixXd(retval.selfadjointView<Eigen::Upper>());
 }
 
-ConstMat get_covariance_matrix(ConstVec x_values, ConstVec S,
+MatrixXd get_covariance_matrix(VectorXd x_values, VectorXd S,
                                const std::vector<double> params) {
     double sigma2 = params[PARAM_SIGMA2];
-    return ConstMat(sigma2 * MatrixXd(S.get().asDiagonal()) +
-                    get_prior_covariance(x_values.get(), params));
+    return sigma2 * MatrixXd(S.asDiagonal()) +
+           get_prior_covariance(x_values, params);
 }
 
 bool mean_has_changed(const std::vector<std::vector<double> > params,
@@ -146,54 +138,3 @@ bool covariance_has_changed(const std::vector<std::vector<double> > params,
     return chsi || chla || chtau;
 }
 
-int main(int argc, char* argv[]) {
-    if (argc != 3) {
-        std::cout << argv[0] << " profile.dat schedule.dat" << std::endl;
-        std::cout << "profile.dat must have 3 columns: x, y, yerr" << std::endl;
-        std::cout << "schedule.dat must have 5 columns: A, sigma2, tau, lambda"
-                  << std::endl
-                  << "and whether the derivative is to be calculated"
-                  << std::endl;
-        return 1;
-    }
-
-    // read input data
-    std::vector<std::vector<double> > data;
-    read_input_data(argv[1], data);
-    // process data to Eigen form
-    ConstVec x_values(get_vector_column(data, 0));
-    ConstVec y_values(get_vector_column(data, 1));
-    ConstVec S(get_vector_column(data, 2).get().array().square());
-
-    // read input params
-    std::vector<std::vector<double> > params;
-    std::vector<bool> use_deriv;
-    read_input_parameters(argv[2], params, use_deriv);
-    // process data to Eigen form
-    ConstVec mu(get_mean_vector(x_values, params[0]));
-    ConstMat Sigma(get_covariance_matrix(x_values, S, params[0]));
-
-    // create MVN object
-    const double lJA = 0.0;  // log jacobian is 0 for normal distribution
-    Multivariate mvn(y_values, mu, lJA, Sigma);
-
-    // loop over parameter lists
-    std::cout << "START " << params.size() << " steps for dataset of size "
-              << data.size() << std::endl;
-    for (unsigned i = 0; i < params.size(); i++) {
-        std::vector<double> param(params[i]);
-        // update matrices if needed
-        if (mean_has_changed(params, i))
-            mvn.set_FM(get_mean_vector(x_values, param));
-        if (covariance_has_changed(params, i))
-            mvn.set_Sigma(get_covariance_matrix(x_values, S, param));
-        // compute derivatives if requested
-        if (use_deriv[i]) {
-            mvn.get_derivative_FM();
-            mvn.get_derivative_Sigma();
-        }
-        mvn.get();
-    }
-    std::cout << "DONE" << std::endl;
-    return 0;
-}
