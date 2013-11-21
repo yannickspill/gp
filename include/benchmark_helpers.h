@@ -28,6 +28,17 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using Eigen::VectorXi;
 
+///
+/// \func DoNotOptimizeAway
+///
+/// \author Andrei Alexandrescu
+///
+template <class T>
+void DoNotOptimizeAway(T&& datum) {
+    const void* p = &datum;
+    putchar(*static_cast<const char*>(p));
+}
+
 void read_input_parameters(char* fname,
                            std::vector<std::vector<double> >& params,
                            std::vector<bool>& use_deriv) {
