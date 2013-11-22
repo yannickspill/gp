@@ -17,9 +17,7 @@ class MatrixDifference {
     //! constructor
     MatrixDifference(LEFTTYPE l, RIGHTTYPE r) : l_(l), r_(r) {}
 
-    //SEGFAULT: typedef decltype(l_.get()-r_.get()) result_type;
-    typedef Eigen::MatrixXd result_type;
-
+    typedef decltype(l_.get()-r_.get()) result_type;
     result_type get() const {return l_.get() - r_.get();}
 
 };

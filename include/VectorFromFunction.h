@@ -7,23 +7,26 @@
 template <class INMATRIX, class UNIFUNC>
 class VectorFromFunction {
 
-    INMATRIX X_;
-    UNIFUNC mu_;
-
    public:
     VectorFromFunction(INMATRIX X, UNIFUNC mu) : X_(X), mu_(mu) {}
 
     typedef Eigen::VectorXd result_type;
-    result_type get() const { return build_vector(); }
+    const result_type& get() const { return build_vector(); }
 
    private:
-    result_type build_vector() const {
+    const result_type& build_vector() const {
         auto Xmat(X_.get());
-        result_type vec(Xmat.rows());
+        retval_ = Eigen::VectorXd(Xmat.rows());
         for (unsigned i = 0; i < Xmat.rows(); i++)
-            vec(i) = mu_.eval(Xmat.row(i));
-        return vec;
+            retval_(i) = mu_.eval(Xmat.row(i));
+        return retval_;
     }
+
+   private:
+    INMATRIX X_;
+    UNIFUNC mu_;
+    mutable result_type retval_;
+
 };
 
 #endif /* VECTOR_FROM_FUNCTION */

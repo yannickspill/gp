@@ -27,7 +27,11 @@ int main(int, char * []) {
     //create difference object
     MD eps(y, mean);
     //
-    VectorXd observed(eps.get());
+    auto observed(eps.get());
+    std::cout <<observed.rows() << std::endl;
+    std::cout <<observed.cols() << std::endl;
+    std::cout <<observed << std::endl;
+    std::cout <<VectorXd(observed) << std::endl;
     VectorXd expected(10);
     expected.setConstant(-2.);
     if (observed != expected) return 1;

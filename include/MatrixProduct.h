@@ -16,7 +16,7 @@ class MatrixProduct {
     //! constructor
     MatrixProduct(LEFTTYPE l, RIGHTTYPE r) : l_(l), r_(r) {}
 
-    typedef Eigen::MatrixXd result_type;
+    typedef decltype(l_.get()*r_.get()) result_type;
 
     result_type get() const {return l_.get() * r_.get();}
 

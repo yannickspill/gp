@@ -11,15 +11,14 @@
 //  Only the upper corner of the matrix is used.
 template <typename MATRIX>
 class LDLT {
-    MATRIX cov_;
-
    public:
     //! constructor
     LDLT(MATRIX cov) : cov_(cov) {}
 
-    Eigen::LDLT<decltype(cov_.get()), Eigen::Upper> get() const {
-        return get_ldlt();
-    }
+    typedef Eigen::LDLT<typename MATRIX::result_type, Eigen::Upper>
+        result_type;
+
+    const result_type& get() const { return get_ldlt(); }
 
     double get_log_determinant() const {
         return get_ldlt().vectorD().array().abs().log().sum();
@@ -34,9 +33,15 @@ class LDLT {
     }
 
    private:
-    Eigen::LDLT<decltype(cov_.get()), Eigen::Upper> get_ldlt() const {
-        return Eigen::LDLT<decltype(cov_.get()), Eigen::Upper>(cov_.get());
+    const result_type& get_ldlt() const {
+        ldlt_ = result_type(cov_.get());
+        return ldlt_;
     }
+
+   private:
+    MATRIX cov_;
+    mutable result_type ldlt_;
+
 };
 
 #endif /* LDLT_H */

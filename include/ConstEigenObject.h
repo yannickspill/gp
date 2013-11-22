@@ -12,7 +12,7 @@ class ConstEigenObject {
     explicit ConstEigenObject(const EIGENTYPE& X) : X_(X) {}
 
     typedef EIGENTYPE result_type;
-    EIGENTYPE get() const { return X_; }
+    const result_type& get() const { return X_; }
 };
 
 #endif /* CONST_EIGEN_OBJECT_H */
