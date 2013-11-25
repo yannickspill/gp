@@ -26,6 +26,17 @@ class MatrixDifference {
     typedef decltype(l_.get() - r_.get()) result_type;
     result_type get() const { return l_.get() - r_.get(); }
 
+    void set_lhs(LEFTTYPE l) {
+        l_ = l;
+        vleft_ = l_.update();
+        version_++;
+    }
+    void set_rhs(RIGHTTYPE r) {
+        r_ = r;
+        vright_ = r_.update();
+        version_++;
+    }
+
     unsigned update() {
         unsigned vleft = l_.update();
         unsigned vright = r_.update();

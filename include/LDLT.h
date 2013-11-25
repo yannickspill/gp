@@ -33,11 +33,11 @@ class LDLT {
         return get_ldlt().vectorD().array().abs().log().sum();
     }
 
-    //! solve for Sigma X = B, returning X = Sigma^{-1} B
-    template <class Derived>
-    auto solve(const Eigen::MatrixBase<Derived>& B) const
-        -> decltype(ldlt_.solve(B)) {
-        return get_ldlt().solve(B);
+    void set_matrix(MATRIX cov) {
+        cov_ = cov;
+        vmat_ = cov_.update();
+        cache_invalid_=true;
+        version_++;
     }
 
     unsigned update() {
@@ -49,6 +49,13 @@ class LDLT {
         }
         vmat_ = vmat;
         return version_;
+    }
+
+    //! solve for Sigma X = B, returning X = Sigma^{-1} B
+    template <class Derived>
+    auto solve(const Eigen::MatrixBase<Derived>& B)
+        const -> decltype(ldlt_.solve(B)) {
+        return get_ldlt().solve(B);
     }
 
    private:
