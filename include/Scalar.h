@@ -44,12 +44,20 @@ class Scalar {
         if (get_lower() > value) target = get_lower();
         if (get_upper() < value) target = get_upper();
         data_->value_ = target;
+        (data_->version_)++;
+    }
+
+    unsigned update() const {
+        //Scalar is updated when set() is called
+        return data_->version_;
     }
 
    private:
     struct Data {
         double value_, lower_, upper_;
-        Data(double v, double l, double u) : value_(v), lower_(l), upper_(u) {}
+        unsigned version_;
+        Data(double v, double l, double u)
+            : value_(v), lower_(l), upper_(u), version_(0) {}
     };
     boost::shared_ptr<Data> data_;
 };

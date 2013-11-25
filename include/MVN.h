@@ -18,12 +18,20 @@ class MVN {
     VECTORM FM_;
     double lJF_;
     MATRIX Sigma_;
+    unsigned vx_, vm_, vmat_, version_;
 
     typedef MatrixDifference<VECTORX, VECTORM> MD;
 
    public:
     MVN(VECTORX FX, VECTORM FM, double lJF, MATRIX Sigma)
-        : FX_(FX), FM_(FM), lJF_(lJF), Sigma_(Sigma) {}
+        : FX_(FX),
+          FM_(FM),
+          lJF_(lJF),
+          Sigma_(Sigma),
+          vx_(FX_.update()),
+          vm_(FM_.update()),
+          vmat_(Sigma_.update()),
+          version_(0) {}
 
     double get() const { return evaluate(); }
 
@@ -36,6 +44,17 @@ class MVN {
     void set_FM(VECTORM FM) { FM_ = FM; }
     void set_lJF(double lJF) { lJF_ = lJF; }
     void set_Sigma(MATRIX Sigma) { Sigma_ = Sigma; }
+
+    unsigned update() {
+        unsigned vx = FX_.update();
+        unsigned vm = FM_.update();
+        unsigned vmat = Sigma_.update();
+        if (vmat != vmat_ || vx != vx_ || vm != vm_) version_++;
+        vx_=vx;
+        vm_=vm;
+        vmat_=vmat;
+        return version_;
+    }
 
    private:
     double evaluate() const {

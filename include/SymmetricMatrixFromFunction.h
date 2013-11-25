@@ -13,10 +13,23 @@ class SymmetricMatrixFromFunction {
     // X : input coordinates
     // cov : covariance function, compatible with X's shape.
     SymmetricMatrixFromFunction(INMATRIX X, BIVFUNC cov)
-        : X_(X), cov_(cov) {}
+        : X_(X),
+          cov_(cov),
+          vmat_(X_.update()),
+          vfunc_(cov_.update()),
+          version_(0) {}
 
     typedef Eigen::MatrixXd result_type;
     const result_type& get() const { return build_matrix(); }
+
+    unsigned update() {
+        unsigned vmat = X_.update();
+        unsigned vfunc = cov_.update();
+        if (vmat != vmat_ || vfunc != vfunc_) version_++;
+        vmat_=vmat;
+        vfunc_=vfunc;
+        return version_;
+    }
 
    private:
     const result_type& build_matrix() const {
@@ -31,6 +44,7 @@ class SymmetricMatrixFromFunction {
    private:
     INMATRIX X_;
     BIVFUNC cov_;
+    unsigned vmat_, vfunc_, version_;
     mutable result_type retval_;
 
 };

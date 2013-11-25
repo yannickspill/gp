@@ -13,7 +13,7 @@ template <typename MATRIX>
 class LDLT {
    public:
     //! constructor
-    LDLT(MATRIX cov) : cov_(cov) {}
+    LDLT(MATRIX cov) : cov_(cov), vmat_(cov.update()), version_(0) {}
 
     typedef Eigen::LDLT<typename MATRIX::result_type, Eigen::Upper>
         result_type;
@@ -32,6 +32,13 @@ class LDLT {
         return get_ldlt().solve(B);
     }
 
+    unsigned update() {
+        unsigned vmat = cov_.update();
+        if (vmat != vmat_) version_++;
+        vmat_=vmat;
+        return version_;
+    }
+
    private:
     const result_type& get_ldlt() const {
         ldlt_ = result_type(cov_.get());
@@ -40,6 +47,7 @@ class LDLT {
 
    private:
     MATRIX cov_;
+    unsigned vmat_, version_;
     mutable result_type ldlt_;
 
 };

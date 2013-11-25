@@ -13,6 +13,7 @@ class ConstEigenObject {
 
     typedef EIGENTYPE result_type;
     const result_type& get() const { return X_; }
+    unsigned update() const { return 0; } // ConstEigenObject not updatable
 };
 
 #endif /* CONST_EIGEN_OBJECT_H */

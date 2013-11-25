@@ -14,6 +14,8 @@ class ConstCov {
                 Eigen::Matrix<double, 1, 3> y) const {
         return 1.;
     }
+
+    unsigned update() { return 0; }
 };
 
 int main(int, char * []) {

@@ -18,10 +18,16 @@
 class Covariance1DFunction {
     Scalar tau_, lambda_;
     unsigned alpha_;
+    unsigned vtau_, vlambda_, version_;
 
    public:
     Covariance1DFunction(Scalar tau, Scalar lambda, unsigned alpha = 2)
-        : tau_(tau), lambda_(lambda), alpha_(alpha) {
+        : tau_(tau),
+          lambda_(lambda),
+          alpha_(alpha),
+          vtau_(tau_.update()),
+          vlambda_(lambda_.update()),
+          version_(0) {
             if (tau_.get_lower() < 0) tau_.set_lower(0);
             if (lambda_.get_lower() < 0) lambda_.set_lower(0);
         }
@@ -39,6 +45,15 @@ class Covariance1DFunction {
     double eval(Eigen::Matrix<double, 1, 1> x,
                       Eigen::Matrix<double, 1, 1> y) const {
         return eval(x(0), y(0));
+    }
+
+    unsigned update() {
+        unsigned vtau = tau_.update();
+        unsigned vlambda = lambda_.update();
+        if (vtau != vtau_ || vlambda != vlambda_) version_++;
+        vtau_=vtau;
+        vlambda_=vlambda;
+        return version_;
     }
 
    private:
