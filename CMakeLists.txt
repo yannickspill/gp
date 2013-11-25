@@ -13,14 +13,21 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 find_package(GSL REQUIRED)
 include_directories(${GSL_INCLUDE_DIRS})
 
+#build type, add coverage on debug mode
 if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
     add_definitions(-DLOGGING)
+    include(CodeCoverage)
+    SETUP_TARGET_FOR_COVERAGE(${PROJECT_NAME}_coverage test_MVN
+        coverage)
 endif()
 
+#include dirs
 include_directories(include)
 
+#testing
 enable_testing()
 
+#build dirs
 add_subdirectory(src)
 add_subdirectory(test)
 add_subdirectory(bench)
