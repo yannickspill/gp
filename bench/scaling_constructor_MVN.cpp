@@ -25,7 +25,7 @@ int main(int, char*[]){
     //dimensions which will be tried
     const std::vector<unsigned> ndims {2,3,5,8,10,
         12,15,18,20,25,30,40,50,60,70,80,90,100,150,200,250,300,350,400,450,
-        500,600,700,800,900,1000,1100,1200,1500,2000,5000,10000};
+        500,600,700,800,900,1000,1100,1200,1500,2000};
     //maximum time spent on a single dimension
     const time_duration maxtime=seconds(1);
     //minimum number of calls to make for a single dimension
