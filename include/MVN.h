@@ -14,13 +14,14 @@
 template <class VECTORX, class VECTORM, class MATRIX>
 class MVN {
 
+    typedef MatrixDifference<VECTORX, VECTORM> MD;
+
     VECTORX FX_;
     VECTORM FM_;
     double lJF_;
     MATRIX Sigma_;
-    unsigned vx_, vm_, vmat_, version_;
-
-    typedef MatrixDifference<VECTORX, VECTORM> MD;
+    LDLT<MATRIX> ldlt_;
+    MD eps_;
 
    public:
     MVN(VECTORX FX, VECTORM FM, double lJF, MATRIX Sigma)
@@ -28,10 +29,8 @@ class MVN {
           FM_(FM),
           lJF_(lJF),
           Sigma_(Sigma),
-          vx_(FX_.update()),
-          vm_(FM_.update()),
-          vmat_(Sigma_.update()),
-          version_(0) {}
+          ldlt_(Sigma_),
+          eps_(FX_, FM_) {}
 
     double get() const { return evaluate(); }
 
@@ -45,48 +44,34 @@ class MVN {
     void set_lJF(double lJF) { lJF_ = lJF; }
     void set_Sigma(MATRIX Sigma) { Sigma_ = Sigma; }
 
-    unsigned update() {
-        unsigned vx = FX_.update();
-        unsigned vm = FM_.update();
-        unsigned vmat = Sigma_.update();
-        if (vmat != vmat_ || vx != vx_ || vm != vm_) version_++;
-        vx_=vx;
-        vm_=vm;
-        vmat_=vmat;
-        return version_;
+   private:
+
+    void update() {
+        eps_.update();
+        ldlt_.update();
     }
 
-   private:
     double evaluate() const {
-        //first we transform the inputs to something MVNEvaluate can process
-        MD eps(FX_, FM_);
-        LDLT<MATRIX> ldlt(Sigma_);
-        Eigen::VectorXd epsilon(eps.get());
-        Eigen::VectorXd Peps(ldlt.solve(epsilon));
+        Eigen::VectorXd epsilon(eps_.get());
+        Eigen::VectorXd Peps(ldlt_.solve(epsilon));
         double exponent = epsilon.transpose()*Peps;
-        double lnorm = ldlt.get_log_determinant();
+        double lnorm = ldlt_.get_log_determinant();
         lnorm = epsilon.rows()*0.5*std::log(2*M_PI) + 0.5*lnorm;
         return lnorm + 0.5 * exponent + lJF_;
     }
 
     Eigen::VectorXd deriv_FM() const {
         // d(-log(p))/d(FM) = - Sigma^{-1} * epsilon
-        MD eps(FX_, FM_);
-        LDLT<MATRIX> ldlt(Sigma_);
-        Eigen::VectorXd epsilon(eps.get());
-        Eigen::VectorXd Peps(ldlt.solve(epsilon));
-        return -Peps;
+        return - ldlt_.solve(eps_.get());
     }
 
     Eigen::MatrixXd deriv_Sigma() const {
         // d(-log(p))/dSigma = 1/2 (P -  P epsilon transpose(epsilon) P)
-        MD eps(FX_, FM_);
-        LDLT<MATRIX> ldlt(Sigma_);
-        Eigen::VectorXd epsilon(eps.get());
-        Eigen::VectorXd Peps(ldlt.solve(epsilon));
+        Eigen::VectorXd epsilon(eps_.get());
+        Eigen::VectorXd Peps(ldlt_.solve(epsilon));
         Eigen::MatrixXd Id(
             Eigen::MatrixXd::Identity(epsilon.rows(), epsilon.rows()));
-        Eigen::MatrixXd P(ldlt.solve(Id));
+        Eigen::MatrixXd P(ldlt_.solve(Id));
         return 0.5*( P - Peps*Peps.transpose() );
     }
 };
