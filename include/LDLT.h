@@ -19,8 +19,8 @@ class LDLT {
    private:
     MATRIX cov_;
     unsigned vmat_, version_;
-    mutable result_type ldlt_;
     mutable bool cache_invalid_;
+    mutable result_type ldlt_;
 
    public:
     //! constructor
