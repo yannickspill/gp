@@ -18,7 +18,7 @@ typedef MVN<Vec, Vec, Mat> Multivariate;
 // for a given dimension. Purpose is profiling and checking if cache works
 int main(int, char * []) {
     // dimension which will be tried
-    const unsigned n = 1000;
+    const unsigned n = 100;
     // Build inputs
     Vec y(EigenVec::Constant(n, 1.0));
     Vec m(EigenVec::LinSpaced(n, 0, 1));
