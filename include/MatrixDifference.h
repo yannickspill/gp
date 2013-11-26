@@ -6,21 +6,26 @@
 
 #include <Eigen/Dense>
 #include <iostream>
+#include <memory>
 
 //! Difference between two Eigen objects
 template <class In1Type, class In2Type>
 class MatrixDifference : public DoubleInputVersionTracker<In1Type, In2Type> {
     typedef DoubleInputVersionTracker<In1Type, In2Type> P;
-    In1Type in1_;
-    In2Type in2_;
+    struct Data {
+        In1Type in1_;
+        In2Type in2_;
+        Data(In1Type in1, In2Type in2) : in1_(in1), in2_(in2) {}
+    };
+    std::shared_ptr<Data> data_;
 
    public:
     //! constructor
     MatrixDifference(In1Type in1, In2Type in2)
-        : P(in1, in2), in1_(in1), in2_(in2) {}
+        : P(in1, in2), data_(std::make_shared<Data>(in1,in2)) {}
 
-    typedef decltype(in1_.get() - in2_.get()) result_type;
-    result_type get() const { return in1_.get() - in2_.get(); }
+    typedef decltype(data_->in1_.get() - data_->in2_.get()) result_type;
+    result_type get() const { return data_->in1_.get() - data_->in2_.get(); }
 };
 
 #endif /* MATRIX_DIFFERENCE_H */

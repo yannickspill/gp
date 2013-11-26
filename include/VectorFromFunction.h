@@ -4,6 +4,7 @@
 #include "DoubleInputVersionTracker.h"
 
 #include <Eigen/Dense>
+#include <memory>
 
 //! map the rows of INMATRIX through UNIFUNC to a VECTOR
 template <class INMATRIX, class UNIFUNC>
@@ -11,21 +12,26 @@ class VectorFromFunction : public DoubleInputVersionTracker<INMATRIX, UNIFUNC> {
     typedef DoubleInputVersionTracker<INMATRIX, UNIFUNC> P;
 
    public:
-    VectorFromFunction(INMATRIX X, UNIFUNC mu) : P(X, mu), X_(X), mu_(mu) {}
+    VectorFromFunction(INMATRIX X, UNIFUNC mu)
+        : P(X, mu), data_(std::make_shared<Data>(X, mu)) {}
 
     typedef Eigen::VectorXd result_type;
     const result_type& get() const {
-        auto Xmat(X_.get());
-        retval_ = Eigen::VectorXd(Xmat.rows());
+        auto Xmat(data_->X_.get());
+        data_->retval_ = Eigen::VectorXd(Xmat.rows());
         for (unsigned i = 0; i < Xmat.rows(); i++)
-            retval_(i) = mu_.eval(Xmat.row(i));
-        return retval_;
+            data_->retval_(i) = data_->mu_.eval(Xmat.row(i));
+        return data_->retval_;
     }
 
    private:
-    INMATRIX X_;
-    UNIFUNC mu_;
-    mutable result_type retval_;
+    struct Data {
+        INMATRIX X_;
+        UNIFUNC mu_;
+        mutable result_type retval_;
+        Data(INMATRIX X, UNIFUNC mu) : X_(X), mu_(mu) {}
+    };
+    std::shared_ptr<Data> data_;
 };
 
 #endif /* VECTOR_FROM_FUNCTION */

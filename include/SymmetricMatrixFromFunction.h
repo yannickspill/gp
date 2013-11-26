@@ -4,6 +4,7 @@
 #include "DoubleInputVersionTracker.h"
 
 #include <Eigen/Dense>
+#include <memory>
 
 //! Build a dense symmetric matrix from a given function
 // maps any two rows of INMATRIX through BIVFUNC to yield a symmetric matrix
@@ -18,22 +19,27 @@ class SymmetricMatrixFromFunction
     // X : input coordinates
     // cov : covariance function, compatible with X's shape.
     SymmetricMatrixFromFunction(INMATRIX X, BIVFUNC cov)
-        : P(X, cov), X_(X), cov_(cov) {}
+        : P(X, cov), data_(std::make_shared<Data>(X,cov)) {}
 
     typedef Eigen::MatrixXd result_type;
     const result_type& get() const {
-        auto Xmat(X_.get());
-        retval_ = Eigen::MatrixXd(Xmat.rows(), Xmat.rows());
+        auto Xmat(data_->X_.get());
+        data_->retval_ = Eigen::MatrixXd(Xmat.rows(), Xmat.rows());
         for (unsigned i = 0; i < Xmat.rows(); i++)
             for (unsigned j = i; j < Xmat.rows(); j++)
-                retval_(i, j) = cov_.eval(Xmat.row(i), Xmat.row(j));
-        return retval_;
+                data_->retval_(i, j) =
+                    data_->cov_.eval(Xmat.row(i), Xmat.row(j));
+        return data_->retval_;
     }
 
    private:
-    INMATRIX X_;
-    BIVFUNC cov_;
-    mutable result_type retval_;
+    struct Data {
+        INMATRIX X_;
+        BIVFUNC cov_;
+        mutable result_type retval_;
+        Data(INMATRIX X, BIVFUNC cov) : X_(X), cov_(cov) {}
+    };
+    std::shared_ptr<Data> data_;
 };
 
 #endif /* SYMMETRIC_MATRIX_FROM_FUNCTION_H */

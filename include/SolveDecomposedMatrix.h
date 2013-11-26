@@ -6,6 +6,7 @@
 
 #include <Eigen/Dense>
 #include <Eigen/Cholesky>
+#include <memory>
 
 //! Using a matrix decomposition for A, solve for AX=B
 //the point of using this class is to allow for caching of the result
@@ -15,30 +16,30 @@ class SolveDecomposedMatrix
 
     typedef DoubleInputCachedVersionTracker<Decomposition, BMATRIX> P;
 
-   private:
-    Decomposition decomp_;
-    BMATRIX B_;
-
    public:
     //this result_type only works for square matrix decompositions.
     typedef typename Eigen::MatrixXd result_type;
 
    private:
-    mutable result_type AmB_;
+    struct Data {
+        Decomposition decomp_;
+        BMATRIX B_;
+        mutable result_type AmB_;
+        Data(Decomposition decomp, BMATRIX B) : decomp_(decomp), B_(B) {}
+    };
+    std::shared_ptr<Data> data_;
   
    public:
     //! constructor
     SolveDecomposedMatrix(Decomposition decomp, BMATRIX B)
-        : P(decomp,B),
-          decomp_(decomp),
-          B_(B) {}
+        : P(decomp, B), data_(std::make_shared<Data>(decomp, B)) {}
 
     result_type get() const {
         if (P::cache_is_invalid()) {
-            AmB_ = decomp_.solve(B_.get());
+            data_->AmB_ = data_->decomp_.solve(data_->B_.get());
             P::set_cache_is_valid();
         }
-        return AmB_;
+        return data_->AmB_;
     }
 };
 
