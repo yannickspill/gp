@@ -2,6 +2,7 @@
 #define LDLT_H
 
 #include "macros.h"
+#include "SingleInputCachedVersionTracker.h"
 
 #include <Eigen/Dense>
 #include <Eigen/Cholesky>
@@ -11,44 +12,24 @@
 //  Sigma = LDL^T
 //  Only the upper corner of the matrix is used.
 template <typename MATRIX>
-class LDLT {
+class LDLT : public SingleInputCachedVersionTracker<MATRIX> {
 
+    typedef SingleInputCachedVersionTracker<MATRIX> P;
    public:
     typedef Eigen::LDLT<typename MATRIX::result_type, Eigen::Upper> result_type;
 
    private:
     MATRIX cov_;
-    unsigned vmat_, version_;
-    mutable bool cache_invalid_;
     mutable result_type ldlt_;
 
    public:
     //! constructor
-    LDLT(MATRIX cov)
-        : cov_(cov), vmat_(cov.update()), version_(0), cache_invalid_(true) {}
+    LDLT(MATRIX cov) : P(cov), cov_(cov) {}
 
     const result_type& get() const { return get_ldlt(); }
 
     double get_log_determinant() const {
         return get_ldlt().vectorD().array().abs().log().sum();
-    }
-
-    void set_matrix(MATRIX cov) {
-        cov_ = cov;
-        vmat_ = cov_.update();
-        cache_invalid_=true;
-        version_++;
-    }
-
-    unsigned update() {
-        unsigned vmat = cov_.update();
-        if (vmat != vmat_)
-        {
-            cache_invalid_=true; //allows lazy updating of ldlt
-            version_++;
-        }
-        vmat_ = vmat;
-        return version_;
     }
 
     //! solve for Sigma X = B, returning X = Sigma^{-1} B
@@ -60,10 +41,10 @@ class LDLT {
 
    private:
     const result_type& get_ldlt() const {
-        if (cache_invalid_) {
+        if (P::cache_is_invalid()) {
             ldlt_ = result_type(cov_.get());
             assert(ldlt_.info() == Eigen::Success);
-            cache_invalid_=false;
+            P::set_cache_is_valid();
         }
         return ldlt_;
     }

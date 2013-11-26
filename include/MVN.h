@@ -41,22 +41,6 @@ class MVN {
     Eigen::VectorXd get_derivative_FM() const { return deriv_FM(); }
 
     Eigen::MatrixXd get_derivative_Sigma() const { return deriv_Sigma(); }
-
-    void set_FX(VECTORX FX) {
-        FX_ = FX;
-        eps_.set_lhs(FX_);
-    }
-    void set_FM(VECTORM FM) {
-        FM_ = FM;
-        eps_.set_rhs(FM_);
-    }
-    void set_lJF(double lJF) {
-        lJF_ = lJF;
-    }
-    void set_Sigma(MATRIX Sigma) {
-        Sigma_ = Sigma;
-        ldlt_.set_matrix(Sigma_);
-    }
     
    private:
 

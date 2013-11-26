@@ -22,7 +22,11 @@ class DoubleInputVersionTracker {
     unsigned update() {
         unsigned vin1 = in1_.update();
         unsigned vin2 = in2_.update();
-        if (vin1 != vin1_ || vin2 != vin2_) version_++;
+        if (vin1 != vin1_ || vin2 != vin2_){
+            vin1_ = vin1;
+            vin2_ = vin2;
+            version_++;
+        }
         return version_;
     }
 

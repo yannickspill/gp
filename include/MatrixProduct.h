@@ -1,49 +1,26 @@
 #ifndef MATRIX_PRODUCT_H
 #define MATRIX_PRODUCT_H
 
-#include "Scalar.h"
+#include "DoubleInputVersionTracker.h"
 #include "macros.h"
 
 #include <Eigen/Dense>
+#include <iostream>
 
-//! Product of two Eigen objects (or Eigen and Scalar)
-template <class LEFTTYPE, class RIGHTTYPE>
-class MatrixProduct {
-    LEFTTYPE l_;
-    RIGHTTYPE r_;
-    unsigned vleft_, vright_, version_;
+//! Product between two Eigen objects
+template <class In1Type, class In2Type>
+class MatrixProduct : public DoubleInputVersionTracker<In1Type, In2Type> {
+    typedef DoubleInputVersionTracker<In1Type, In2Type> P;
+    In1Type in1_;
+    In2Type in2_;
 
    public:
     //! constructor
-    MatrixProduct(LEFTTYPE l, RIGHTTYPE r)
-        : l_(l),
-          r_(r),
-          vleft_(l_.update()),
-          vright_(r_.update()),
-          version_(0) {}
+    MatrixProduct(In1Type in1, In2Type in2)
+        : P(in1, in2), in1_(in1), in2_(in2) {}
 
-    typedef decltype(l_.get() * r_.get()) result_type;
-    result_type get() const { return l_.get() * r_.get(); }
-
-    void set_lhs(LEFTTYPE l) {
-        l_ = l;
-        vleft_ = l_.update();
-        version_++;
-    }
-    void set_rhs(RIGHTTYPE r) {
-        r_ = r;
-        vright_ = r_.update();
-        version_++;
-    }
-
-    unsigned update() {
-        unsigned vleft = l_.update();
-        unsigned vright = r_.update();
-        if (vleft != vleft_ || vright != vright_) version_++;
-        vleft_ = vleft;
-        vright_ = vright;
-        return version_;
-    }
+    typedef decltype(in1_.get() * in2_.get()) result_type;
+    result_type get() const { return in1_.get() * in2_.get(); }
 };
 
 #endif /* MATRIX_PRODUCT_H */
