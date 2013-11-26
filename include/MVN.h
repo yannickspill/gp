@@ -52,26 +52,35 @@ class MVN {
     }
 
     double evaluate() const {
+        LOG(" mvn eval: eps" << std::endl);
         Eigen::VectorXd epsilon(eps_.get());
+        LOG(" mvn eval: Peps" << std::endl);
         Eigen::VectorXd Peps(Peps_.get());
         double exponent = epsilon.transpose()*Peps;
+        LOG(" mvn eval: determinant" << std::endl);
         double lnorm = ldlt_.get_log_determinant();
         lnorm = epsilon.rows()*0.5*std::log(2*M_PI) + 0.5*lnorm;
+        LOG(" mvn eval: return" << std::endl);
         return lnorm + 0.5 * exponent + lJF_;
     }
 
     Eigen::VectorXd deriv_FM() const {
         // d(-log(p))/d(FM) = - Sigma^{-1} * epsilon
+        LOG(" mvn FM: return Peps" << std::endl);
         return - Peps_.get();
     }
 
     Eigen::MatrixXd deriv_Sigma() const {
         // d(-log(p))/dSigma = 1/2 (P -  P epsilon transpose(epsilon) P)
+        LOG(" mvn sigma: eps" << std::endl);
         Eigen::VectorXd epsilon(eps_.get());
+        LOG(" mvn sigma: Peps" << std::endl);
         Eigen::VectorXd Peps(Peps_.get());
         Eigen::MatrixXd Id(
             Eigen::MatrixXd::Identity(epsilon.rows(), epsilon.rows()));
+        LOG(" mvn sigma: ldlt solve" << std::endl);
         Eigen::MatrixXd P(ldlt_.solve(Id));
+        LOG(" mvn sigma: return" << std::endl);
         return 0.5*( P - Peps*Peps.transpose() );
     }
 };

@@ -35,10 +35,13 @@ class SolveDecomposedMatrix
         : P(decomp, B), data_(std::make_shared<Data>(decomp, B)) {}
 
     result_type get() const {
+        LOG("Solve: get()");
         if (P::cache_is_invalid()) {
             data_->AmB_ = data_->decomp_.solve(data_->B_.get());
             P::set_cache_is_valid();
+            LOG(" reset cache");
         }
+        LOG(std::endl);
         return data_->AmB_;
     }
 };

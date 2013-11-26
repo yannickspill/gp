@@ -1,6 +1,7 @@
 #ifndef DOUBLE_INPUT_CACHED_VERSION_TRACKER_H
 #define DOUBLE_INPUT_CACHED_VERSION_TRACKER_H
 
+#include "macros.h"
 #include <memory>
 
 //! Class that implements version tracking only, no caching
@@ -29,6 +30,7 @@ class DoubleInputCachedVersionTracker {
         : data_(std::make_shared<Data>(in1,in2)) {}
 
     unsigned update() {
+        LOG("DoubleInputCachedVersionTracker::update()");
         unsigned vin1 = data_->in1_.update();
         unsigned vin2 = data_->in2_.update();
         if (vin1 != data_->vin1_ || vin2 != data_->vin2_){
@@ -36,12 +38,17 @@ class DoubleInputCachedVersionTracker {
             data_->vin2_ = vin2;
             data_->cache_invalid_ = true;
             data_->version_++;
+            LOG(" invalidate cache");
         }
+        LOG(std::endl);
         return data_->version_;
     }
 
     bool cache_is_invalid() const { return data_->cache_invalid_; }
-    void set_cache_is_valid() const { data_->cache_invalid_=false; }
+    void set_cache_is_valid() const {
+        LOG("DoubleInputCachedVersionTracker::set_cache_is_valid()");
+        data_->cache_invalid_=false;
+    }
 
 };
 

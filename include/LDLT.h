@@ -45,11 +45,14 @@ class LDLT : public SingleInputCachedVersionTracker<MATRIX> {
 
    private:
     const result_type& get_ldlt() const {
+        LOG("ldlt: get_ldlt()");
         if (P::cache_is_invalid()) {
             data_->ldlt_ = result_type(data_->cov_.get());
             assert(data_->ldlt_.info() == Eigen::Success);
             P::set_cache_is_valid();
+            LOG(" recomputed LDLT");
         }
+        LOG(std::endl);
         return data_->ldlt_;
     }
 };

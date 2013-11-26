@@ -1,6 +1,7 @@
 #ifndef SINGLE_INPUT_CACHED_VERSION_TRACKER_H
 #define SINGLE_INPUT_CACHED_VERSION_TRACKER_H
 
+#include "macros.h"
 #include <memory>
 
 //! Class that implements version tracking and caching
@@ -23,17 +24,23 @@ class SingleInputCachedVersionTracker {
         : data_(std::make_shared<Data>(in)) {}
 
     unsigned update() {
+        LOG("SingleInputCachedVersionTracker::update()");
         unsigned vin = data_->in_.update();
         if (vin != data_->vin_){
             data_->cache_invalid_ = true;
             data_->version_++;
+            LOG(" invalidate cache");
         }
+        LOG(std::endl);
         data_->vin_ = vin;
         return data_->version_;
     }
 
     bool cache_is_invalid() const { return data_->cache_invalid_; }
-    void set_cache_is_valid() const { data_->cache_invalid_=false; }
+    void set_cache_is_valid() const {
+        LOG("SingleInputCachedVersionTracker::cache_is_invalid()");
+        data_->cache_invalid_=false;
+    }
 
 };
 

@@ -25,7 +25,10 @@ class MatrixDifference : public DoubleInputVersionTracker<In1Type, In2Type> {
         : P(in1, in2), data_(std::make_shared<Data>(in1,in2)) {}
 
     typedef decltype(data_->in1_.get() - data_->in2_.get()) result_type;
-    result_type get() const { return data_->in1_.get() - data_->in2_.get(); }
+    result_type get() const {
+        LOG("MatrixDifference: get()" << std::endl);
+        return data_->in1_.get() - data_->in2_.get();
+    }
 };
 
 #endif /* MATRIX_DIFFERENCE_H */
