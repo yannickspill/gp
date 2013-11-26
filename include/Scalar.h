@@ -2,8 +2,7 @@
 #define SCALAR_H
 
 #include <limits>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
+#include <memory>
 
 // Scalar with optional upper/lower bounds
 class Scalar {
@@ -11,7 +10,7 @@ class Scalar {
     explicit Scalar(double value,
                     double lower = -std::numeric_limits<double>::infinity(),
                     double upper = std::numeric_limits<double>::infinity())
-        : data_(boost::make_shared<Data>(value, lower, upper)) {}
+        : data_(std::make_shared<Data>(value, lower, upper)) {}
 
     Scalar(const Scalar& other) : data_(other.data_) {}
 
@@ -59,7 +58,7 @@ class Scalar {
         Data(double v, double l, double u)
             : value_(v), lower_(l), upper_(u), version_(0) {}
     };
-    boost::shared_ptr<Data> data_;
+    std::shared_ptr<Data> data_;
 };
 
 #endif /* SCALAR_H */
