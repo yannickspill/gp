@@ -87,7 +87,7 @@ bool test_degenerate() {
     MatrixXd Sigma(1, 1);
     Sigma(0, 0) = 1.0 + rand();
 
-    MultivariateNormal mv(ConstVec(FA), ConstVec(FM), lJA, ConstMat(Sigma));
+    MultivariateNormal mv((ConstVec(FA)), (ConstVec(FM)), (ConstMat(Sigma)));
     FNormal fn(FA(0, 0), JA, FM(0), sqrt(Sigma(0, 0)));
 
     {
@@ -99,7 +99,7 @@ bool test_degenerate() {
 
     {
         // evaluate_derivative_FM
-        double observed = mv.get_derivative_FM()(0);
+        double observed = mv.get_derivative_MU()(0);
         double expected = fn.evaluate_derivative_FM();
         if (naeq(observed, expected)) FAIL("evaluate_derivative_FM");
     }
@@ -135,7 +135,7 @@ bool test_degenerate_N1M2() {
     ConstVec cvFA(FA);
     ConstVec cvFM(FM);
     ConstMat cmS(Sigma);
-    MultivariateNormal mv(cvFA, cvFM, lJA, cmS);
+    MultivariateNormal mv(cvFA, cvFM, cmS);
     FNormal fn(FA(0), JA, FM(0), sqrt(Sigma(0, 0)));
     FNormal fn2(FA(1), JA, FM(1), sqrt(Sigma(1, 1)));
 
@@ -148,7 +148,7 @@ bool test_degenerate_N1M2() {
 
     {
         // evaluate_derivative_FM
-        VectorXd observed = mv.get_derivative_FM();
+        VectorXd observed = mv.get_derivative_MU();
         double expected = fn.evaluate_derivative_FM();
         if (naeq(observed(0), expected)) FAIL("evaluate_derivative_FM 1");
         expected = fn2.evaluate_derivative_FM();
@@ -194,7 +194,7 @@ bool test_2D() {
     Sigma(0, 1) = rho * sigma1 * sigma2;
     Sigma(1, 0) = rho * sigma1 * sigma2;
 
-    MultivariateNormal mv(ConstVec(FA), ConstVec(FM), lJA, ConstMat(Sigma));
+    MultivariateNormal mv((ConstVec(FA)), (ConstVec(FM)), (ConstMat(Sigma)));
 
     {
         // evaluate
@@ -210,7 +210,7 @@ bool test_2D() {
 
     {
         // test_evaluate_derivative_FM
-        VectorXd observed = mv.get_derivative_FM();
+        VectorXd observed = mv.get_derivative_MU();
         double expected =
             ((FM(1) - FA(1)) * rho * sigma1 + (FA(0) - FM(0)) * sigma2) /
             ((-1 + rho * rho) * sigma1 * sigma1 * sigma2);

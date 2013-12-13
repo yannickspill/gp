@@ -14,7 +14,7 @@ typedef ConstEigenObject<EigenVec> Vec;
 typedef ConstEigenObject<EigenMat> Mat;
 typedef MVN<Vec, Vec, Mat> Multivariate;
 
-// Just execute one get(), get_derivative_FM() and get_derivative_Sigma()
+// Just execute one get(), get_derivative_MU() and get_derivative_Sigma()
 // for a given dimension. Purpose is profiling and checking if cache works
 int main(int, char * []) {
     // dimension which will be tried
@@ -30,11 +30,11 @@ int main(int, char * []) {
     // perform run
     unsigned ncalls = 0;
     std::cout << "mvn construct" << std::endl;
-    Multivariate mvn(y, m, 0.0, Sigma);
+    Multivariate mvn(y, m, Sigma);
     std::cout << "mvn get" << std::endl;
     mvn.get();
-    std::cout << "mvn dFM" << std::endl;
-    mvn.get_derivative_FM();
+    std::cout << "mvn dMU" << std::endl;
+    mvn.get_derivative_MU();
     std::cout << "mvn dSigma" << std::endl;
     mvn.get_derivative_Sigma();
     std::cout << "mvn done" << std::endl;

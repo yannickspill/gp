@@ -51,7 +51,7 @@ int main(int, char*[]){
             ptime start = microsec_clock::local_time();
             //
             // BENCHMARK
-            Multivariate mvn(y,m,0.0,Sigma);
+            Multivariate mvn(y,m,Sigma);
             //
             //
             ptime end = microsec_clock::local_time();

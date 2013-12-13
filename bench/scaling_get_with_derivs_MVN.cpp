@@ -46,12 +46,12 @@ int main(int, char*[]){
         unsigned ncalls = 0;
         ptime run = microsec_clock::local_time();
         do{
-            Multivariate mvn(y,m,0.0,Sigma);
+            Multivariate mvn(y,m,Sigma);
             //
             // BENCHMARK
             ptime start = microsec_clock::local_time();
             mvn.get();
-            mvn.get_derivative_FM();
+            mvn.get_derivative_MU();
             mvn.get_derivative_Sigma();
             ptime end = microsec_clock::local_time();
             //
