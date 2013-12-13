@@ -8,40 +8,64 @@
 #include <Eigen/Dense>
 
 //! Multivariate normal distribution
-//FX : F(X)
-//lJF : -log(jacobian)
-//FM : F(mu)
-//Sigma: covariance
+/** Probability density function and -log(p) of multivariate normal
+ * distribution of an M-variate observation.
+ *
+ * \f[ p(x|\mu,\Sigma) =
+ *  \left((2\pi)^M|\Sigma|\right)^{-N/2}
+ *  \exp\left(-\frac{1}{2} (x-\mu)^\top\Sigma^{-1}(x-\mu)  \right)
+ *  \f]
+ *
+ *  \note References:
+ *  - Multivariate Likelihood:
+ *  Box and Tiao, "Bayesian Inference in Statistical Analysis",
+ *  Addison-Wesley publishing company, 1973, pp 423.
+ *  - Matrix calculations for derivatives:
+ *  Petersen and Pedersen, "The Matrix Cookbook", 2008, matrixcookbook.com
+ *
+ */
 template <class VECTORX, class VECTORM, class MATRIX>
 class MVN {
 
     typedef MatrixDifference<VECTORX, VECTORM> MD;
 
-    VECTORX FX_;
-    VECTORM FM_;
-    double lJF_;
+    VECTORX X_;
+    VECTORM MU_;
     MATRIX Sigma_;
     LDLT<MATRIX> ldlt_;
     MD eps_;
     SolveDecomposedMatrix<LDLT<MATRIX>, MD> Peps_;
 
    public:
-    MVN(VECTORX FX, VECTORM FM, double lJF, MATRIX Sigma)
-        : FX_(FX),
-          FM_(FM),
-          lJF_(lJF),
+    /** Constructor
+    * \param [in] X vector of observations with M rows.
+    * \param [in] MU mean vector \f$F(\mu)\f$ of size M.
+    * \param [in] Sigma : MxM variance-covariance matrix \f$\Sigma\f$.
+    * */
+    MVN(VECTORX X, VECTORM MU, MATRIX Sigma)
+        : X_(X),
+          MU_(MU),
           Sigma_(Sigma),
           ldlt_(Sigma_),
-          eps_(FX_, FM_),
+          eps_(X_, MU_),
           Peps_(ldlt_, eps_) {}
 
+    /// return -log(p)
     double get() const { return evaluate(); }
 
-    Eigen::VectorXd get_derivative_FX() const { return -deriv_FM(); }
-    Eigen::VectorXd get_derivative_FM() const { return deriv_FM(); }
+    /// return gradient of -log(p) wrt X
+    Eigen::VectorXd get_derivative_X() const { return -deriv_MU(); }
+    /// return gradient of -log(p) wrt MU
+    Eigen::VectorXd get_derivative_MU() const { return deriv_MU(); }
 
+    /// return gradient of -log(p) wrt Sigma
     Eigen::MatrixXd get_derivative_Sigma() const { return deriv_Sigma(); }
     
+    //get partial derivative of -log(p) wrt obj
+    //template<class OBJ>
+    //Eigen::MatrixXd deriv(const OBJ& obj) const {
+    //}
+
    private:
 
     void update() {
@@ -52,6 +76,7 @@ class MVN {
     }
 
     double evaluate() const {
+        // -log(p) =
         LOG(" mvn eval: eps" << std::endl);
         Eigen::VectorXd epsilon(eps_.get());
         LOG(" mvn eval: Peps" << std::endl);
@@ -61,12 +86,12 @@ class MVN {
         double lnorm = ldlt_.get_log_determinant();
         lnorm = epsilon.rows()*0.5*std::log(2*M_PI) + 0.5*lnorm;
         LOG(" mvn eval: return" << std::endl);
-        return lnorm + 0.5 * exponent + lJF_;
+        return lnorm + 0.5 * exponent;
     }
 
-    Eigen::VectorXd deriv_FM() const {
-        // d(-log(p))/d(FM) = - Sigma^{-1} * epsilon
-        LOG(" mvn FM: return Peps" << std::endl);
+    Eigen::VectorXd deriv_MU() const {
+        // d(-log(p))/d(MU) = - Sigma^{-1} * epsilon
+        LOG(" mvn MU: return Peps" << std::endl);
         return - Peps_.get();
     }
 
@@ -83,6 +108,7 @@ class MVN {
         LOG(" mvn sigma: return" << std::endl);
         return 0.5*( P - Peps*Peps.transpose() );
     }
+
 };
 
-#endif /* MVN_EVALUATE_H */
+#endif /* MVN_H */
