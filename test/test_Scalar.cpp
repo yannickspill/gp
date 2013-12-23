@@ -41,5 +41,11 @@ int main(int, char * []) {
     if (s.get_lower() != t.get_lower()) return 18;
     if (s.get_upper() != t.get_upper()) return 19;
 
+    //test operator==
+    if (!(t == s)) return 20;
+    if (t != s) return 21;
+    Scalar u(1.0);
+    if (s == u) return 22;
+
     return 0;
 }

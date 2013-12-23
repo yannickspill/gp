@@ -51,6 +51,13 @@ class Scalar {
         return data_->version_;
     }
 
+    bool operator==(const Scalar& other) const {
+        return data_ == other.data_;
+    }
+    bool operator!=(const Scalar& other) const {
+        return !(*this == other);
+    }
+
    private:
     struct Data {
         double value_, lower_, upper_;
