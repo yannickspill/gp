@@ -2,6 +2,7 @@
 #define DOUBLE_INPUT_CACHED_VERSION_TRACKER_H
 
 #include "macros.h"
+#include "Scalar.h"
 #include <memory>
 
 //! Class that implements version tracking only, no caching
@@ -50,6 +51,10 @@ class DoubleInputCachedVersionTracker {
         data_->cache_invalid_=false;
     }
 
+    bool get_is_function_of(const Scalar& s) const {
+        return data_->in1_.get_is_function_of(s) ||
+               data_->in2_.get_is_function_of(s);
+    }
 };
 
 #endif /* DOUBLE_INPUT_CACHED_VERSION_TRACKER_H */

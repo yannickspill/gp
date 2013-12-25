@@ -58,6 +58,10 @@ class Scalar {
         return !(*this == other);
     }
 
+    bool get_is_function_of(const Scalar& other) const {
+        return (*this == other);
+    }
+
    private:
     struct Data {
         double value_, lower_, upper_;

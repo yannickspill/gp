@@ -2,6 +2,7 @@
 #define SINGLE_INPUT_CACHED_VERSION_TRACKER_H
 
 #include "macros.h"
+#include "Scalar.h"
 #include <memory>
 
 //! Class that implements version tracking and caching
@@ -40,6 +41,10 @@ class SingleInputCachedVersionTracker {
     void set_cache_is_valid() const {
         LOG("SingleInputCachedVersionTracker::cache_is_invalid()");
         data_->cache_invalid_=false;
+    }
+
+    bool get_is_function_of(const Scalar& s) const {
+        return data_->in_.get_is_function_of(s);
     }
 
 };
