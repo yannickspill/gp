@@ -2,7 +2,7 @@
 #include "ConstEigenObject.h"
 #include "Linear1DFunction.h"
 #include "VectorFromFunction.h"
-#include "MatrixDifference.h"
+#include "EpsilonVector.h"
 
 #include <Eigen/Dense>
 
@@ -11,7 +11,7 @@ using Eigen::MatrixXd;
 namespace{
 typedef ConstEigenObject<VectorXd> ConstVec;
 typedef VectorFromFunction<ConstVec, Linear1DFunction> VFF;
-typedef MatrixDifference<ConstVec, VFF> MD;
+typedef EpsilonVector<ConstVec, VFF> MD;
 }
 
 
