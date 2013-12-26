@@ -24,6 +24,14 @@ class VectorFromFunction : public DoubleInputVersionTracker<INMATRIX, UNIFUNC> {
         return data_->retval_;
     }
 
+    result_type get_derivative(const Scalar& s) const {
+        auto Xmat(data_->X_.get());
+        Eigen::VectorXd retval(Xmat.rows());
+        for (unsigned i=0; i < Xmat.rows(); i++)
+            retval(i) = data_->mu_.eval_derivative(Xmat.row(i),s);
+        return retval;
+    }
+
    private:
     struct Data {
         INMATRIX X_;
