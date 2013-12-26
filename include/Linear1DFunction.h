@@ -25,6 +25,20 @@ class Linear1DFunction : public DoubleInputVersionTracker<Scalar, Scalar> {
         return eval(x(0));
     }
 
+    double eval_derivative(double x, const Scalar& s) const {
+        if (s == a_){
+            return x;
+        } else if (s == b_) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    double eval_derivative(Eigen::Matrix<double, 1, 1> x,
+                           const Scalar& s) const {
+        return eval_derivative(x(0),s);
+    }
+
    private:
     double get_a_value() const { return a_.get(); }
     double get_b_value() const { return b_.get(); }
