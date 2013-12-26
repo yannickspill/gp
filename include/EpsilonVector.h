@@ -32,16 +32,6 @@ class EpsilonVector : public DoubleInputVersionTracker<In1Type, In2Type> {
 
     typedef typename In1Type::result_type derivative_type;
 
-    derivative_type get_derivative_in1() const {
-        double rows(data_->in1_.get().rows());
-        return derivative_type::Ones(rows);
-    }
-
-    derivative_type get_derivative_in2() const {
-        double rows(data_->in2_.get().rows());
-        return -derivative_type::Ones(rows);
-    }
-
     derivative_type get_derivative(const Scalar& s) const {
         //d(eps)/ds = d(left)/ds - d(right)/ds
         double rows(data_->in1_.get().rows());

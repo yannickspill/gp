@@ -21,12 +21,6 @@ int main(int, char*[]) {
     //test value
     if ((diff.get()-(A-B)).array().abs().array().sum() > 1e-7) return 1;
     const Eigen::VectorXd ones(Eigen::VectorXd::Ones(10));
-    //test left derivative
-    if ((diff.get_derivative_in1() - ones).array().abs().array().sum() > 1e-7)
-        return 2;
-    //test right derivative
-    if ((diff.get_derivative_in2() + ones).array().abs().array().sum() > 1e-7)
-        return 3;
     //test derivative wrt scalar on the right
     Scalar a(0.0);
     Scalar b(1.0);
