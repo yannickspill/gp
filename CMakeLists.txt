@@ -3,7 +3,11 @@ cmake_minimum_required (VERSION 2.6)
 project (GaussianProcess)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
-ADD_DEFINITIONS("-std=c++0x") 
+if(CMAKE_COMPILER_IS_GNUCXX)
+    ADD_DEFINITIONS("-std=gnu++0x") 
+else(CMAKE_COMPILER_IS_GNUCXX)
+    ADD_DEFINITIONS("-std=c++0x") 
+endif()
 
 #dependencies
 find_package(Boost REQUIRED)
