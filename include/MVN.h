@@ -4,6 +4,7 @@
 #include "EpsilonVector.h"
 #include "LDLT.h"
 #include "SolveDecomposedMatrix.h"
+#include "Scalar.h"
 
 #include <Eigen/Dense>
 
@@ -60,11 +61,15 @@ class MVN {
 
     /// return gradient of -log(p) wrt Sigma
     Eigen::MatrixXd get_derivative_Sigma() const { return deriv_Sigma(); }
-    
-    //get partial derivative of -log(p) wrt obj
-    //template<class OBJ>
-    //Eigen::MatrixXd deriv(const OBJ& obj) const {
-    //}
+
+    bool get_is_function_of(const Scalar& scalar) const {
+        return (X_.get_is_function_of(scalar) ||
+                MU_.get_is_function_of(scalar) ||
+                Sigma_.get_is_function_of(scalar));
+    }
+
+    //get partial derivative of -log(p) wrt scalar
+    double get_derivative(const Scalar& scalar) const { return deriv(scalar); }
 
    private:
 
@@ -76,7 +81,8 @@ class MVN {
     }
 
     double evaluate() const {
-        // -log(p) =
+        // -log(p) = 1/2 * eps^T * Sigma^{-1} * eps 
+        //           + M/2 * log(2*pi) + 1/2*log(det(Sigma))
         LOG(" mvn eval: eps" << std::endl);
         Eigen::VectorXd epsilon(eps_.get());
         LOG(" mvn eval: Peps" << std::endl);
@@ -107,6 +113,18 @@ class MVN {
         Eigen::MatrixXd P(ldlt_.solve(Id));
         LOG(" mvn sigma: return" << std::endl);
         return 0.5*( P - Peps*Peps.transpose() );
+    }
+
+    double deriv(const Scalar& scalar) const {
+        // d(-log(p))/ds = d(-log(p))/d(eps) * d(eps)/ds
+        //                +d(-log(p))/d(Sigma) * d(Sigma)/ds
+        double deriv=0;
+        if (eps_.get_is_function_of(scalar))
+            deriv += -deriv_MU().transpose() * eps_.get_derivative(scalar);
+        if (Sigma_.get_is_function_of(scalar))
+            deriv += (deriv_Sigma().transpose() * Sigma_.get_derivative(scalar))
+                         .trace();
+        return deriv;
     }
 
 };
