@@ -1,7 +1,7 @@
 #ifndef MVN_H
 #define MVN_H
 
-#include "MatrixDifference.h"
+#include "EpsilonVector.h"
 #include "LDLT.h"
 #include "SolveDecomposedMatrix.h"
 
@@ -27,7 +27,7 @@
 template <class VECTORX, class VECTORM, class MATRIX>
 class MVN {
 
-    typedef MatrixDifference<VECTORX, VECTORM> MD;
+    typedef EpsilonVector<VECTORX, VECTORM> MD;
 
     VECTORX X_;
     VECTORM MU_;
