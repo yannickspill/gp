@@ -32,7 +32,7 @@ class Covariance1DFunction : public DoubleInputVersionTracker<Scalar, Scalar> {
         }
 
     double eval(double x, double y) const {
-        double dist = std::abs(x-y);
+        const double dist = std::abs(x-y);
         double ret = dist/get_lambda_value();
         if (alpha_ == 2) {
             ret = SQUARE(ret);
@@ -44,6 +44,31 @@ class Covariance1DFunction : public DoubleInputVersionTracker<Scalar, Scalar> {
     double eval(Eigen::Matrix<double, 1, 1> x,
                       Eigen::Matrix<double, 1, 1> y) const {
         return eval(x(0), y(0));
+    }
+
+    double eval_derivative(double x, double y, const Scalar& s) const {
+        const double tauval = get_tau_value();
+        if (tauval == 0.) return 0; //all derivatives will be zero
+                                    // except lambda==0 not considered here
+        if (s == tau_) {
+            // d[w(x1,x2)]/dtau = 2/tau*w(x1,x2)
+            return eval(x,y)*2./tauval;
+        } else if (s == lambda_) {
+            // d[w(x,x')]/dlambda
+            //= w(x,x') *( alpha |x'-x|^alpha/(2 lambda^{alpha+1}))
+            const double lambdaval = get_lambda_value();
+            const double ratio(std::abs(x-y)/lambdaval);
+            return eval(x, y) * alpha_ * std::pow(ratio, alpha_) /
+                   (2. * lambdaval);
+        } else {
+            return 0;
+        }
+    }
+
+    double eval_derivative(Eigen::Matrix<double, 1, 1> x,
+                           Eigen::Matrix<double, 1, 1> y,
+                           const Scalar& s) const {
+        return eval_derivative(x(0),y(0),s);
     }
 
    private:

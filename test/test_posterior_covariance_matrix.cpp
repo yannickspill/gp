@@ -32,12 +32,12 @@ int main(int, char * []) {
     typedef MatrixSum<MF, MPP> MS;
     MS cov(W, si2S);
     //test
-    Eigen::MatrixXd observed(cov.get().selfadjointView<Eigen::Upper>());
+    Eigen::MatrixXd observed(cov.get());
     Eigen::MatrixXd expected(Eigen::MatrixXd::Ones(10,10));
     if (observed != expected) return 1;
     //change sigma and test again
     sigma.set(3.0);
-    Eigen::MatrixXd observed2(cov.get().selfadjointView<Eigen::Upper>());
+    Eigen::MatrixXd observed2(cov.get());
     expected += 9.0*Eigen::MatrixXd::Identity(10,10);
     if (observed2 != expected) return 2;
     return 0;

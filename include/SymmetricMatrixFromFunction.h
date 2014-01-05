@@ -8,7 +8,6 @@
 
 //! Build a dense symmetric matrix from a given function
 // maps any two rows of INMATRIX through BIVFUNC to yield a symmetric matrix
-// only the upper half of the matrix is filled
 template <class INMATRIX, class BIVFUNC>
 class SymmetricMatrixFromFunction
     : public DoubleInputVersionTracker<INMATRIX, BIVFUNC> {
@@ -26,17 +25,31 @@ class SymmetricMatrixFromFunction
         auto Xmat(data_->X_.get());
         data_->retval_ = Eigen::MatrixXd(Xmat.rows(), Xmat.rows());
         for (unsigned i = 0; i < Xmat.rows(); i++)
-            for (unsigned j = i; j < Xmat.rows(); j++)
+            for (unsigned j = i; j < Xmat.rows(); j++) {
                 data_->retval_(i, j) =
                     data_->cov_.eval(Xmat.row(i), Xmat.row(j));
+                if (j>i) data_->retval_(j,i) = data_->retval_(i,j);
+            }
         return data_->retval_;
+    }
+
+    const result_type& get_derivative(const Scalar& s) const {
+        auto Xmat(data_->X_.get());
+        data_->deriv_ = Eigen::MatrixXd(Xmat.rows(), Xmat.rows());
+        for (unsigned i=0; i< Xmat.rows(); i++)
+            for (unsigned j = i; j < Xmat.rows(); j++) {
+                data_->deriv_(i, j) =
+                    data_->cov_.eval_derivative(Xmat.row(i), Xmat.row(j), s);
+                if (j > i) data_->deriv_(j, i) = data_->deriv_(i, j);
+            }
+        return data_->deriv_;
     }
 
    private:
     struct Data {
         INMATRIX X_;
         BIVFUNC cov_;
-        mutable result_type retval_;
+        mutable result_type retval_, deriv_;
         Data(INMATRIX X, BIVFUNC cov) : X_(X), cov_(cov) {}
     };
     std::shared_ptr<Data> data_;
