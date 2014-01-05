@@ -12,7 +12,7 @@
  * distribution of an M-variate observation.
  *
  * \f[ p(x|\mu,\Sigma) =
- *  \left((2\pi)^M|\Sigma|\right)^{-N/2}
+ *  \frac{1}{(2\pi)^{M/2}|\Sigma|^{1/2}}
  *  \exp\left(-\frac{1}{2} (x-\mu)^\top\Sigma^{-1}(x-\mu)  \right)
  *  \f]
  *
