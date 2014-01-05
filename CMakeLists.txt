@@ -22,8 +22,7 @@ if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
     add_definitions(-DLOGGING)
     include(CodeCoverage)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
-    SETUP_TARGET_FOR_COVERAGE(${PROJECT_NAME}_coverage test_MVN
-        coverage)
+    SETUP_TARGET_FOR_COVERAGE(${PROJECT_NAME}_coverage ninja coverage test )
 endif()
 
 #include dirs
