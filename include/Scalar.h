@@ -12,8 +12,6 @@ class Scalar {
                     double upper = std::numeric_limits<double>::infinity())
         : data_(std::make_shared<Data>(value, lower, upper)) {}
 
-    Scalar(const Scalar& other) : data_(other.data_) {}
-
     void clear_lower() {
         data_->lower_ = -std::numeric_limits<double>::infinity();
     }
