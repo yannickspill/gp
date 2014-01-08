@@ -6,7 +6,7 @@
 
 // Scalar with optional upper/lower bounds
 class Scalar {
-   public:
+  public:
     explicit Scalar(double value,
                     double lower = -std::numeric_limits<double>::infinity(),
                     double upper = std::numeric_limits<double>::infinity())
@@ -32,11 +32,17 @@ class Scalar {
         if (get() > upper) set(upper);
     }
 
-    double get_lower() const { return data_->lower_; }
-    double get_upper() const { return data_->upper_; }
+    double get_lower() const {
+        return data_->lower_;
+    }
+    double get_upper() const {
+        return data_->upper_;
+    }
 
     typedef double return_type;
-    return_type get() const { return data_->value_; }
+    return_type get() const {
+        return data_->value_;
+    }
 
     void set(double value) {
         double target = value;
@@ -62,7 +68,7 @@ class Scalar {
         return (*this == other);
     }
 
-   private:
+  private:
     struct Data {
         double value_, lower_, upper_;
         unsigned version_;

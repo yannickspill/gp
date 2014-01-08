@@ -9,7 +9,7 @@
 
 typedef ConstEigenObject<Eigen::MatrixXd> ConstMat;
 typedef SymmetricMatrixFromFunction<ConstMat, Covariance1DFunction>
-    VarCov;
+VarCov;
 
 int main(int, char * []) {
     //check if result is correct

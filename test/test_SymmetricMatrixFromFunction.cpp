@@ -4,18 +4,20 @@
 #include <Eigen/Dense>
 #include <iostream>
 
-namespace{
+namespace {
 typedef ConstEigenObject<Eigen::MatrixXd> ConstMat;
 }
 
 class ConstCov {
-   public:
+  public:
     double eval(Eigen::Matrix<double, 1, 3> x,
                 Eigen::Matrix<double, 1, 3> y) const {
         return 1.;
     }
 
-    unsigned update() { return 0; }
+    unsigned update() {
+        return 0;
+    }
 };
 
 int main(int, char * []) {

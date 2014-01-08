@@ -28,13 +28,15 @@ GaussianProcessInterpolation::GaussianProcessInterpolation(
                     "mean_function should have 1 output dimension");
     IMP_USAGE_CHECK(covariance_function->get_ndims_x1() == N_,
                     "covariance_function should have "
-                        << N_ << " input dimensions for first vector");
+                    << N_ << " input dimensions for first vector");
     IMP_USAGE_CHECK(covariance_function->get_ndims_x2() == N_,
                     "covariance_function should have "
-                        << N_ << " input dimensions for second vector");
+                    << N_ << " input dimensions for second vector");
     IMP_USAGE_CHECK(covariance_function->get_ndims_y() == 1,
                     "covariance_function should have 1 output dimension");
-    IMP_IF_CHECK(USAGE_AND_INTERNAL) { Scale::decorate_particle(sigma); }
+    IMP_IF_CHECK(USAGE_AND_INTERNAL) {
+        Scale::decorate_particle(sigma);
+    }
     // set all flags to false = need update.
     force_mean_update();
     force_covariance_update();
@@ -56,7 +58,7 @@ void GaussianProcessInterpolation::force_covariance_update() {
     flag_W_ = false;
     flag_Omega_ = false;
     flag_Omega_gpir_ = false;  // the gpi restraint needs to know when
-                               // to update the mvn's Sigma:=Omega matrix.
+    // to update the mvn's Sigma:=Omega matrix.
 }
 
 void GaussianProcessInterpolation::compute_I(VectorXd mean) {
@@ -83,7 +85,9 @@ void GaussianProcessInterpolation::compute_S(VectorXd std) {
     IMP_LOG_TERSE(std::endl);
 }
 
-MatrixXd GaussianProcessInterpolation::get_data_abscissa() const { return x_; }
+MatrixXd GaussianProcessInterpolation::get_data_abscissa() const {
+    return x_;
+}
 
 VectorXd GaussianProcessInterpolation::get_data_mean() const {
     VectorXd ret;
@@ -254,7 +258,7 @@ MatrixXd GaussianProcessInterpolation::get_posterior_covariance_hessian(
             if (!Oopt[pb]) continue;  // skip not optimized particles
             // sigma has already been skipped
             tmp.push_back(covariance_function_->get_second_derivative_matrix(
-                pa - 1, pb - 1, xv)(0, 0));
+                              pa - 1, pb - 1, xv)(0, 0));
         }
         tmplist.push_back(tmp);
     }
@@ -335,7 +339,7 @@ MatrixXd GaussianProcessInterpolation::get_posterior_covariance_hessian(
         for (unsigned j = i; j < cov_opt; j++)
             ret.bottomRightCorner(cov_opt, cov_opt)(i, j) +=
                 (dcOm.transpose() * get_Omega_second_derivative(i + 1, j + 1))
-                    .trace();
+                .trace();
     // dcOm.resize(0,0);
 
     // return as symmetric matrix
@@ -365,9 +369,9 @@ void GaussianProcessInterpolation::update_flags_mean() {
     if (flag_m_gpir_) flag_m_gpir_ = !ret;
     if (flag_OmiIm_) flag_OmiIm_ = !ret;
     IMP_LOG_TERSE("update_flags_mean: ret " << ret << " flag_m_ " << flag_m_
-                                            << " flag_m_gpir_ " << flag_m_gpir_
-                                            << " flag_OmiIm_ " << flag_OmiIm_
-                                            << std::endl);
+                  << " flag_m_gpir_ " << flag_m_gpir_
+                  << " flag_OmiIm_ " << flag_OmiIm_
+                  << std::endl);
 }
 
 void GaussianProcessInterpolation::update_flags_covariance() {
@@ -442,7 +446,7 @@ VectorXd GaussianProcessInterpolation::get_wx_vector_second_derivative(
         xv.push_back(xval);
         xv.push_back(x_[q]);
         ret(q) = covariance_function_->get_second_derivative_matrix(
-            i - (nm + 1), j - (nm + 1), xv)(0, 1);
+                     i - (nm + 1), j - (nm + 1), xv)(0, 1);
     }
     return ret;
 }
@@ -482,19 +486,21 @@ VectorXd GaussianProcessInterpolation::get_m() const {
     return m_;
 }
 
-void GaussianProcessInterpolation::compute_m() { m_ = (*mean_function_)(x_); }
+void GaussianProcessInterpolation::compute_m() {
+    m_ = (*mean_function_)(x_);
+}
 
 unsigned GaussianProcessInterpolation::get_number_of_m_particles() const {
     return mean_function_->get_number_of_particles();
 }
 
 bool GaussianProcessInterpolation::get_m_particle_is_optimized(unsigned i)
-    const {
+const {
     return mean_function_->get_particle_is_optimized(i);
 }
 
 VectorXd GaussianProcessInterpolation::get_m_derivative(unsigned particle)
-    const {
+const {
     const_cast<GaussianProcessInterpolation *>(this)->update_flags_mean();
     return mean_function_->get_derivative_vector(particle, x_);
 }
@@ -536,7 +542,7 @@ unsigned GaussianProcessInterpolation::get_number_of_Omega_particles() const {
 }
 
 bool GaussianProcessInterpolation::get_Omega_particle_is_optimized(unsigned i)
-    const {
+const {
     // sigma is optimized locally
     if (i == 0) {
         return Scale(sigma_).get_nuisance_is_optimized();
@@ -546,7 +552,7 @@ bool GaussianProcessInterpolation::get_Omega_particle_is_optimized(unsigned i)
 }
 
 MatrixXd GaussianProcessInterpolation::get_Omega_derivative(unsigned particle)
-    const {
+const {
     const_cast<GaussianProcessInterpolation *>(this)->update_flags_covariance();
     // Omega = W + sigma*S/n_obs
     if (particle == 0) {
@@ -566,7 +572,7 @@ MatrixXd GaussianProcessInterpolation::get_Omega_second_derivative(
         return MatrixXd::Zero(M_, M_);
     } else {
         return covariance_function_->get_second_derivative_matrix(p1 - 1,
-                                                                  p2 - 1, x_);
+                p2 - 1, x_);
     }
 }
 
@@ -576,12 +582,12 @@ void GaussianProcessInterpolation::add_to_Omega_particle_derivative(
         Scale(sigma_).add_to_nuisance_derivative(value, accum);
     } else {
         covariance_function_->add_to_particle_derivative(particle - 1, value,
-                                                         accum);
+                accum);
     }
 }
 
 Eigen::LDLT<MatrixXd, Eigen::Upper> GaussianProcessInterpolation::get_ldlt()
-    const {
+const {
     IMP_LOG_TERSE("get_ldlt()" << std::endl);
     const_cast<GaussianProcessInterpolation *>(this)->update_flags_covariance();
     if (!flag_ldlt_) {
@@ -658,7 +664,7 @@ MatrixXd GaussianProcessInterpolation::get_d2cov_dwq_dwq() const {
 }
 
 MatrixXd GaussianProcessInterpolation::get_d2cov_dwq_dOm(VectorXd q,
-                                                         unsigned m) const {
+        unsigned m) const {
     VectorXd wq(get_wx_vector(q));
     VectorXd L(get_ldlt().solve(wq));
     MatrixXd Omi(get_Omi());
@@ -667,7 +673,7 @@ MatrixXd GaussianProcessInterpolation::get_d2cov_dwq_dOm(VectorXd q,
 }
 
 MatrixXd GaussianProcessInterpolation::get_d2cov_dOm_dOm(VectorXd q, unsigned m,
-                                                         unsigned n) const {
+        unsigned n) const {
     VectorXd wq(get_wx_vector(q));
     VectorXd L(get_ldlt().solve(wq));
     MatrixXd Omi(get_Omi());
@@ -690,7 +696,7 @@ MatrixXd GaussianProcessInterpolation::get_d2cov_dOm_dOm(VectorXd q, unsigned m,
 */
 
 kernel::ParticlesTemp GaussianProcessInterpolation::get_input_particles()
-    const {
+const {
     kernel::ParticlesTemp ret;
     kernel::ParticlesTemp ret1 = mean_function_->get_input_particles();
     ret.insert(ret.end(), ret1.begin(), ret1.end());

@@ -7,17 +7,17 @@
 #include <memory>
 
 //! Build a dense symmetric matrix from a given function
-// maps any two rows of INMATRIX through BIVFUNC to yield a symmetric matrix
-template <class INMATRIX, class BIVFUNC>
+// maps any two rows of MatrixType through BivariateFunctionType to yield a symmetric matrix
+template <class MatrixType, class BivariateFunctionType>
 class SymmetricMatrixFromFunction
-    : public DoubleInputVersionTracker<INMATRIX, BIVFUNC> {
-    typedef DoubleInputVersionTracker<INMATRIX, BIVFUNC> P;
+    : public DoubleInputVersionTracker<MatrixType, BivariateFunctionType> {
+    typedef DoubleInputVersionTracker<MatrixType, BivariateFunctionType> P;
 
-   public:
+  public:
     //! constructor
     // X : input coordinates
     // cov : covariance function, compatible with X's shape.
-    SymmetricMatrixFromFunction(INMATRIX X, BIVFUNC cov)
+    SymmetricMatrixFromFunction(MatrixType X, BivariateFunctionType cov)
         : P(X, cov), data_(std::make_shared<Data>(X,cov)) {}
 
     typedef Eigen::MatrixXd result_type;
@@ -45,12 +45,12 @@ class SymmetricMatrixFromFunction
         return data_->deriv_;
     }
 
-   private:
+  private:
     struct Data {
-        INMATRIX X_;
-        BIVFUNC cov_;
+        MatrixType X_;
+        BivariateFunctionType cov_;
         mutable result_type retval_, deriv_;
-        Data(INMATRIX X, BIVFUNC cov) : X_(X), cov_(cov) {}
+        Data(MatrixType X, BivariateFunctionType cov) : X_(X), cov_(cov) {}
     };
     std::shared_ptr<Data> data_;
 };

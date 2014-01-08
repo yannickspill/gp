@@ -22,7 +22,7 @@ class GaussianProcessInterpolationScoreState;
  * covariance functions at points requested by the user.
  */
 class GaussianProcessInterpolation {
-   public:
+  public:
     /** Constructor for the gaussian process
      * \param [in] x : a list of coordinates in N-dimensional space
      *                corresponding to the abscissa of each observation
@@ -116,9 +116,11 @@ class GaussianProcessInterpolation {
 
     IMP_OBJECT_METHODS(GaussianProcessInterpolation);
 
-   protected:
+  protected:
     // returns updated data vector
-    VectorXd get_I() const { return I_; }
+    VectorXd get_I() const {
+        return I_;
+    }
     // returns updated prior mean vector
     VectorXd get_m() const;
     // returns dm/dparticle
@@ -132,7 +134,9 @@ class GaussianProcessInterpolation {
     // returns updated prior covariance vector
     VectorXd get_wx_vector(VectorXd xval) const;
     // returns updated data covariance matrix
-    Eigen::DiagonalMatrix<double, Eigen::Dynamic> get_S() const { return S_; }
+    Eigen::DiagonalMatrix<double, Eigen::Dynamic> get_S() const {
+        return S_;
+    }
     // returns updated prior covariance matrix
     MatrixXd get_W() const;
     // returns Omega=(W+S/N)
@@ -152,7 +156,7 @@ class GaussianProcessInterpolation {
     // returns updated Omega^{-1}(I-m)
     VectorXd get_OmiIm() const;
 
-   private:
+  private:
     // ensures the mean/covariance function has updated parameters. Signals an
     // update by changing the state flags. Returns true if the function has
     // changed. This is used by GaussianProcessInterpolationRestraint.
@@ -174,7 +178,7 @@ class GaussianProcessInterpolation {
     VectorXd get_wx_vector_derivative(VectorXd q, unsigned i) const;
     // compute dw(q)/(dparticle_i * dparticle_j)
     VectorXd get_wx_vector_second_derivative(VectorXd q, unsigned i,
-                                             unsigned j) const;
+            unsigned j) const;
 
     // compute dcov(q,q)/dw(q)
     VectorXd get_dcov_dwq(VectorXd q) const;
@@ -194,7 +198,7 @@ class GaussianProcessInterpolation {
     // compute prior mean vector
     void compute_m();
 
-   private:
+  private:
     unsigned N_;      // number of dimensions of the abscissa
     unsigned M_;      // number of observations to learn from
     MatrixXd x_;      // abscissa
@@ -208,7 +212,7 @@ class GaussianProcessInterpolation {
     Eigen::DiagonalMatrix<double, Eigen::Dynamic> S_;
     VectorXd OmiIm_;  // Omi * (I - m)
     bool flag_m_, flag_m_gpir_, flag_Omi_, flag_OmiIm_, flag_W_, flag_Omega_,
-        flag_Omega_gpir_, flag_ldlt_;
+         flag_Omega_gpir_, flag_ldlt_;
     IMP::base::Pointer<IMP::kernel::Particle> sigma_;
     double cutoff_;
     double sigma_val_;  // to know if an update is needed

@@ -25,25 +25,25 @@
  *  Petersen and Pedersen, "The Matrix Cookbook", 2008, matrixcookbook.com
  *
  */
-template <class VECTORX, class VECTORM, class MATRIX>
+template <class XVectorType, class MVectorType, class MatrixType>
 class MVN {
 
-    typedef EpsilonVector<VECTORX, VECTORM> MD;
+    typedef EpsilonVector<XVectorType, MVectorType> MD;
 
-    VECTORX X_;
-    VECTORM MU_;
-    MATRIX Sigma_;
-    LDLT<MATRIX> ldlt_;
+    XVectorType X_;
+    MVectorType MU_;
+    MatrixType Sigma_;
+    LDLT<MatrixType> ldlt_;
     MD eps_;
-    SolveDecomposedMatrix<LDLT<MATRIX>, MD> Peps_;
+    SolveDecomposedMatrix<LDLT<MatrixType>, MD> Peps_;
 
-   public:
+  public:
     /** Constructor
     * \param [in] X vector of observations with M rows.
     * \param [in] MU mean vector \f$F(\mu)\f$ of size M.
     * \param [in] Sigma : MxM variance-covariance matrix \f$\Sigma\f$.
     * */
-    MVN(VECTORX X, VECTORM MU, MATRIX Sigma)
+    MVN(XVectorType X, MVectorType MU, MatrixType Sigma)
         : X_(X),
           MU_(MU),
           Sigma_(Sigma),
@@ -52,15 +52,23 @@ class MVN {
           Peps_(ldlt_, eps_) {}
 
     /// return -log(p)
-    double get() const { return evaluate(); }
+    double get() const {
+        return evaluate();
+    }
 
     /// return gradient of -log(p) wrt X
-    Eigen::VectorXd get_derivative_X() const { return -deriv_MU(); }
+    Eigen::VectorXd get_derivative_X() const {
+        return -deriv_MU();
+    }
     /// return gradient of -log(p) wrt MU
-    Eigen::VectorXd get_derivative_MU() const { return deriv_MU(); }
+    Eigen::VectorXd get_derivative_MU() const {
+        return deriv_MU();
+    }
 
     /// return gradient of -log(p) wrt Sigma
-    Eigen::MatrixXd get_derivative_Sigma() const { return deriv_Sigma(); }
+    Eigen::MatrixXd get_derivative_Sigma() const {
+        return deriv_Sigma();
+    }
 
     bool get_is_function_of(const Scalar& scalar) const {
         return (X_.get_is_function_of(scalar) ||
@@ -69,9 +77,11 @@ class MVN {
     }
 
     //get partial derivative of -log(p) wrt scalar
-    double get_derivative(const Scalar& scalar) const { return deriv(scalar); }
+    double get_derivative(const Scalar& scalar) const {
+        return deriv(scalar);
+    }
 
-   private:
+  private:
 
     void update() {
         //return values are not used
@@ -81,7 +91,7 @@ class MVN {
     }
 
     double evaluate() const {
-        // -log(p) = 1/2 * eps^T * Sigma^{-1} * eps 
+        // -log(p) = 1/2 * eps^T * Sigma^{-1} * eps
         //           + M/2 * log(2*pi) + 1/2*log(det(Sigma))
         LOG(" mvn eval: eps" << std::endl);
         Eigen::VectorXd epsilon(eps_.get());
@@ -123,7 +133,7 @@ class MVN {
             deriv += -deriv_MU().transpose() * eps_.get_derivative(scalar);
         if (Sigma_.get_is_function_of(scalar))
             deriv += (deriv_Sigma().transpose() * Sigma_.get_derivative(scalar))
-                         .trace();
+                     .trace();
         return deriv;
     }
 

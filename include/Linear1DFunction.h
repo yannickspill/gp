@@ -15,7 +15,7 @@ class Linear1DFunction : public DoubleInputVersionTracker<Scalar, Scalar> {
     typedef DoubleInputVersionTracker<Scalar, Scalar> P;
     Scalar a_, b_;
 
-   public:
+  public:
     Linear1DFunction(Scalar a, Scalar b) : P(a,b), a_(a), b_(b) {}
 
     double eval(double x) const {
@@ -26,7 +26,7 @@ class Linear1DFunction : public DoubleInputVersionTracker<Scalar, Scalar> {
     }
 
     double eval_derivative(double x, const Scalar& s) const {
-        if (s == a_){
+        if (s == a_) {
             return x;
         } else if (s == b_) {
             return 1;
@@ -39,9 +39,13 @@ class Linear1DFunction : public DoubleInputVersionTracker<Scalar, Scalar> {
         return eval_derivative(x(0),s);
     }
 
-   private:
-    double get_a_value() const { return a_.get(); }
-    double get_b_value() const { return b_.get(); }
+  private:
+    double get_a_value() const {
+        return a_.get();
+    }
+    double get_b_value() const {
+        return b_.get();
+    }
 };
 
 #endif /* LINEAR1D_FUNCTION_H */

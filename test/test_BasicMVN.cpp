@@ -22,7 +22,7 @@ RNGType generator;
 
 boost::uniform_real<> uniform(0, 1);
 boost::variate_generator<RNGType, boost::uniform_real<> > rand(generator,
-                                                               uniform);
+        uniform);
 
 #define FAIL(str)                      \
     {                                  \
@@ -196,10 +196,10 @@ bool test_2D() {
         double observed = mv.get();
         double expected = log(2 * PI * sigma1 * sigma2 * sqrt(1 - rho * rho)) +
                           1 / (2 * (1 - rho * rho)) *
-                              (SQUARE(FA(0) - FM(0)) / (sigma1 * sigma1) +
-                               SQUARE(FA(1) - FM(1)) / (sigma2 * sigma2) -
-                               2 * rho * (FA(0) - FM(0)) *
-                                   (FA(1) - FM(1)) / (sigma1 * sigma2));
+                          (SQUARE(FA(0) - FM(0)) / (sigma1 * sigma1) +
+                           SQUARE(FA(1) - FM(1)) / (sigma2 * sigma2) -
+                           2 * rho * (FA(0) - FM(0)) *
+                           (FA(1) - FM(1)) / (sigma1 * sigma2));
         if (naeq(observed, expected)) FAIL("evaluate");
     }
 

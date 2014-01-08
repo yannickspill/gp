@@ -12,10 +12,12 @@ class Observer;
 // virtual void setval(T value)
 template <typename T>
 class Subject {
-   public:
+  public:
     Subject(T value) : value_(value) {};
 
-    T get() const { return value_; }
+    T get() const {
+        return value_;
+    }
 
     void set(T value) {
         // set value, operation happens in child
@@ -38,12 +40,12 @@ class Subject {
 
     virtual ~Subject() {};
 
-   protected:
+  protected:
     // these two are used in the child.
     virtual void setval(T value) = 0;
     T value_;
 
-   private:
+  private:
     typename std::set<Observer<T>*> observers_;
 };
 
@@ -53,7 +55,7 @@ class Subject {
 // virtual void notify(Subject<T>* s)
 template <typename T>
 class Observer {
-   public:
+  public:
     virtual void notify(Subject<T>& s) = 0;
     virtual ~Observer() {};
 };

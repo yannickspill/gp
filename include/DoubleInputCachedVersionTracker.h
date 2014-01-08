@@ -26,7 +26,7 @@ class DoubleInputCachedVersionTracker {
     };
     std::shared_ptr<Data> data_;
 
-   public:
+  public:
     DoubleInputCachedVersionTracker(In1Type in1, In2Type in2)
         : data_(std::make_shared<Data>(in1,in2)) {}
 
@@ -34,7 +34,7 @@ class DoubleInputCachedVersionTracker {
         LOG("DoubleInputCachedVersionTracker::update()");
         unsigned vin1 = data_->in1_.update();
         unsigned vin2 = data_->in2_.update();
-        if (vin1 != data_->vin1_ || vin2 != data_->vin2_){
+        if (vin1 != data_->vin1_ || vin2 != data_->vin2_) {
             data_->vin1_ = vin1;
             data_->vin2_ = vin2;
             data_->cache_invalid_ = true;
@@ -45,7 +45,9 @@ class DoubleInputCachedVersionTracker {
         return data_->version_;
     }
 
-    bool cache_is_invalid() const { return data_->cache_invalid_; }
+    bool cache_is_invalid() const {
+        return data_->cache_invalid_;
+    }
     void set_cache_is_valid() const {
         LOG("DoubleInputCachedVersionTracker::set_cache_is_valid()");
         data_->cache_invalid_=false;

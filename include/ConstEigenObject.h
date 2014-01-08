@@ -5,19 +5,25 @@
 #include <iostream>
 
 //! take an Eigen object and just provide a get() function for it
-template <class EIGENTYPE>
+template <class EigenType>
 class ConstEigenObject {
-    EIGENTYPE X_;
+    EigenType X_;
 
-   public:
-    explicit ConstEigenObject(const EIGENTYPE& X) : X_(X) {}
+  public:
+    explicit ConstEigenObject(const EigenType& X) : X_(X) {}
 
-    typedef EIGENTYPE result_type;
-    const result_type& get() const { return X_; }
-    unsigned update() const { return 0; } // ConstEigenObject not updatable
-    bool get_is_function_of(const Scalar&) const { return false; }
+    typedef EigenType result_type;
+    const result_type& get() const {
+        return X_;
+    }
+    unsigned update() const {
+        return 0;    // ConstEigenObject not updatable
+    }
+    bool get_is_function_of(const Scalar&) const {
+        return false;
+    }
     result_type get_derivative(const Scalar&) const {
-        return EIGENTYPE::Zero(X_.rows(),X_.cols());
+        return EigenType::Zero(X_.rows(),X_.cols());
     }
 };
 

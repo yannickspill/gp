@@ -22,7 +22,7 @@ IMPISD_BEGIN_NAMESPACE
 
 //! Base class for functions of two variables
 class IMPISDEXPORT BivariateFunction : public base::Object {
-   public:
+  public:
     BivariateFunction(std::string str) : Object(str) {}
 
     //! evaluate the function at a certain point
@@ -55,7 +55,7 @@ class IMPISDEXPORT BivariateFunction : public base::Object {
      */
     virtual void add_to_particle_derivative(unsigned particle_no, double value,
                                             DerivativeAccumulator& accum)
-        const = 0;
+    const = 0;
 
     //! return derivative matrix
     /* m_ij = d(func(xlist[i],xlist[j]))/dparticle_no
@@ -66,8 +66,8 @@ class IMPISDEXPORT BivariateFunction : public base::Object {
 
     // for testing purposes
     virtual FloatsList get_derivative_matrix(unsigned particle_no,
-                                             const FloatsList& xlist,
-                                             bool stupid) const = 0;
+            const FloatsList& xlist,
+            bool stupid) const = 0;
 
     //! return second derivative matrix
     virtual Eigen::MatrixXd get_second_derivative_matrix(
@@ -76,9 +76,9 @@ class IMPISDEXPORT BivariateFunction : public base::Object {
 
     // for testing purposes
     virtual FloatsList get_second_derivative_matrix(unsigned particle_a,
-                                                    unsigned particle_b,
-                                                    const FloatsList& xlist,
-                                                    bool stupid) const = 0;
+            unsigned particle_b,
+            const FloatsList& xlist,
+            bool stupid) const = 0;
 
     //! returns the number of input dimensions
     virtual unsigned get_ndims_x1() const = 0;
@@ -116,7 +116,7 @@ class IMPISDEXPORT BivariateFunction : public base::Object {
  * value when x=x', and affects only the call get_derivative_matrix.
  */
 class IMPISDEXPORT Covariance1DFunction : public BivariateFunction {
-   public:
+  public:
     Covariance1DFunction(kernel::Particle* tau, kernel::Particle* ilambda,
                          double alpha = 2.0, double jitter = 0.0,
                          double cutoff = 1e-7)
@@ -127,8 +127,12 @@ class IMPISDEXPORT Covariance1DFunction : public BivariateFunction {
           J_(jitter),
           cutoff_(cutoff) {
         IMP_LOG_TERSE("Covariance1DFunction: constructor" << std::endl);
-        IMP_IF_CHECK(USAGE_AND_INTERNAL) { Scale::decorate_particle(tau); }
-        IMP_IF_CHECK(USAGE_AND_INTERNAL) { Scale::decorate_particle(ilambda); }
+        IMP_IF_CHECK(USAGE_AND_INTERNAL) {
+            Scale::decorate_particle(tau);
+        }
+        IMP_IF_CHECK(USAGE_AND_INTERNAL) {
+            Scale::decorate_particle(ilambda);
+        }
         lambda_val_ = Scale(ilambda).get_nuisance();
         tau_val_ = Scale(tau).get_nuisance();
         do_jitter = (jitter > IMP_ISD_BIVARIATE_FUNCTIONS_MINIMUM);
@@ -144,8 +148,8 @@ class IMPISDEXPORT Covariance1DFunction : public BivariateFunction {
         IMP_LOG_VERBOSE(tmpt << " " << tau_val_ << " ");
         IMP_LOG_VERBOSE(tmpl << " " << lambda_val_ << " ");
         if ((std::abs(tmpt - tau_val_) > IMP_ISD_BIVARIATE_FUNCTIONS_MINIMUM) ||
-            (std::abs(tmpl - lambda_val_) >
-             IMP_ISD_BIVARIATE_FUNCTIONS_MINIMUM)) {
+                (std::abs(tmpl - lambda_val_) >
+                 IMP_ISD_BIVARIATE_FUNCTIONS_MINIMUM)) {
             IMP_LOG_VERBOSE("true" << std::endl);
             return true;
         } else {
@@ -220,18 +224,18 @@ class IMPISDEXPORT Covariance1DFunction : public BivariateFunction {
     void add_to_particle_derivative(unsigned particle_no, double value,
                                     DerivativeAccumulator& accum) const {
         switch (particle_no) {
-            case 0:  // tau
-                IMP_INTERNAL_CHECK(!base::isnan(value),
-                                   "tau derivative is nan.");
-                Scale(tau_).add_to_nuisance_derivative(value, accum);
-                break;
-            case 1:  // lambda
-                IMP_INTERNAL_CHECK(!base::isnan(value),
-                                   "lambda derivative is nan.");
-                Scale(lambda_).add_to_nuisance_derivative(value, accum);
-                break;
-            default:
-                IMP_THROW("Invalid particle number", ModelException);
+        case 0:  // tau
+            IMP_INTERNAL_CHECK(!base::isnan(value),
+                               "tau derivative is nan.");
+            Scale(tau_).add_to_nuisance_derivative(value, accum);
+            break;
+        case 1:  // lambda
+            IMP_INTERNAL_CHECK(!base::isnan(value),
+                               "lambda derivative is nan.");
+            Scale(lambda_).add_to_nuisance_derivative(value, accum);
+            break;
+        default:
+            IMP_THROW("Invalid particle number", ModelException);
         }
     }
 
@@ -244,20 +248,20 @@ class IMPISDEXPORT Covariance1DFunction : public BivariateFunction {
         Eigen::MatrixXd ret(N, N);
         double diag;
         switch (particle_no) {
-            case 0:  // tau
-                // d[w(x1,x1)]/dtau
-                //  = 2/tau*w(x1,x1)
-                diag = get_value(xlist[0][0], xlist[0][0]);
-                diag *= 2. / tau_val_;
-                break;
-            case 1:  // lambda
-                // d[w(x,x)]/dlambda
-                //= w(x,x)
-                //  *( alpha /(2 lambda^{alpha+1}))
-                diag = 0;
-                break;
-            default:
-                IMP_THROW("Invalid particle number", ModelException);
+        case 0:  // tau
+            // d[w(x1,x1)]/dtau
+            //  = 2/tau*w(x1,x1)
+            diag = get_value(xlist[0][0], xlist[0][0]);
+            diag *= 2. / tau_val_;
+            break;
+        case 1:  // lambda
+            // d[w(x,x)]/dlambda
+            //= w(x,x)
+            //  *( alpha /(2 lambda^{alpha+1}))
+            diag = 0;
+            break;
+        default:
+            IMP_THROW("Invalid particle number", ModelException);
         }
         IMP_INTERNAL_CHECK(!base::isnan(diag),
                            "derivative matrix is nan on the diagonal.");
@@ -276,28 +280,28 @@ class IMPISDEXPORT Covariance1DFunction : public BivariateFunction {
                 // smaller than the cutoff distance
                 if (initial_loop || dist <= dmax) {
                     switch (particle_no) {
-                        case 0:  // tau
-                            // d[w(x1,x2)]/dtau
-                            //  = 2/tau*w(x1,x2)
+                    case 0:  // tau
+                        // d[w(x1,x2)]/dtau
+                        //  = 2/tau*w(x1,x2)
+                        val = get_value(xlist[i][0], xlist[j][0]);
+                        val *= 2. / tau_val_;
+                        break;
+                    case 1:  // lambda
+                        // d[w(x,x')]/dlambda
+                        //= w(x,x')
+                        //  *( alpha |x'-x|^alpha/(2 lambda^{alpha+1}))
+                        if (dist < IMP_ISD_BIVARIATE_FUNCTIONS_MINIMUM) {
+                            val = 0;
+                        } else {
                             val = get_value(xlist[i][0], xlist[j][0]);
-                            val *= 2. / tau_val_;
-                            break;
-                        case 1:  // lambda
-                            // d[w(x,x')]/dlambda
-                            //= w(x,x')
-                            //  *( alpha |x'-x|^alpha/(2 lambda^{alpha+1}))
-                            if (dist < IMP_ISD_BIVARIATE_FUNCTIONS_MINIMUM) {
-                                val = 0;
-                            } else {
-                                val = get_value(xlist[i][0], xlist[j][0]);
-                                val *= alpha_ *
-                                       std::pow((dist / lambda_val_), alpha_) /
-                                       (2. * lambda_val_);
-                            }
-                            break;
-                        default:
-                            IMP_THROW("Invalid particle number",
-                                      ModelException);
+                            val *= alpha_ *
+                                   std::pow((dist / lambda_val_), alpha_) /
+                                   (2. * lambda_val_);
+                        }
+                        break;
+                    default:
+                        IMP_THROW("Invalid particle number",
+                                  ModelException);
                     }
                     // the value has been computed and is in val
                     // now check if it is smaller than the cutoff.
@@ -315,7 +319,7 @@ class IMPISDEXPORT Covariance1DFunction : public BivariateFunction {
                 }
                 IMP_INTERNAL_CHECK(!base::isnan(val),
                                    "derivative matrix is nan at position("
-                                       << i << "," << j << ").");
+                                   << i << "," << j << ").");
                 ret(i, j) = val;
                 ret(j, i) = val;
             }
@@ -397,20 +401,28 @@ class IMPISDEXPORT Covariance1DFunction : public BivariateFunction {
         return ret;
     }
 
-    unsigned get_ndims_x1() const { return 1; }
-    unsigned get_ndims_x2() const { return 1; }
-    unsigned get_ndims_y() const { return 1; }
+    unsigned get_ndims_x1() const {
+        return 1;
+    }
+    unsigned get_ndims_x2() const {
+        return 1;
+    }
+    unsigned get_ndims_y() const {
+        return 1;
+    }
 
-    unsigned get_number_of_particles() const { return 2; }
+    unsigned get_number_of_particles() const {
+        return 2;
+    }
 
     bool get_particle_is_optimized(unsigned particle_no) const {
         switch (particle_no) {
-            case 0:  // tau
-                return Scale(tau_).get_nuisance_is_optimized();
-            case 1:  // lambda
-                return Scale(lambda_).get_nuisance_is_optimized();
-            default:
-                IMP_THROW("Invalid particle number", ModelException);
+        case 0:  // tau
+            return Scale(tau_).get_nuisance_is_optimized();
+        case 1:  // lambda
+            return Scale(lambda_).get_nuisance_is_optimized();
+        default:
+            IMP_THROW("Invalid particle number", ModelException);
         }
     }
 
@@ -438,7 +450,7 @@ class IMPISDEXPORT Covariance1DFunction : public BivariateFunction {
             << alpha_ << std::endl, {});*/
     IMP_OBJECT_METHODS(Covariance1DFunction);
 
-   private:
+  private:
     inline double get_value(double x1, double x2) const {
         double dist = std::abs(x1 - x2);
         double ret = dist / lambda_val_;
@@ -453,12 +465,12 @@ class IMPISDEXPORT Covariance1DFunction : public BivariateFunction {
         }
         IMP_INTERNAL_CHECK(!base::isnan(ret),
                            "function value is nan. tau = "
-                               << tau_val_ << " lambda = " << lambda_val_
-                               << " q1 = " << x1 << " q2 = " << x2);
+                           << tau_val_ << " lambda = " << lambda_val_
+                           << " q1 = " << x1 << " q2 = " << x2);
         return ret;
     }
 
-   private:
+  private:
     double alpha_;
     base::Pointer<kernel::Particle> tau_, lambda_;
     double tau_val_, lambda_val_, J_, cutoff_, alpha_square_;

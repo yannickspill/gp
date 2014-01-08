@@ -10,7 +10,7 @@
 
 //! Base class for functions from R to R
 class UnivariateFunction {
-   public:
+  public:
     //! evaluate the function at a certain point
     virtual VectorXd operator()(const VectorXd& x) const = 0;
 
@@ -41,7 +41,7 @@ class UnivariateFunction {
      */
     virtual void add_to_particle_derivative(unsigned particle_no, double value,
                                             DerivativeAccumulator& accum)
-        const = 0;
+    const = 0;
 
     //! return derivative vector
     /* m_ij = d(func(xlist[i]))/dparticle_j
@@ -63,9 +63,9 @@ class UnivariateFunction {
 
     //! for testing purposes
     virtual MatrixXd get_second_derivative_vector(unsigned particle_a,
-                                                  unsigned particle_b,
-                                                  const MatrixXd& xlist,
-                                                  bool stupid) const = 0;
+            unsigned particle_b,
+            const MatrixXd& xlist,
+            bool stupid) const = 0;
 
     //! returns the number of input dimensions
     virtual unsigned get_ndims_x() const = 0;
@@ -93,12 +93,16 @@ class UnivariateFunction {
 /* f(x) = a*x + b, where a,b are ISD nuisances, and f(x) and x are doubles.
  */
 class IMPISDEXPORT Linear1DFunction : public UnivariateFunction {
-   public:
+  public:
     Linear1DFunction(kernel::Scalar* a, kernel::Scalar* b)
         : UnivariateFunction("Linear1DFunction %1%"), a_(a), b_(b) {
         IMP_LOG_TERSE("Linear1DFunction: constructor" << std::endl);
-        IMP_IF_CHECK(USAGE_AND_INTERNAL) { Nuisance::decorate_particle(a); }
-        IMP_IF_CHECK(USAGE_AND_INTERNAL) { Nuisance::decorate_particle(b); }
+        IMP_IF_CHECK(USAGE_AND_INTERNAL) {
+            Nuisance::decorate_particle(a);
+        }
+        IMP_IF_CHECK(USAGE_AND_INTERNAL) {
+            Nuisance::decorate_particle(b);
+        }
         a_val_ = Nuisance(a).get_nuisance();
         b_val_ = Nuisance(b).get_nuisance();
         update();
@@ -108,7 +112,7 @@ class IMPISDEXPORT Linear1DFunction : public UnivariateFunction {
         double tmpa = Nuisance(a_).get_nuisance();
         double tmpb = Nuisance(b_).get_nuisance();
         if ((std::abs(tmpa - a_val_) > IMP_ISD_UNIVARIATE_FUNCTIONS_MINIMUM) ||
-            (std::abs(tmpb - b_val_) > IMP_ISD_UNIVARIATE_FUNCTIONS_MINIMUM)) {
+                (std::abs(tmpb - b_val_) > IMP_ISD_UNIVARIATE_FUNCTIONS_MINIMUM)) {
             IMP_LOG_TERSE("Linear1DFunction: has_changed():");
             IMP_LOG_TERSE("true" << std::endl);
             return true;
@@ -159,14 +163,14 @@ class IMPISDEXPORT Linear1DFunction : public UnivariateFunction {
     void add_to_particle_derivative(unsigned particle_no, double value,
                                     DerivativeAccumulator& accum) const {
         switch (particle_no) {
-            case 0:
-                Nuisance(a_).add_to_nuisance_derivative(value, accum);
-                break;
-            case 1:
-                Nuisance(b_).add_to_nuisance_derivative(value, accum);
-                break;
-            default:
-                IMP_THROW("Invalid particle number", ModelException);
+        case 0:
+            Nuisance(a_).add_to_nuisance_derivative(value, accum);
+            break;
+        case 1:
+            Nuisance(b_).add_to_nuisance_derivative(value, accum);
+            break;
+        default:
+            IMP_THROW("Invalid particle number", ModelException);
         }
     }
 
@@ -175,14 +179,14 @@ class IMPISDEXPORT Linear1DFunction : public UnivariateFunction {
         unsigned N = xlist.size();
         Eigen::VectorXd ret(N);
         switch (particle_no) {
-            case 0:  // a
-                for (unsigned i = 0; i < N; i++) ret(i) = xlist[i][0];
-                break;
-            case 1:  // b
-                ret.setOnes();
-                break;
-            default:
-                IMP_THROW("Invalid particle number", ModelException);
+        case 0:  // a
+            for (unsigned i = 0; i < N; i++) ret(i) = xlist[i][0];
+            break;
+        case 1:  // b
+            ret.setOnes();
+            break;
+        default:
+            IMP_THROW("Invalid particle number", ModelException);
         }
         return ret;
     }
@@ -201,7 +205,7 @@ class IMPISDEXPORT Linear1DFunction : public UnivariateFunction {
     }
 
     Eigen::VectorXd get_second_derivative_vector(unsigned, unsigned,
-                                                 const MatrixXd& xlist) const {
+            const MatrixXd& xlist) const {
         // The Hessian is zero for all particles.
         unsigned N = xlist.size();
         Eigen::VectorXd H(Eigen::VectorXd::Zero(N));
@@ -222,19 +226,25 @@ class IMPISDEXPORT Linear1DFunction : public UnivariateFunction {
         return ret;
     }
 
-    unsigned get_ndims_x() const { return 1; }
-    unsigned get_ndims_y() const { return 1; }
+    unsigned get_ndims_x() const {
+        return 1;
+    }
+    unsigned get_ndims_y() const {
+        return 1;
+    }
 
-    unsigned get_number_of_particles() const { return 2; }
+    unsigned get_number_of_particles() const {
+        return 2;
+    }
 
     bool get_particle_is_optimized(unsigned particle_no) const {
         switch (particle_no) {
-            case 0:  // a
-                return Nuisance(a_).get_nuisance_is_optimized();
-            case 1:  // b
-                return Nuisance(b_).get_nuisance_is_optimized();
-            default:
-                IMP_THROW("Invalid particle number", ModelException);
+        case 0:  // a
+            return Nuisance(a_).get_nuisance_is_optimized();
+        case 1:  // b
+            return Nuisance(b_).get_nuisance_is_optimized();
+        default:
+            IMP_THROW("Invalid particle number", ModelException);
         }
     }
 
@@ -261,7 +271,7 @@ class IMPISDEXPORT Linear1DFunction : public UnivariateFunction {
       << " * x + " << b_val_ << std::endl, {});*/
     IMP_OBJECT_METHODS(Linear1DFunction);
 
-   private:
+  private:
     base::Pointer<kernel::Scalar> a_, b_;
     double a_val_, b_val_;
 };
@@ -278,7 +288,7 @@ class IMPISDEXPORT Linear1DFunction : public UnivariateFunction {
  *  G, Rg, d, s and A are particles (ISD Scales).
  */
 class IMPISDEXPORT GeneralizedGuinierPorodFunction : public UnivariateFunction {
-   public:
+  public:
     GeneralizedGuinierPorodFunction(kernel::Scalar* G, kernel::Scalar* Rg,
                                     kernel::Scalar* d, kernel::Scalar* s,
                                     kernel::Scalar* A)
@@ -290,11 +300,21 @@ class IMPISDEXPORT GeneralizedGuinierPorodFunction : public UnivariateFunction {
           A_(A) {
         IMP_LOG_TERSE("GeneralizedGuinierPorodFunction: constructor"
                       << std::endl);
-        IMP_IF_CHECK(USAGE_AND_INTERNAL) { Scale::decorate_particle(G); }
-        IMP_IF_CHECK(USAGE_AND_INTERNAL) { Scale::decorate_particle(Rg); }
-        IMP_IF_CHECK(USAGE_AND_INTERNAL) { Scale::decorate_particle(d); }
-        IMP_IF_CHECK(USAGE_AND_INTERNAL) { Scale::decorate_particle(s); }
-        IMP_IF_CHECK(USAGE_AND_INTERNAL) { Nuisance::decorate_particle(A); }
+        IMP_IF_CHECK(USAGE_AND_INTERNAL) {
+            Scale::decorate_particle(G);
+        }
+        IMP_IF_CHECK(USAGE_AND_INTERNAL) {
+            Scale::decorate_particle(Rg);
+        }
+        IMP_IF_CHECK(USAGE_AND_INTERNAL) {
+            Scale::decorate_particle(d);
+        }
+        IMP_IF_CHECK(USAGE_AND_INTERNAL) {
+            Scale::decorate_particle(s);
+        }
+        IMP_IF_CHECK(USAGE_AND_INTERNAL) {
+            Nuisance::decorate_particle(A);
+        }
         update();
     }
 
@@ -305,11 +325,11 @@ class IMPISDEXPORT GeneralizedGuinierPorodFunction : public UnivariateFunction {
         double tmps = Scale(s_).get_scale();
         double tmpA = Nuisance(A_).get_nuisance();
         if ((std::abs(tmpG - G_val_) > IMP_ISD_UNIVARIATE_FUNCTIONS_MINIMUM) ||
-            (std::abs(tmpRg - Rg_val_) >
-             IMP_ISD_UNIVARIATE_FUNCTIONS_MINIMUM) ||
-            (std::abs(tmpd - d_val_) > IMP_ISD_UNIVARIATE_FUNCTIONS_MINIMUM) ||
-            (std::abs(tmps - s_val_) > IMP_ISD_UNIVARIATE_FUNCTIONS_MINIMUM) ||
-            (std::abs(tmpA - A_val_) > IMP_ISD_UNIVARIATE_FUNCTIONS_MINIMUM)) {
+                (std::abs(tmpRg - Rg_val_) >
+                 IMP_ISD_UNIVARIATE_FUNCTIONS_MINIMUM) ||
+                (std::abs(tmpd - d_val_) > IMP_ISD_UNIVARIATE_FUNCTIONS_MINIMUM) ||
+                (std::abs(tmps - s_val_) > IMP_ISD_UNIVARIATE_FUNCTIONS_MINIMUM) ||
+                (std::abs(tmpA - A_val_) > IMP_ISD_UNIVARIATE_FUNCTIONS_MINIMUM)) {
             IMP_LOG_TERSE("GeneralizedGuinierPorodFunction: has_changed():");
             IMP_LOG_TERSE("true" << std::endl);
             return true;
@@ -423,33 +443,33 @@ class IMPISDEXPORT GeneralizedGuinierPorodFunction : public UnivariateFunction {
     void add_to_particle_derivative(unsigned particle_no, double value,
                                     DerivativeAccumulator& accum) const {
         switch (particle_no) {
-            case 0:
-                IMP_INTERNAL_CHECK(!base::isnan(value),
-                                   "derivative for G is nan.");
-                Scale(G_).add_to_scale_derivative(value, accum);
-                break;
-            case 1:
-                IMP_INTERNAL_CHECK(!base::isnan(value),
-                                   "derivative for Rg is nan.");
-                Scale(Rg_).add_to_scale_derivative(value, accum);
-                break;
-            case 2:
-                IMP_INTERNAL_CHECK(!base::isnan(value),
-                                   "derivative for d is nan.");
-                Scale(d_).add_to_scale_derivative(value, accum);
-                break;
-            case 3:
-                IMP_INTERNAL_CHECK(!base::isnan(value),
-                                   "derivative for s is nan.");
-                Scale(s_).add_to_scale_derivative(value, accum);
-                break;
-            case 4:
-                IMP_INTERNAL_CHECK(!base::isnan(value),
-                                   "derivative for A is nan.");
-                Nuisance(A_).add_to_nuisance_derivative(value, accum);
-                break;
-            default:
-                IMP_THROW("Invalid particle number", ModelException);
+        case 0:
+            IMP_INTERNAL_CHECK(!base::isnan(value),
+                               "derivative for G is nan.");
+            Scale(G_).add_to_scale_derivative(value, accum);
+            break;
+        case 1:
+            IMP_INTERNAL_CHECK(!base::isnan(value),
+                               "derivative for Rg is nan.");
+            Scale(Rg_).add_to_scale_derivative(value, accum);
+            break;
+        case 2:
+            IMP_INTERNAL_CHECK(!base::isnan(value),
+                               "derivative for d is nan.");
+            Scale(d_).add_to_scale_derivative(value, accum);
+            break;
+        case 3:
+            IMP_INTERNAL_CHECK(!base::isnan(value),
+                               "derivative for s is nan.");
+            Scale(s_).add_to_scale_derivative(value, accum);
+            break;
+        case 4:
+            IMP_INTERNAL_CHECK(!base::isnan(value),
+                               "derivative for A is nan.");
+            Nuisance(A_).add_to_nuisance_derivative(value, accum);
+            break;
+        default:
+            IMP_THROW("Invalid particle number", ModelException);
         }
     }
 
@@ -458,60 +478,60 @@ class IMPISDEXPORT GeneralizedGuinierPorodFunction : public UnivariateFunction {
         unsigned N = xlist.size();
         Eigen::VectorXd ret(N);
         switch (particle_no) {
-            case 0:  // G
-                // d[f(x)]/dG = f(x)/G
-                ret = ((*this)(xlist) - Eigen::VectorXd::Constant(N, A_val_)) /
-                      G_val_;
-                break;
-            case 1:  // Rg
-                for (unsigned i = 0; i < N; i++) {
-                    double qval = xlist[i][0];
-                    if (qval <= q1_param_) {
-                        // d[f(x)]/dRg = - f(x) * 2 q^2 Rg / (3-s)
-                        ret(i) = -(get_value(qval) - A_val_) * 2 *
-                                 IMP::square(qval) * Rg_val_ / (3 - s_val_);
-                    } else {
-                        // d[f(x)]/dRg = f(x) * (s-d)/Rg
-                        ret(i) = (get_value(qval) - A_val_) *
-                                 (s_val_ - d_val_) / Rg_val_;
-                    }
+        case 0:  // G
+            // d[f(x)]/dG = f(x)/G
+            ret = ((*this)(xlist) - Eigen::VectorXd::Constant(N, A_val_)) /
+                  G_val_;
+            break;
+        case 1:  // Rg
+            for (unsigned i = 0; i < N; i++) {
+                double qval = xlist[i][0];
+                if (qval <= q1_param_) {
+                    // d[f(x)]/dRg = - f(x) * 2 q^2 Rg / (3-s)
+                    ret(i) = -(get_value(qval) - A_val_) * 2 *
+                             IMP::square(qval) * Rg_val_ / (3 - s_val_);
+                } else {
+                    // d[f(x)]/dRg = f(x) * (s-d)/Rg
+                    ret(i) = (get_value(qval) - A_val_) *
+                             (s_val_ - d_val_) / Rg_val_;
                 }
-                break;
-            case 2:  // d
-                for (unsigned i = 0; i < N; i++) {
-                    double qval = xlist[i][0];
-                    if (qval <= q1_param_) {
-                        // d[f(x)]/dd = 0
-                        ret(i) = 0;
-                    } else {
-                        // d[f(x)]/dd = f(x) * log(q1/q)
-                        ret(i) = (get_value(qval) - A_val_) *
-                                 std::log(q1_param_ / qval);
-                    }
+            }
+            break;
+        case 2:  // d
+            for (unsigned i = 0; i < N; i++) {
+                double qval = xlist[i][0];
+                if (qval <= q1_param_) {
+                    // d[f(x)]/dd = 0
+                    ret(i) = 0;
+                } else {
+                    // d[f(x)]/dd = f(x) * log(q1/q)
+                    ret(i) = (get_value(qval) - A_val_) *
+                             std::log(q1_param_ / qval);
                 }
-                break;
-            case 3:  // s
-                for (unsigned i = 0; i < N; i++) {
-                    double qval = xlist[i][0];
-                    if (qval <= q1_param_) {
-                        // d[f(x)]/ds = - f(x)
-                        //    * (q^2 Rg^2 + (3-s)^2 log(q)) / (3-s)^2
-                        ret(i) = -(get_value(qval) - A_val_) *
-                                 (IMP::square((qval * Rg_val_) / (3 - s_val_)) +
-                                  std::log(qval));
-                    } else {
-                        // d[f(x)]/ds = - f(x) * ( (d-s)/(2(3-s)) + log(q1) )
-                        ret(i) = -(get_value(qval) - A_val_) *
-                                 ((d_val_ - s_val_) / (2 * (3 - s_val_)) +
-                                  std::log(q1_param_));
-                    }
+            }
+            break;
+        case 3:  // s
+            for (unsigned i = 0; i < N; i++) {
+                double qval = xlist[i][0];
+                if (qval <= q1_param_) {
+                    // d[f(x)]/ds = - f(x)
+                    //    * (q^2 Rg^2 + (3-s)^2 log(q)) / (3-s)^2
+                    ret(i) = -(get_value(qval) - A_val_) *
+                             (IMP::square((qval * Rg_val_) / (3 - s_val_)) +
+                              std::log(qval));
+                } else {
+                    // d[f(x)]/ds = - f(x) * ( (d-s)/(2(3-s)) + log(q1) )
+                    ret(i) = -(get_value(qval) - A_val_) *
+                             ((d_val_ - s_val_) / (2 * (3 - s_val_)) +
+                              std::log(q1_param_));
                 }
-                break;
-            case 4:  // A
-                ret = Eigen::VectorXd::Constant(N, 1);
-                break;
-            default:
-                IMP_THROW("Invalid particle number", ModelException);
+            }
+            break;
+        case 4:  // A
+            ret = Eigen::VectorXd::Constant(N, 1);
+            break;
+        default:
+            IMP_THROW("Invalid particle number", ModelException);
         }
         return ret;
     }
@@ -533,8 +553,8 @@ class IMPISDEXPORT GeneralizedGuinierPorodFunction : public UnivariateFunction {
     }
 
     Eigen::VectorXd get_second_derivative_vector(unsigned particle_a,
-                                                 unsigned particle_b,
-                                                 const MatrixXd& xlist) const {
+            unsigned particle_b,
+            const MatrixXd& xlist) const {
         if (particle_a >= 5)
             IMP_THROW("Invalid particle 1 number", ModelException);
         if (particle_b >= 5)
@@ -546,200 +566,200 @@ class IMPISDEXPORT GeneralizedGuinierPorodFunction : public UnivariateFunction {
         unsigned pb = std::max(particle_a, particle_b);
         Eigen::VectorXd ret(N);
         switch (pa) {
+        case 0:  // G
+            switch (pb) {
             case 0:  // G
-                switch (pb) {
-                    case 0:  // G
-                        // d2f/dG2 = 0
-                        ret.noalias() = Eigen::VectorXd::Zero(N);
-                        break;
-
-                    case 1:  // Rg
-                        // d2f/dGdRg = df/dRg * 1/G
-                        ret.noalias() =
-                            get_derivative_vector(1, xlist) / G_val_;
-                        break;
-
-                    case 2:  // d
-                        // d2f/dGdd = df/dd * 1/G
-                        ret.noalias() =
-                            get_derivative_vector(2, xlist) / G_val_;
-                        break;
-
-                    case 3:  // s
-                        // d2f/dGds = df/ds * 1/G
-                        ret.noalias() =
-                            get_derivative_vector(3, xlist) / G_val_;
-                        break;
-
-                    default:
-                        IMP_THROW("Invalid particle 2 number", ModelException);
-                        break;
-                }
+                // d2f/dG2 = 0
+                ret.noalias() = Eigen::VectorXd::Zero(N);
                 break;
 
             case 1:  // Rg
-                switch (pb) {
-                    case 1:  // Rg
-                        for (unsigned i = 0; i < N; i++) {
-                            double qval = xlist[i][0];
-                            if (qval <= q1_param_) {
-                                // d2[f(x)]/dRg2 =
-                                // f(x) * (2 q^2 / (3-s))
-                                //  * (2 q^2 Rg^2 / (3-s) - 1)
-                                ret(i) = (get_value(qval) - A_val_) * 2 *
-                                         IMP::square(qval) / (3 - s_val_) *
-                                         (2 * IMP::square(qval * Rg_val_) /
-                                              (3 - s_val_) -
-                                          1);
-                            } else {
-                                // d2[f(x)]/dRg2=f(x) * (d-s)/Rg^2 * (d-s+1)
-                                ret(i) = (get_value(qval) - A_val_) *
-                                         (d_val_ - s_val_) /
-                                         IMP::square(Rg_val_) *
-                                         (d_val_ - s_val_ + 1);
-                            }
-                        }
-                        break;
+                // d2f/dGdRg = df/dRg * 1/G
+                ret.noalias() =
+                    get_derivative_vector(1, xlist) / G_val_;
+                break;
 
-                    case 2:  // d
-                        for (unsigned i = 0; i < N; i++) {
-                            double qval = xlist[i][0];
-                            if (qval <= q1_param_) {
-                                // d2[f(x)]/dddRg = 0
-                                ret(i) = 0;
-                            } else {
-                                // d2[f(x)]/dddRg = -f(x)/Rg
-                                //           - (d-s)/Rg *df(x)/dd
-                                double val = (get_value(qval) - A_val_);
-                                ret(i) = -val / Rg_val_ -
-                                         (val * std::log(q1_param_ / qval) *
-                                          (d_val_ - s_val_) / Rg_val_);
-                            }
-                        }
-                        break;
+            case 2:  // d
+                // d2f/dGdd = df/dd * 1/G
+                ret.noalias() =
+                    get_derivative_vector(2, xlist) / G_val_;
+                break;
 
-                    case 3:  // s
-                        for (unsigned i = 0; i < N; i++) {
-                            double qval = xlist[i][0];
-                            double val = (get_value(qval) - A_val_);
-                            if (qval <= q1_param_) {
-                                // d2[f(x)]/dsdRg = -2q^2Rg/(3-s)
-                                //     * (df(x)/ds + f(x)/(3-s))
-                                double deriv =
-                                    -val * (IMP::square((qval * Rg_val_) /
-                                                        (3 - s_val_)) +
-                                            std::log(qval));
-                                ret(i) = -2 * IMP::square(qval) * Rg_val_ /
-                                         (3 - s_val_) *
-                                         (deriv + val / (3 - s_val_));
-                            } else {
-                                // d2[f(x)]/dsdRg =
-                                //          1/Rg * (f(x)- (d-s)*df(x)/ds)
-                                double deriv = -val * ((d_val_ - s_val_) /
-                                                           (2 * (3 - s_val_)) +
-                                                       std::log(q1_param_));
-                                ret(i) =
-                                    (val - (d_val_ - s_val_) * deriv) / Rg_val_;
-                            }
-                        }
-                        break;
+            case 3:  // s
+                // d2f/dGds = df/ds * 1/G
+                ret.noalias() =
+                    get_derivative_vector(3, xlist) / G_val_;
+                break;
 
-                    default:
-                        IMP_THROW("Invalid particle 2 number", ModelException);
-                        break;
+            default:
+                IMP_THROW("Invalid particle 2 number", ModelException);
+                break;
+            }
+            break;
+
+        case 1:  // Rg
+            switch (pb) {
+            case 1:  // Rg
+                for (unsigned i = 0; i < N; i++) {
+                    double qval = xlist[i][0];
+                    if (qval <= q1_param_) {
+                        // d2[f(x)]/dRg2 =
+                        // f(x) * (2 q^2 / (3-s))
+                        //  * (2 q^2 Rg^2 / (3-s) - 1)
+                        ret(i) = (get_value(qval) - A_val_) * 2 *
+                                 IMP::square(qval) / (3 - s_val_) *
+                                 (2 * IMP::square(qval * Rg_val_) /
+                                  (3 - s_val_) -
+                                  1);
+                    } else {
+                        // d2[f(x)]/dRg2=f(x) * (d-s)/Rg^2 * (d-s+1)
+                        ret(i) = (get_value(qval) - A_val_) *
+                                 (d_val_ - s_val_) /
+                                 IMP::square(Rg_val_) *
+                                 (d_val_ - s_val_ + 1);
+                    }
                 }
                 break;
 
             case 2:  // d
-                switch (pb) {
-                    case 2:  // d
-                        for (unsigned i = 0; i < N; i++) {
-                            double qval = xlist[i][0];
-                            if (qval <= q1_param_) {
-                                // d2[f(x)]/dddd = 0
-                                ret(i) = 0;
-                            } else {
-                                // d2[f(x)]/dddd =
-                                //         f(x)*(log(q1/q)^2 + 1/(2*(d-s)))
-                                double val = (get_value(qval) - A_val_);
-                                ret(i) =
-                                    val *
-                                    (IMP::square(std::log(q1_param_ / qval)) +
-                                     1 / (2 * (d_val_ - s_val_)));
-                            }
-                        }
-                        break;
-
-                    case 3:  // s
-                    {
-                        double lterm = (d_val_ - s_val_) / (2 * (3 - s_val_)) +
-                                       std::log(q1_param_);
-                        double rterm =
-                            0.5 * (1 / (3 - s_val_) + 1 / (d_val_ - s_val_));
-                        for (unsigned i = 0; i < N; i++) {
-                            double qval = xlist[i][0];
-                            if (qval <= q1_param_) {
-                                // d2[f(x)]/ddds = 0
-                                ret(i) = 0;
-                            } else {
-                                // d2[f(x)]/ddds = log(q1/q)*df(x)/ds
-                                //      - (1/(3-s) + 1/(d-s))*f(x)/2
-                                //
-                                double val = (get_value(qval) - A_val_);
-                                ret(i) =
-                                    -val * (std::log(q1_param_ / qval) * lterm +
-                                            rterm);
-                            }
-                        }
-                    } break;
-
-                    default:
-                        IMP_THROW("Invalid particle 2 number", ModelException);
-                        break;
+                for (unsigned i = 0; i < N; i++) {
+                    double qval = xlist[i][0];
+                    if (qval <= q1_param_) {
+                        // d2[f(x)]/dddRg = 0
+                        ret(i) = 0;
+                    } else {
+                        // d2[f(x)]/dddRg = -f(x)/Rg
+                        //           - (d-s)/Rg *df(x)/dd
+                        double val = (get_value(qval) - A_val_);
+                        ret(i) = -val / Rg_val_ -
+                                 (val * std::log(q1_param_ / qval) *
+                                  (d_val_ - s_val_) / Rg_val_);
+                    }
                 }
                 break;
 
             case 3:  // s
-                switch (pb) {
-                    case 3:  // s
-                    {
-                        double cterm =
-                            IMP::square(0.5 * (d_val_ - s_val_) / (3 - s_val_) +
-                                        std::log(q1_param_)) +
-                            0.5 * ((6 - s_val_ - d_val_) /
-                                       IMP::square(3 - s_val_) +
-                                   1. / (d_val_ - s_val_));
-                        for (unsigned i = 0; i < N; i++) {
-                            double qval = xlist[i][0];
-                            double val = (get_value(qval) - A_val_);
-                            if (qval <= q1_param_) {
-                                // d2[f(x)]/dsds = f(x) *
-                                //  ( [(qRg)^2/(3-s)^2 + log q ]^2
-                                //    - 2(qRg)^2/(3-s)^3 )
-                                double factor = IMP::square((qval * Rg_val_) /
-                                                            (3 - s_val_));
-                                ret(i) = val *
-                                         (IMP::square(factor + std::log(qval)) -
-                                          2 * factor / (3 - s_val_));
-                            } else {
-                                // d2[f(x)]/dsds = f(x)
-                                // * ( [ (d-s)/(2*(3-s)) + log(q1) ]^2
-                                //     + 1/2 * [ (6-s-d)/(3-s)^2
-                                //               + 1/(d-s) ] )
-                                ret(i) = val * cterm;
-                            }
-                        }
-                    } break;
-
-                    default:
-                        IMP_THROW("Invalid particle 2 number", ModelException);
-                        break;
+                for (unsigned i = 0; i < N; i++) {
+                    double qval = xlist[i][0];
+                    double val = (get_value(qval) - A_val_);
+                    if (qval <= q1_param_) {
+                        // d2[f(x)]/dsdRg = -2q^2Rg/(3-s)
+                        //     * (df(x)/ds + f(x)/(3-s))
+                        double deriv =
+                            -val * (IMP::square((qval * Rg_val_) /
+                                                (3 - s_val_)) +
+                                    std::log(qval));
+                        ret(i) = -2 * IMP::square(qval) * Rg_val_ /
+                                 (3 - s_val_) *
+                                 (deriv + val / (3 - s_val_));
+                    } else {
+                        // d2[f(x)]/dsdRg =
+                        //          1/Rg * (f(x)- (d-s)*df(x)/ds)
+                        double deriv = -val * ((d_val_ - s_val_) /
+                                               (2 * (3 - s_val_)) +
+                                               std::log(q1_param_));
+                        ret(i) =
+                            (val - (d_val_ - s_val_) * deriv) / Rg_val_;
+                    }
                 }
                 break;
 
             default:
-                IMP_THROW("Invalid particle 1 number", ModelException);
+                IMP_THROW("Invalid particle 2 number", ModelException);
                 break;
+            }
+            break;
+
+        case 2:  // d
+            switch (pb) {
+            case 2:  // d
+                for (unsigned i = 0; i < N; i++) {
+                    double qval = xlist[i][0];
+                    if (qval <= q1_param_) {
+                        // d2[f(x)]/dddd = 0
+                        ret(i) = 0;
+                    } else {
+                        // d2[f(x)]/dddd =
+                        //         f(x)*(log(q1/q)^2 + 1/(2*(d-s)))
+                        double val = (get_value(qval) - A_val_);
+                        ret(i) =
+                            val *
+                            (IMP::square(std::log(q1_param_ / qval)) +
+                             1 / (2 * (d_val_ - s_val_)));
+                    }
+                }
+                break;
+
+            case 3: { // s
+                double lterm = (d_val_ - s_val_) / (2 * (3 - s_val_)) +
+                               std::log(q1_param_);
+                double rterm =
+                    0.5 * (1 / (3 - s_val_) + 1 / (d_val_ - s_val_));
+                for (unsigned i = 0; i < N; i++) {
+                    double qval = xlist[i][0];
+                    if (qval <= q1_param_) {
+                        // d2[f(x)]/ddds = 0
+                        ret(i) = 0;
+                    } else {
+                        // d2[f(x)]/ddds = log(q1/q)*df(x)/ds
+                        //      - (1/(3-s) + 1/(d-s))*f(x)/2
+                        //
+                        double val = (get_value(qval) - A_val_);
+                        ret(i) =
+                            -val * (std::log(q1_param_ / qval) * lterm +
+                                    rterm);
+                    }
+                }
+            }
+            break;
+
+            default:
+                IMP_THROW("Invalid particle 2 number", ModelException);
+                break;
+            }
+            break;
+
+        case 3:  // s
+            switch (pb) {
+            case 3: { // s
+                double cterm =
+                    IMP::square(0.5 * (d_val_ - s_val_) / (3 - s_val_) +
+                                std::log(q1_param_)) +
+                    0.5 * ((6 - s_val_ - d_val_) /
+                           IMP::square(3 - s_val_) +
+                           1. / (d_val_ - s_val_));
+                for (unsigned i = 0; i < N; i++) {
+                    double qval = xlist[i][0];
+                    double val = (get_value(qval) - A_val_);
+                    if (qval <= q1_param_) {
+                        // d2[f(x)]/dsds = f(x) *
+                        //  ( [(qRg)^2/(3-s)^2 + log q ]^2
+                        //    - 2(qRg)^2/(3-s)^3 )
+                        double factor = IMP::square((qval * Rg_val_) /
+                                                    (3 - s_val_));
+                        ret(i) = val *
+                                 (IMP::square(factor + std::log(qval)) -
+                                  2 * factor / (3 - s_val_));
+                    } else {
+                        // d2[f(x)]/dsds = f(x)
+                        // * ( [ (d-s)/(2*(3-s)) + log(q1) ]^2
+                        //     + 1/2 * [ (6-s-d)/(3-s)^2
+                        //               + 1/(d-s) ] )
+                        ret(i) = val * cterm;
+                    }
+                }
+            }
+            break;
+
+            default:
+                IMP_THROW("Invalid particle 2 number", ModelException);
+                break;
+            }
+            break;
+
+        default:
+            IMP_THROW("Invalid particle 1 number", ModelException);
+            break;
         }
         return ret;
     }
@@ -758,25 +778,31 @@ class IMPISDEXPORT GeneralizedGuinierPorodFunction : public UnivariateFunction {
         return ret;
     }
 
-    unsigned get_ndims_x() const { return 1; }
-    unsigned get_ndims_y() const { return 1; }
+    unsigned get_ndims_x() const {
+        return 1;
+    }
+    unsigned get_ndims_y() const {
+        return 1;
+    }
 
-    unsigned get_number_of_particles() const { return 5; }
+    unsigned get_number_of_particles() const {
+        return 5;
+    }
 
     bool get_particle_is_optimized(unsigned particle_no) const {
         switch (particle_no) {
-            case 0:  // G
-                return Scale(G_).get_scale_is_optimized();
-            case 1:  // Rg
-                return Scale(Rg_).get_scale_is_optimized();
-            case 2:  // d
-                return Scale(d_).get_scale_is_optimized();
-            case 3:  // s
-                return Scale(s_).get_scale_is_optimized();
-            case 4:  // A
-                return Nuisance(A_).get_nuisance_is_optimized();
-            default:
-                IMP_THROW("Invalid particle number", ModelException);
+        case 0:  // G
+            return Scale(G_).get_scale_is_optimized();
+        case 1:  // Rg
+            return Scale(Rg_).get_scale_is_optimized();
+        case 2:  // d
+            return Scale(d_).get_scale_is_optimized();
+        case 3:  // s
+            return Scale(s_).get_scale_is_optimized();
+        case 4:  // A
+            return Nuisance(A_).get_nuisance_is_optimized();
+        default:
+            IMP_THROW("Invalid particle number", ModelException);
         }
     }
 
@@ -815,13 +841,13 @@ class IMPISDEXPORT GeneralizedGuinierPorodFunction : public UnivariateFunction {
             << std::endl, {});*/
     IMP_OBJECT_METHODS(GeneralizedGuinierPorodFunction);
 
-   private:
+  private:
     inline double get_value(double q) const {
         double value;
         if (q <= q1_param_) {
             value =
                 A_val_ + G_val_ / std::pow(q, s_val_) *
-                             std::exp(-IMP::square(q * Rg_val_) / (3 - s_val_));
+                std::exp(-IMP::square(q * Rg_val_) / (3 - s_val_));
         } else {
             value = A_val_ + D_param_ / std::pow(q, d_val_);
         }

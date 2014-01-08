@@ -70,7 +70,7 @@ using Eigen::VectorXd;
 
 class MultivariateFNormalSufficient {
 
-   private:
+  private:
     VectorXd FM_, Fbar_, epsilon_, Peps_;
     double JF_, lJF_, norm_, lnorm_;
     MatrixXd P_, W_, Sigma_, FX_, PW_;
@@ -80,32 +80,32 @@ class MultivariateFNormalSufficient {
     Eigen::LDLT<MatrixXd, Eigen::Upper> ldlt_;
     // flags are true if the corresponding object is up to date.
     bool flag_FM_, flag_FX_, flag_Fbar_, flag_W_, flag_Sigma_, flag_epsilon_,
-        flag_PW_, flag_P_, flag_ldlt_, flag_norms_, flag_Peps_;
+         flag_PW_, flag_P_, flag_ldlt_, flag_norms_, flag_Peps_;
     double factor_;
 
-   public:
+  public:
     /** Initialize with all observed data
-* \param [in] FX F(X) matrix of observations with M columns and N rows.
-* \param [in] JF J(F) determinant of Jacobian of F with respect to
-*                 observation matrix X.
-* \param [in] FM F(M) mean vector \f$F(\mu)\f$ of size M.
-* \param [in] Sigma : MxM variance-covariance matrix \f$\Sigma\f$.
-* \param [in] factor : multiplicative factor (default 1)
-* */
+    * \param [in] FX F(X) matrix of observations with M columns and N rows.
+    * \param [in] JF J(F) determinant of Jacobian of F with respect to
+    *                 observation matrix X.
+    * \param [in] FM F(M) mean vector \f$F(\mu)\f$ of size M.
+    * \param [in] Sigma : MxM variance-covariance matrix \f$\Sigma\f$.
+    * \param [in] factor : multiplicative factor (default 1)
+    * */
     MultivariateFNormalSufficient(const MatrixXd& FX, double JF,
                                   const VectorXd& FM, const MatrixXd& Sigma,
                                   double factor = 1);
 
     /** Initialize with sufficient statistics
-* \param [in] Fbar : M-dimensional vector of mean observations.
-* \param [in] JF J(F) determinant of Jacobian of F with respect to observation
-*                  matrix X.
-* \param [in] FM F(M) : M-dimensional true mean vector \f$\mu\f$.
-* \param [in] Nobs : number of observations for each variable.
-* \param [in] W : MxM matrix of sample variance-covariances.
-* \param [in] Sigma : MxM variance-covariance matrix Sigma.
-* \param [in] factor : multiplicative factor (default 1)
-* */
+    * \param [in] Fbar : M-dimensional vector of mean observations.
+    * \param [in] JF J(F) determinant of Jacobian of F with respect to observation
+    *                  matrix X.
+    * \param [in] FM F(M) : M-dimensional true mean vector \f$\mu\f$.
+    * \param [in] Nobs : number of observations for each variable.
+    * \param [in] W : MxM matrix of sample variance-covariances.
+    * \param [in] Sigma : MxM variance-covariance matrix Sigma.
+    * \param [in] factor : multiplicative factor (default 1)
+    * */
     MultivariateFNormalSufficient(const VectorXd& Fbar, double JF,
                                   const VectorXd& FM, int Nobs,
                                   const MatrixXd& W, const MatrixXd& Sigma,
@@ -136,7 +136,7 @@ class MultivariateFNormalSufficient {
 
     /* second derivative wrt Sigma and Sigma(k,l) */
     MatrixXd evaluate_second_derivative_Sigma_Sigma(unsigned k,
-                                                    unsigned l) const;
+            unsigned l) const;
 
     /* change of parameters */
     void set_FX(const MatrixXd& f);
@@ -192,7 +192,7 @@ class MultivariateFNormalSufficient {
      */
     double get_minus_log_normalization() const;
 
-   private:
+  private:
     // precision matrix
     MatrixXd get_P() const;
     void set_P(const MatrixXd& P);

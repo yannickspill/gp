@@ -6,13 +6,14 @@
 #include <Eigen/Dense>
 #include <memory>
 
-//! map the rows of INMATRIX through UNIFUNC to a VECTOR
-template <class INMATRIX, class UNIFUNC>
-class VectorFromFunction : public DoubleInputVersionTracker<INMATRIX, UNIFUNC> {
-    typedef DoubleInputVersionTracker<INMATRIX, UNIFUNC> P;
+//! map the rows of MatrixType through UnivariateFunctionType to a VECTOR
+template <class MatrixType, class UnivariateFunctionType>
+class VectorFromFunction : public DoubleInputVersionTracker<MatrixType,
+    UnivariateFunctionType> {
+    typedef DoubleInputVersionTracker<MatrixType, UnivariateFunctionType> P;
 
-   public:
-    VectorFromFunction(INMATRIX X, UNIFUNC mu)
+  public:
+    VectorFromFunction(MatrixType X, UnivariateFunctionType mu)
         : P(X, mu), data_(std::make_shared<Data>(X, mu)) {}
 
     typedef Eigen::VectorXd result_type;
@@ -32,12 +33,12 @@ class VectorFromFunction : public DoubleInputVersionTracker<INMATRIX, UNIFUNC> {
         return retval;
     }
 
-   private:
+  private:
     struct Data {
-        INMATRIX X_;
-        UNIFUNC mu_;
+        MatrixType X_;
+        UnivariateFunctionType mu_;
         mutable result_type retval_;
-        Data(INMATRIX X, UNIFUNC mu) : X_(X), mu_(mu) {}
+        Data(MatrixType X, UnivariateFunctionType mu) : X_(X), mu_(mu) {}
     };
     std::shared_ptr<Data> data_;
 };

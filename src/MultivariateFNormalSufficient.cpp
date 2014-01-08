@@ -30,7 +30,7 @@ MultivariateFNormalSufficient::MultivariateFNormalSufficient(
     N_ = Nobs;
     M_ = Fbar.rows();
     LOG("MVN: sufficient statistics init with N=" << N_ << " and M=" << M_
-                                                  << std::endl);
+        << std::endl);
     CHECK(N_ > 0, "please provide at least one observation per dimension");
     CHECK(M_ > 0, "please provide at least one variable");
     set_factor(factor);
@@ -125,8 +125,7 @@ MatrixXd MultivariateFNormalSufficient::evaluate_derivative_Sigma() const {
     // d(-log(p))/dSigma = 1/2 (N P - N P epsilon transpose(epsilon) P - PWP)
     LOG("MVN: evaluate_derivative_Sigma() = " << std::endl);
     MatrixXd R;
-    if (N_ == 1)  // O(M) if up to date, O(M^3) if Sigma new
-    {
+    if (N_ == 1) { // O(M) if up to date, O(M^3) if Sigma new
         R = 0.5 * (get_P() - compute_PTP() / SQUARE(factor_));
     } else {  // O(M^2) if up to date, O(M^3) if Sigma new
         double f2 = SQUARE(factor_);
@@ -144,14 +143,14 @@ double MultivariateFNormalSufficient::evaluate_derivative_factor() const {
         R = -get_mean_square_residuals() / CUBE(factor_) + double(M_) / factor_;
     } else {
         R = -(double(N_) * get_mean_square_residuals() + trace_WP()) /
-                CUBE(factor_) +
+            CUBE(factor_) +
             double(M_ * N_) / factor_;
     }
     return R;
 }
 
 MatrixXd MultivariateFNormalSufficient::evaluate_second_derivative_FM_FM()
-    const {
+const {
     CHECK(N_ == 1, "not implemented when N>1");
     MatrixXd ret(get_P() / SQUARE(factor_));
     return ret;
@@ -186,10 +185,10 @@ void MultivariateFNormalSufficient::set_FX(const MatrixXd& FX) {
     if (FX.rows() != FX_.rows() || FX.cols() != FX_.cols() || FX != FX_) {
         CHECK(FX.rows() == N_,
               "size mismatch for FX in the number of repetitions: got "
-                  << FX.rows() << " instead of " << N_);
+              << FX.rows() << " instead of " << N_);
         CHECK(FX.cols() == M_,
               "size mismatch for FX in the number of variables: got "
-                  << FX.cols() << " instead of " << M_);
+              << FX.cols() << " instead of " << M_);
         FX_ = FX;
         LOG("MVN:   set FX to new matrix" << std::endl);
         flag_Fbar_ = false;
@@ -209,7 +208,7 @@ VectorXd MultivariateFNormalSufficient::get_FM() const {
 void MultivariateFNormalSufficient::set_FM(const VectorXd& FM) {
     if (FM.rows() != FM_.rows() || FM.cols() != FM_.cols() || FM != FM_) {
         CHECK(FM.rows() == M_, "size mismatch for FM: got "
-                                   << FM.rows() << " instead of " << M_);
+              << FM.rows() << " instead of " << M_);
         FM_ = FM;
         LOG("MVN:   set FM to new vector" << std::endl);
         flag_epsilon_ = false;
@@ -230,9 +229,9 @@ VectorXd MultivariateFNormalSufficient::get_Fbar() const {
 
 void MultivariateFNormalSufficient::set_Fbar(const VectorXd& Fbar) {
     if (Fbar.rows() != Fbar_.rows() || Fbar.cols() != Fbar_.cols() ||
-        Fbar != Fbar_) {
+            Fbar != Fbar_) {
         CHECK(Fbar.rows() == M_, "size mismatch for Fbar: got "
-                                     << Fbar.rows() << " instead of " << M_);
+              << Fbar.rows() << " instead of " << M_);
         Fbar_ = Fbar;
         LOG("MVN:   set Fbar to new vector" << std::endl);
         flag_epsilon_ = false;
@@ -243,7 +242,9 @@ void MultivariateFNormalSufficient::set_Fbar(const VectorXd& Fbar) {
     flag_Fbar_ = true;
 }
 
-double MultivariateFNormalSufficient::get_jacobian() const { return JF_; }
+double MultivariateFNormalSufficient::get_jacobian() const {
+    return JF_;
+}
 
 void MultivariateFNormalSufficient::set_jacobian(double JF) {
     JF_ = JF;
@@ -309,7 +310,7 @@ MatrixXd MultivariateFNormalSufficient::get_Sigma() const {
 
 void MultivariateFNormalSufficient::set_Sigma(const MatrixXd& Sigma) {
     if (Sigma.rows() != Sigma_.rows() || Sigma.cols() != Sigma_.cols() ||
-        Sigma != Sigma_) {
+            Sigma != Sigma_) {
         CHECK(Sigma.cols() == Sigma.rows(), "need a square matrix!");
         Sigma_ = Sigma;
         // std::cout << "Sigma: " << Sigma_ << std::endl << std::endl;
@@ -323,7 +324,9 @@ void MultivariateFNormalSufficient::set_Sigma(const MatrixXd& Sigma) {
     flag_Sigma_ = true;
 }
 
-double MultivariateFNormalSufficient::get_factor() const { return factor_; }
+double MultivariateFNormalSufficient::get_factor() const {
+    return factor_;
+}
 
 void MultivariateFNormalSufficient::set_factor(double f) {
     factor_ = f;
@@ -332,7 +335,7 @@ void MultivariateFNormalSufficient::set_factor(double f) {
 
 // Eigen::LLT<MatrixXd, Eigen::Upper>
 Eigen::LDLT<MatrixXd, Eigen::Upper> MultivariateFNormalSufficient::get_ldlt()
-    const {
+const {
     if (!flag_ldlt_) {
         LOG("MVN:   computing Cholesky decomposition" << std::endl);
         // compute Cholesky decomposition for determinant and inverse
@@ -373,7 +376,7 @@ std::vector<double> MultivariateFNormalSufficient::get_norms() const {
                        double(N_) / 2 * logDetSigma;
         LOG("MVN:   norm = " << norm << " lnorm = " << lnorm << std::endl);
         const_cast<MultivariateFNormalSufficient*>(this)
-            ->set_norms(norm, lnorm);
+        ->set_norms(norm, lnorm);
     }
     std::vector<double> norms;
     norms.push_back(norm_);
@@ -395,7 +398,7 @@ MatrixXd MultivariateFNormalSufficient::get_P() const {
         Eigen::LDLT<MatrixXd, Eigen::Upper> ldlt(get_ldlt());
         LOG("MVN:   solving for inverse" << std::endl);
         const_cast<MultivariateFNormalSufficient*>(this)
-            ->set_P(ldlt.solve(MatrixXd::Identity(M_, M_)));
+        ->set_P(ldlt.solve(MatrixXd::Identity(M_, M_)));
     }
     return P_;
 }
@@ -442,7 +445,7 @@ VectorXd MultivariateFNormalSufficient::get_Peps() const {
         ////Peps
         LOG("MVN:   solving for P*epsilon" << std::endl);
         const_cast<MultivariateFNormalSufficient*>(this)
-            ->set_Peps(get_ldlt().solve(get_epsilon()));
+        ->set_Peps(get_ldlt().solve(get_epsilon()));
     }
     return Peps_;
 }
@@ -499,7 +502,7 @@ MatrixXd MultivariateFNormalSufficient::compute_PWP() const {
 
 VectorXd MultivariateFNormalSufficient::get_Sigma_eigenvalues() const {
     Eigen::SelfAdjointEigenSolver<MatrixXd> eigensolver(get_Sigma(),
-                                                        Eigen::EigenvaluesOnly);
+            Eigen::EigenvaluesOnly);
     CHECK(eigensolver.info() == Eigen::Success,
           "Could not determine eigenvalues!");
     return eigensolver.eigenvalues();

@@ -10,28 +10,28 @@
 
 //! Using a matrix decomposition for A, solve for AX=B
 //the point of using this class is to allow for caching of the result
-template <class Decomposition, class BMATRIX>
+template <class DecompositionType, class BMatrixType>
 class SolveDecomposedMatrix
-    : public DoubleInputCachedVersionTracker<Decomposition, BMATRIX> {
+    : public DoubleInputCachedVersionTracker<DecompositionType, BMatrixType> {
 
-    typedef DoubleInputCachedVersionTracker<Decomposition, BMATRIX> P;
+    typedef DoubleInputCachedVersionTracker<DecompositionType, BMatrixType> P;
 
-   public:
+  public:
     //this result_type only works for square matrix decompositions.
     typedef typename Eigen::MatrixXd result_type;
 
-   private:
+  private:
     struct Data {
-        Decomposition decomp_;
-        BMATRIX B_;
+        DecompositionType decomp_;
+        BMatrixType B_;
         mutable result_type AmB_;
-        Data(Decomposition decomp, BMATRIX B) : decomp_(decomp), B_(B) {}
+        Data(DecompositionType decomp, BMatrixType B) : decomp_(decomp), B_(B) {}
     };
     std::shared_ptr<Data> data_;
-  
-   public:
+
+  public:
     //! constructor
-    SolveDecomposedMatrix(Decomposition decomp, BMATRIX B)
+    SolveDecomposedMatrix(DecompositionType decomp, BMatrixType B)
         : P(decomp, B), data_(std::make_shared<Data>(decomp, B)) {}
 
     result_type get() const {

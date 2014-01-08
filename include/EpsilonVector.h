@@ -9,19 +9,20 @@
 #include <memory>
 
 //! Difference between two wrapped Eigen vectors
-template <class In1Type, class In2Type>
-class EpsilonVector : public DoubleInputVersionTracker<In1Type, In2Type> {
-    typedef DoubleInputVersionTracker<In1Type, In2Type> P;
+template <class Vector1Type, class Vector2Type>
+class EpsilonVector : public DoubleInputVersionTracker<Vector1Type,
+    Vector2Type> {
+    typedef DoubleInputVersionTracker<Vector1Type, Vector2Type> P;
     struct Data {
-        In1Type in1_;
-        In2Type in2_;
-        Data(In1Type in1, In2Type in2) : in1_(in1), in2_(in2) {}
+        Vector1Type in1_;
+        Vector2Type in2_;
+        Data(Vector1Type in1, Vector2Type in2) : in1_(in1), in2_(in2) {}
     };
     std::shared_ptr<Data> data_;
 
-   public:
+  public:
     //! constructor
-    EpsilonVector(In1Type in1, In2Type in2)
+    EpsilonVector(Vector1Type in1, Vector2Type in2)
         : P(in1, in2), data_(std::make_shared<Data>(in1,in2)) {}
 
     typedef decltype(data_->in1_.get() - data_->in2_.get()) result_type;
@@ -30,7 +31,7 @@ class EpsilonVector : public DoubleInputVersionTracker<In1Type, In2Type> {
         return data_->in1_.get() - data_->in2_.get();
     }
 
-    typedef typename In1Type::result_type derivative_type;
+    typedef typename Vector1Type::result_type derivative_type;
 
     derivative_type get_derivative(const Scalar& s) const {
         //d(eps)/ds = d(left)/ds - d(right)/ds

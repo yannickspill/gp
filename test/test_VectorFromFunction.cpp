@@ -9,11 +9,13 @@ typedef ConstEigenObject<Eigen::VectorXd> ConstVec;
 }
 
 class ConstFunc {
-   public:
+  public:
     double eval(Eigen::Matrix<double, 1, 1> x) const {
         return 1.;
     }
-    unsigned update() { return 0 ; }
+    unsigned update() {
+        return 0 ;
+    }
 };
 
 int main(int, char * []) {

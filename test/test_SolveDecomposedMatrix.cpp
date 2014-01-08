@@ -10,7 +10,7 @@
 
 typedef ConstEigenObject<Eigen::MatrixXd> ConstMat;
 typedef SymmetricMatrixFromFunction<ConstMat, Covariance1DFunction>
-    VarCov;
+VarCov;
 typedef LDLT<ConstMat> DecompConst;
 typedef LDLT<VarCov> DecompVar;
 

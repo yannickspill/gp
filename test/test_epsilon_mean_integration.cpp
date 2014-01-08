@@ -8,7 +8,7 @@
 
 using Eigen::VectorXd;
 using Eigen::MatrixXd;
-namespace{
+namespace {
 typedef ConstEigenObject<VectorXd> ConstVec;
 typedef VectorFromFunction<ConstVec, Linear1DFunction> VFF;
 typedef EpsilonVector<ConstVec, VFF> MD;

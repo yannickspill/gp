@@ -19,7 +19,7 @@
  */
 
 class FNormal {
-   public:
+  public:
     FNormal(double FA, double JA, double FM, double sigma)
         : FA_(FA), JA_(JA), FM_(FM), sigma_(sigma) {}
 
@@ -34,7 +34,9 @@ class FNormal {
         return (FA_ - FM_) / SQUARE(sigma_);
     }
 
-    virtual double evaluate_derivative_JA() const { return -1 / JA_; }
+    virtual double evaluate_derivative_JA() const {
+        return -1 / JA_;
+    }
 
     // derivative wrt F(M)
     virtual double evaluate_derivative_FM() const {
@@ -52,12 +54,20 @@ class FNormal {
     }
 
     /* change of parameters */
-    void set_FA(double f) { FA_ = f; }
-    void set_JA(double f) { JA_ = f; }
-    void set_FM(double f) { FM_ = f; }
-    void set_sigma(double f) { sigma_ = f; }
+    void set_FA(double f) {
+        FA_ = f;
+    }
+    void set_JA(double f) {
+        JA_ = f;
+    }
+    void set_FM(double f) {
+        FM_ = f;
+    }
+    void set_sigma(double f) {
+        sigma_ = f;
+    }
 
-   private:
+  private:
     double FA_, JA_, FM_, sigma_;
 };
 

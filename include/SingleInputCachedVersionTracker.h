@@ -20,14 +20,14 @@ class SingleInputCachedVersionTracker {
     };
     std::shared_ptr<Data> data_;
 
-   public:
+  public:
     SingleInputCachedVersionTracker(InType in)
         : data_(std::make_shared<Data>(in)) {}
 
     unsigned update() {
         LOG("SingleInputCachedVersionTracker::update()");
         unsigned vin = data_->in_.update();
-        if (vin != data_->vin_){
+        if (vin != data_->vin_) {
             data_->cache_invalid_ = true;
             data_->version_++;
             LOG(" invalidate cache");
@@ -37,7 +37,9 @@ class SingleInputCachedVersionTracker {
         return data_->version_;
     }
 
-    bool cache_is_invalid() const { return data_->cache_invalid_; }
+    bool cache_is_invalid() const {
+        return data_->cache_invalid_;
+    }
     void set_cache_is_valid() const {
         LOG("SingleInputCachedVersionTracker::cache_is_invalid()");
         data_->cache_invalid_=false;

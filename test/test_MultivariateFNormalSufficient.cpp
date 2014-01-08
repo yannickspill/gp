@@ -19,7 +19,7 @@ RNGType generator;
 
 boost::uniform_real<> uniform(0, 1);
 boost::variate_generator<RNGType, boost::uniform_real<> > rand(generator,
-                                                               uniform);
+        uniform);
 
 #define FAIL(str)                      \
     {                                  \
@@ -342,7 +342,7 @@ bool test_1D(int N) {
         double expected =
             double(N) * log((sqrt(2 * PI) * sigma)) +
             1 / (2 * sigma * sigma) *
-                (double(N) * SQUARE(sample_mean - FM(0)) + sum_squares);
+            (double(N) * SQUARE(sample_mean - FM(0)) + sum_squares);
         // PRINT("evaluate " << observed << " " << expected << " "
         //          << fn->evaluate() + fn2->evaluate());
         if (naeq(observed, expected)) FAIL("evaluate");
@@ -374,7 +374,7 @@ bool test_1D(int N) {
         double expected =
             (double)N / (2.0 * Sigma(0, 0)) -
             0.5 / SQUARE(Sigma(0, 0)) *
-                ((double)N * SQUARE(sample_mean - FM(0)) + sum_squares);
+            ((double)N * SQUARE(sample_mean - FM(0)) + sum_squares);
         // PRINT("Sigma " << observed(0,0) << " " << expected
         //          << " " <<
         // fn->evaluate_derivative_sigma()/(2*sqrt(Sigma(0,0))));
@@ -422,10 +422,10 @@ bool test_2D() {
         double observed = mv->evaluate();
         double expected = log(2 * PI * sigma1 * sigma2 * sqrt(1 - rho * rho)) +
                           1 / (2 * (1 - rho * rho)) *
-                              (SQUARE(FA(0, 0) - FM(0)) / (sigma1 * sigma1) +
-                               SQUARE(FA(0, 1) - FM(1)) / (sigma2 * sigma2) -
-                               2 * rho * (FA(0, 0) - FM(0)) *
-                                   (FA(0, 1) - FM(1)) / (sigma1 * sigma2));
+                          (SQUARE(FA(0, 0) - FM(0)) / (sigma1 * sigma1) +
+                           SQUARE(FA(0, 1) - FM(1)) / (sigma2 * sigma2) -
+                           2 * rho * (FA(0, 0) - FM(0)) *
+                           (FA(0, 1) - FM(1)) / (sigma1 * sigma2));
         if (naeq(observed, expected)) FAIL("evaluate");
     }
 
@@ -437,7 +437,7 @@ bool test_2D() {
                               (SQUARE(FA(0, 0) - FM(0)) / (sigma1 * sigma1) +
                                SQUARE(FA(0, 1) - FM(1)) / (sigma2 * sigma2) -
                                2 * rho * (FA(0, 0) - FM(0)) *
-                                   (FA(0, 1) - FM(1)) / (sigma1 * sigma2)));
+                               (FA(0, 1) - FM(1)) / (sigma1 * sigma2)));
         if (naeq(observed, expected)) FAIL("density");
     }
 

@@ -24,7 +24,7 @@ class DoubleInputVersionTracker {
     };
     std::shared_ptr<Data> data_;
 
-   public:
+  public:
     DoubleInputVersionTracker(In1Type in1, In2Type in2)
         : data_(std::make_shared<Data>(in1, in2)) {}
 
@@ -32,7 +32,7 @@ class DoubleInputVersionTracker {
         LOG("DoubleInputVersionTracker::update()");
         unsigned vin1 = data_->in1_.update();
         unsigned vin2 = data_->in2_.update();
-        if (vin1 != data_->vin1_ || vin2 != data_->vin2_){
+        if (vin1 != data_->vin1_ || vin2 != data_->vin2_) {
             data_->vin1_ = vin1;
             data_->vin2_ = vin2;
             data_->version_++;

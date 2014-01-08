@@ -13,14 +13,22 @@ class BasicMVN {
     double lJF_;
     Mat Sigma_;
 
-   public:
+  public:
     BasicMVN(const Vec& FX, const Vec& FM, double lJF, const Mat& Sigma)
         : FX_(FX), FM_(FM), lJF_(lJF), Sigma_(Sigma) {}
 
-    void set_FX(Vec FX) { FX_ = FX; }
-    void set_FM(Vec FM) { FM_ = FM; }
-    void set_lJF(double lJF) { lJF_ = lJF; }
-    void set_Sigma(Mat Sigma) { Sigma_ = Sigma; }
+    void set_FX(Vec FX) {
+        FX_ = FX;
+    }
+    void set_FM(Vec FM) {
+        FM_ = FM;
+    }
+    void set_lJF(double lJF) {
+        lJF_ = lJF;
+    }
+    void set_Sigma(Mat Sigma) {
+        Sigma_ = Sigma;
+    }
 
     double get() const {
         Vec eps(FX_ - FM_);
@@ -37,7 +45,9 @@ class BasicMVN {
         return -ldlt.solve(eps);
     }
 
-    Vec get_derivative_FX() const { return -get_derivative_FM(); }
+    Vec get_derivative_FX() const {
+        return -get_derivative_FM();
+    }
 
     Mat get_derivative_Sigma() const {
         Vec eps(FX_ - FM_);

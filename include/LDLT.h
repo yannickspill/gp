@@ -11,26 +11,28 @@
 //! Build the LDLT (Cholesky) decomposition of a matrix
 //  Sigma = LDL^T
 //  Only the upper corner of the matrix is used.
-template <typename MATRIX>
-class LDLT : public SingleInputCachedVersionTracker<MATRIX> {
+template <typename MatrixType>
+class LDLT : public SingleInputCachedVersionTracker<MatrixType> {
 
-    typedef SingleInputCachedVersionTracker<MATRIX> P;
-   public:
-    typedef Eigen::LDLT<typename MATRIX::result_type, Eigen::Upper> result_type;
+    typedef SingleInputCachedVersionTracker<MatrixType> P;
+  public:
+    typedef Eigen::LDLT<typename MatrixType::result_type, Eigen::Upper> result_type;
 
-   private:
+  private:
     struct Data {
-        MATRIX cov_;
+        MatrixType cov_;
         mutable result_type ldlt_;
-        Data(MATRIX cov) : cov_(cov) {}
+        Data(MatrixType cov) : cov_(cov) {}
     };
     std::shared_ptr<Data> data_;
 
-   public:
+  public:
     //! constructor
-    LDLT(MATRIX cov) : P(cov), data_(std::make_shared<Data>(cov)) {}
+    LDLT(MatrixType cov) : P(cov), data_(std::make_shared<Data>(cov)) {}
 
-    const result_type& get() const { return get_ldlt(); }
+    const result_type& get() const {
+        return get_ldlt();
+    }
 
     double get_log_determinant() const {
         return get_ldlt().vectorD().array().abs().log().sum();
@@ -39,11 +41,11 @@ class LDLT : public SingleInputCachedVersionTracker<MATRIX> {
     //! solve for Sigma X = B, returning X = Sigma^{-1} B
     template <class Derived>
     auto solve(const Eigen::MatrixBase<Derived>& B)
-        const -> decltype(data_->ldlt_.solve(B)) {
+    const -> decltype(data_->ldlt_.solve(B)) {
         return get_ldlt().solve(B);
     }
 
-   private:
+  private:
     const result_type& get_ldlt() const {
         LOG("ldlt: get_ldlt()");
         if (P::cache_is_invalid()) {

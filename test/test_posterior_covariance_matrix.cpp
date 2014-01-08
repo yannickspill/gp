@@ -7,11 +7,13 @@
 #include <Eigen/Dense>
 
 class ConstCovFunc {
-   public:
+  public:
     double eval(Eigen::RowVectorXd a, Eigen::RowVectorXd b) const {
         return 1.;
     }
-    unsigned update() { return 0; }
+    unsigned update() {
+        return 0;
+    }
 };
 
 int main(int, char * []) {
