@@ -20,11 +20,15 @@ class MatrixSum : public DoubleInputVersionTracker<Matrix1Type, Matrix2Type> {
     std::shared_ptr<Data> data_;
 
   public:
+
+    typedef decltype(data_->in1_.get() + data_->in2_.get()) result_type;
+    static const unsigned RowsAtCompileTime = result_type::RowsAtCompileTime;
+    static const unsigned ColsAtCompileTime = result_type::ColsAtCompileTime;
+
     //! constructor
     MatrixSum(Matrix1Type in1, Matrix2Type in2)
         : P(in1, in2), data_(std::make_shared<Data>(in1,in2)) {}
 
-    typedef decltype(data_->in1_.get() + data_->in2_.get()) result_type;
     result_type get() const {
         return data_->in1_.get() + data_->in2_.get();
     }

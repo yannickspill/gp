@@ -21,6 +21,9 @@ class SingleInputCachedVersionTracker {
     std::shared_ptr<Data> data_;
 
   public:
+
+    static const unsigned num_inputs = 1;
+
     SingleInputCachedVersionTracker(InType in)
         : data_(std::make_shared<Data>(in)) {}
 

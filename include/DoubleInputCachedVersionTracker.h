@@ -27,6 +27,9 @@ class DoubleInputCachedVersionTracker {
     std::shared_ptr<Data> data_;
 
   public:
+
+    static const unsigned num_inputs = 2;
+
     DoubleInputCachedVersionTracker(In1Type in1, In2Type in2)
         : data_(std::make_shared<Data>(in1,in2)) {}
 

@@ -22,6 +22,10 @@ class Covariance1DFunction : public DoubleInputVersionTracker<Scalar, Scalar> {
     unsigned alpha_;
 
   public:
+
+    static const unsigned num_inputs = 2;
+    static const unsigned num_outputs = 1;
+
     Covariance1DFunction(Scalar tau, Scalar lambda, unsigned alpha = 2)
         : P(tau,lambda),
           tau_(tau),

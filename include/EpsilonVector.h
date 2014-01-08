@@ -12,6 +12,14 @@
 template <class Vector1Type, class Vector2Type>
 class EpsilonVector : public DoubleInputVersionTracker<Vector1Type,
     Vector2Type> {
+
+    static_assert(Vector1Type::ColsAtCompileTime == 1
+                  && Vector2Type::ColsAtCompileTime == 1,
+                  "Vector types should have only one column!");
+    static_assert(Vector1Type::RowsAtCompileTime
+                  == Vector2Type::RowsAtCompileTime,
+                  "Vector types should have the same number of rows");
+
     typedef DoubleInputVersionTracker<Vector1Type, Vector2Type> P;
     struct Data {
         Vector1Type in1_;
@@ -21,11 +29,15 @@ class EpsilonVector : public DoubleInputVersionTracker<Vector1Type,
     std::shared_ptr<Data> data_;
 
   public:
+
+    typedef decltype(data_->in1_.get() - data_->in2_.get()) result_type;
+    static const unsigned RowsAtCompileTime = result_type::RowsAtCompileTime;
+    static const unsigned ColsAtCompileTime = result_type::ColsAtCompileTime;
+
     //! constructor
     EpsilonVector(Vector1Type in1, Vector2Type in2)
         : P(in1, in2), data_(std::make_shared<Data>(in1,in2)) {}
 
-    typedef decltype(data_->in1_.get() - data_->in2_.get()) result_type;
     result_type get() const {
         LOG("EpsilonVector: get()" << std::endl);
         return data_->in1_.get() - data_->in2_.get();

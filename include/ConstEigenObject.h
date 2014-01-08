@@ -10,9 +10,13 @@ class ConstEigenObject {
     EigenType X_;
 
   public:
+
+    static const unsigned RowsAtCompileTime = EigenType::RowsAtCompileTime;
+    static const unsigned ColsAtCompileTime = EigenType::ColsAtCompileTime;
+    typedef EigenType result_type;
+
     explicit ConstEigenObject(const EigenType& X) : X_(X) {}
 
-    typedef EigenType result_type;
     const result_type& get() const {
         return X_;
     }

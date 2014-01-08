@@ -16,6 +16,9 @@ class Linear1DFunction : public DoubleInputVersionTracker<Scalar, Scalar> {
     Scalar a_, b_;
 
   public:
+    static const unsigned num_inputs = 1;
+    static const unsigned num_outputs = 1;
+
     Linear1DFunction(Scalar a, Scalar b) : P(a,b), a_(a), b_(b) {}
 
     double eval(double x) const {

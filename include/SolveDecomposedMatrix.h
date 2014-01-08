@@ -19,6 +19,8 @@ class SolveDecomposedMatrix
   public:
     //this result_type only works for square matrix decompositions.
     typedef typename Eigen::MatrixXd result_type;
+    static const unsigned RowsAtCompileTime = result_type::RowsAtCompileTime;
+    static const unsigned ColsAtCompileTime = result_type::ColsAtCompileTime;
 
   private:
     struct Data {

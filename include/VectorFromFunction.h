@@ -13,10 +13,13 @@ class VectorFromFunction : public DoubleInputVersionTracker<MatrixType,
     typedef DoubleInputVersionTracker<MatrixType, UnivariateFunctionType> P;
 
   public:
+    typedef Eigen::VectorXd result_type;
+    static const unsigned RowsAtCompileTime = result_type::RowsAtCompileTime;
+    static const unsigned ColsAtCompileTime = result_type::ColsAtCompileTime;
+
     VectorFromFunction(MatrixType X, UnivariateFunctionType mu)
         : P(X, mu), data_(std::make_shared<Data>(X, mu)) {}
 
-    typedef Eigen::VectorXd result_type;
     const result_type& get() const {
         auto Xmat(data_->X_.get());
         data_->retval_ = Eigen::VectorXd(Xmat.rows());

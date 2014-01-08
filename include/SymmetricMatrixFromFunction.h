@@ -14,13 +14,16 @@ class SymmetricMatrixFromFunction
     typedef DoubleInputVersionTracker<MatrixType, BivariateFunctionType> P;
 
   public:
+    typedef Eigen::MatrixXd result_type;
+    static const unsigned RowsAtCompileTime = MatrixType::RowsAtCompileTime;
+    static const unsigned ColsAtCompileTime = MatrixType::RowsAtCompileTime;
+
     //! constructor
     // X : input coordinates
     // cov : covariance function, compatible with X's shape.
     SymmetricMatrixFromFunction(MatrixType X, BivariateFunctionType cov)
         : P(X, cov), data_(std::make_shared<Data>(X,cov)) {}
 
-    typedef Eigen::MatrixXd result_type;
     const result_type& get() const {
         auto Xmat(data_->X_.get());
         data_->retval_ = Eigen::MatrixXd(Xmat.rows(), Xmat.rows());
