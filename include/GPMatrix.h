@@ -45,7 +45,7 @@ class GPMatrix : public GPMatrixBase<GPMatrix<EigenType> > {
 
   //! Return bare Eigen type
   // Use with precaution as this loses track of any dependent Scalars.
-  EigenType eigen() const { return data_; }
+  result_type eigen() const { return data_; }
 };
 
 // specialize traits for GPMatrix
