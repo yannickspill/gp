@@ -2,26 +2,15 @@
 #define GPMATRIX_H
 
 #include "macros.h"
+#include "GPMatrixBase.h"
 
 #include <Eigen/Dense>
 
-// declare traits class
-template <class Derived> struct traits;
-
-//! Base class for any matrix
-template <class Derived>
-class GPMatrixBase {
-
- public:
-  // typedefs
-  typedef typename traits<Derived>::result_type result_type;
-  static const unsigned RowsAtCompileTime = result_type::RowsAtCompileTime;
-  static const unsigned ColsAtCompileTime = result_type::ColsAtCompileTime;
-
- public:
-  // allow casting to Derived
-  operator Derived&() { return static_cast<Derived&>(*this); }
-  operator const Derived&() { return static_cast<const Derived&>(*this); }
+// specialize traits for GPMatrix
+template <class EigenType>
+struct traits<GPMatrix<EigenType> > {
+  typedef EigenType result_type;
+  typedef typename EigenType::Scalar scalar_type;
 };
 
 //! Use this to represent any constant or Scalar-dependent matrix/vector
@@ -46,12 +35,6 @@ class GPMatrix : public GPMatrixBase<GPMatrix<EigenType> > {
   //! Return bare Eigen type
   // Use with precaution as this loses track of any dependent Scalars.
   result_type eigen() const { return data_; }
-};
-
-// specialize traits for GPMatrix
-template <class EigenType>
-struct traits<GPMatrix<EigenType> > {
-  typedef EigenType result_type;
 };
 
 //! \addtogroup Common matrix typedefs @{
