@@ -1,5 +1,5 @@
 #include "GPMatrix.h"
-//#include "GPMatrixSum.h"
+#include "GPMatrixSum.h"
 
 #include <Eigen/Dense>
 #include <type_traits>
@@ -21,7 +21,7 @@ int main(int, char * []) {
   if (gpSum.eigen() != X + Y) return 2;  // make sure nothing changes
   GPMatrixXd gpY(Y);
   gpY;
-  // GPMatrixSum<GPMatrixXd,GPMatrixXd> s(gpX,gpY); //type is defined
+  //GPMatrixSum<GPMatrixXd,GPMatrixXd> s(gpX,gpY); //type is defined
   // if (s.eigen() != X+Y) return 3; // works as expected
   // gpX + gpY; //operator+
   // if ((gpX+gpY).eigen() != X+Y) return 4; // + is properly implemented
