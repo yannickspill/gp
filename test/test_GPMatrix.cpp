@@ -1,30 +1,32 @@
 #include "GPMatrix.h"
 #include "GPMatrixSum.h"
 
-#include <Eigen/Dense>
+#include <vector>
 #include <type_traits>
 
 int main(int, char * []) {
+  const unsigned int sz=10;
+  std::vector<double> x(sz,1);
+  GPVector vx(x);
+  GPVector vy(std::vector<double>(sz,2));
+  if (vx.eigen() != x) return 1;
+  vx+vy;
+  const std::vector<double> tmp((vx+vy).eigen());
+  GPVector vsum_manual(tmp);
+  GPVector vsum(vy+vx);
+  if (vsum.eigen() != std::vector<double>(sz,3)) return 2;
+  if ((vx+vy).eigen() != std::vector<double>(sz,3)) return 3;
+
   // traits classes
-  static_assert(std::is_same<GPMatrixXd::result_type, Eigen::MatrixXd>::value,
-                "wrong result_type");
-  static_assert(std::is_same<GPMatrixXd::scalar_type, double>::value,
+  static_assert(
+      std::is_same<GPVector::result_type, std::vector<double> >::value,
+      "wrong result_type");
+  static_assert(std::is_same<GPVector::scalar_type, double>::value,
                 "wrong scalar_type");
-  // implementation
-  Eigen::MatrixXd X(Eigen::MatrixXd::Random(10, 3));
-  GPMatrixXd gpX(X);  // matrix creation
-  if (gpX.eigen() != X) return 1;
-  Eigen::MatrixXd Y(Eigen::MatrixXd::Random(10, 3));
-  GPMatrixXd gpSum(X + Y);
-  static_assert(std::is_same<decltype(gpSum.eigen()), Eigen::MatrixXd>::value,
-                "wrong eigen() return type");
-  if (gpSum.eigen() != X + Y) return 2;  // make sure nothing changes
-  GPMatrixXd gpY(Y);
-  gpY;
-  //GPMatrixSum<GPMatrixXd,GPMatrixXd> s(gpX,gpY); //type is defined
-  // if (s.eigen() != X+Y) return 3; // works as expected
-  // gpX + gpY; //operator+
-  // if ((gpX+gpY).eigen() != X+Y) return 4; // + is properly implemented
-  // gpSum = gpX + gpY; //type conversion
+  static_assert(
+      std::is_same<decltype(vsum.eigen()), std::vector<double> >::value,
+      "wrong eigen() return type");
+  GPMatrixSum<GPVector,GPVector> s(vx,vy); //type is defined
+  if (s.eigen() != vsum.eigen()) return 4; // works as expected
   return 0;
 }

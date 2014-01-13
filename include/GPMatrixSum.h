@@ -3,56 +3,37 @@
 
 #include "macros.h"
 #include "GPMatrixBase.h"
-
-#include <Eigen/Core>
+#include "GPMatrix.h"
 
 // specialize traits for GPMatrixSum
-template <typename Lhs, typename Rhs>
+template <class Lhs, class Rhs>
 struct traits<GPMatrixSum<Lhs, Rhs> > {
-  typedef typename Eigen::CwiseBinaryOp<Eigen::internal::scalar_sum_op<double>,
-                                        Lhs, Rhs> result_type;
-  typedef typename result_type::Scalar scalar_type;
+    typedef typename Lhs::scalar_type scalar_type;
+    typedef typename Lhs::result_type result_type;
 };
 
 //! \addtogroup Matrix sum, difference, product and division templates @{
 template <typename Lhs, typename Rhs>
 class GPMatrixSum : public GPMatrixBase<GPMatrixSum<Lhs, Rhs> > {
- private:
-  Lhs lhs_;
-  Rhs rhs_;
+   private:
+    Lhs lhs_;
+    Rhs rhs_;
 
- public:
-  typedef typename GPMatrixBase<GPMatrixSum>::result_type result_type;
+   public:
+    typedef typename traits<GPMatrixSum<Lhs, Rhs> >::scalar_type scalar_type;
+    typedef typename traits<GPMatrixSum<Lhs, Rhs> >::result_type result_type;
 
- public:
-  // constructor
-  GPMatrixSum(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
+   public:
+    // constructor
+    GPMatrixSum(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
 
-  // actual computation
-  const result_type eigen() const { return lhs_.eigen() + rhs_.eigen(); }
-
-  /*
-  template <class Left, class Right>
-  friend const GPMatrixSum<Left, Right> operator+(
-      const GPMatrixBase<Left>& lhs, const GPMatrixBase<Right>& rhs) {
-    return GPMatrixSum<Left, Right>(lhs, rhs);
-  }
-  */
+    // actual computation
+    const result_type eigen() const {
+        result_type ret, left(lhs_.eigen()), right(rhs_.eigen());
+        for (unsigned i = 0; i < left.size(); i++)
+            ret.push_back(left[i] + right[i]);
+        return ret;
+    }
 };
 
-/*
-template <typename Lhs>
-template <typename Rhs>
-const GPMatrixSum<Lhs, Rhs> GPMatrixBase<Lhs>::operator+=(
-    const GPMatrixBase<Rhs>& rhs) {
-  return GPMatrixSum<Lhs, Rhs>(lhs, rhs);
-}
-*/
-/*
-  template <class Left, class Right>
-  GPMatrixSum<Left, Right> operator+(
-      const GPMatrixBase<Left>& lhs, const GPMatrixBase<Right>& rhs) {
-    return GPMatrixSum<Left, Right>(lhs, rhs);
-  }
-*/
 #endif /* GPMATRIX_SUM_H */

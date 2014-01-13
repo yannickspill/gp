@@ -4,42 +4,40 @@
 #include "macros.h"
 #include "GPMatrixBase.h"
 
-#include <Eigen/Dense>
+#include <vector>
 
 // specialize traits for GPMatrix
-template <class EigenType>
-struct traits<GPMatrix<EigenType> > {
-  typedef EigenType result_type;
-  typedef typename EigenType::Scalar scalar_type;
+template <typename ScalarType>
+struct traits<GPMatrix<ScalarType> > {
+    typedef ScalarType scalar_type;
+    typedef std::vector<scalar_type> result_type;
 };
 
 //! Use this to represent any constant or Scalar-dependent matrix/vector
-template <class EigenType>
-class GPMatrix : public GPMatrixBase<GPMatrix<EigenType> > {
+template <typename ScalarType>
+class GPMatrix : public GPMatrixBase<GPMatrix<ScalarType> > {
 
- private:
-  EigenType data_;
+   public:
+    typedef typename traits<GPMatrix>::scalar_type scalar_type;
+    typedef typename traits<GPMatrix>::result_type result_type;
 
- public:
-  typedef typename GPMatrixBase<GPMatrix>::result_type result_type;
+   private:
+    result_type data_;
 
- public:
-  //! Construct directly from Eigen expression
-  GPMatrix(const EigenType& data) : data_(data) {}
+   public:
+    //! Construct directly from underlying data type
+    GPMatrix(const result_type& data) : data_(data) {}
 
-  //! Construct from GP matrix expression, convert if needed
-  template <class OtherDerived>
-  explicit GPMatrix(const GPMatrixBase<OtherDerived>& expr)
-      : data_(expr.eigen()) {}
+    //! Construct from GP matrix expression, convert if needed
+    template <class GPExpression>
+    explicit GPMatrix(const GPMatrixBase<GPExpression>& expr)
+        : data_(static_cast<GPExpression>(expr).eigen()) {}
 
-  //! Return bare Eigen type
-  // Use with precaution as this loses track of any dependent Scalars.
-  result_type eigen() const { return data_; }
+    //! Return bare Implemented type
+    // Use with precaution as this loses track of any dependent Scalars.
+    result_type eigen() const { return data_; }
 };
 
-//! \addtogroup Common matrix typedefs @{
-typedef GPMatrix<Eigen::MatrixXd> GPMatrixXd;
-typedef GPMatrix<Eigen::VectorXd> GPVectorXd;
-//! @}
+typedef GPMatrix<double> GPVector;
 
 #endif /* GPMATRIX_H */
