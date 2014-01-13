@@ -6,7 +6,7 @@ template <class Derived> struct traits;
 
 // declare basic matrix classes
 template <class Derived> class GPMatrixBase;
-template <typename ScalarType> class GPMatrix;
+template <class EigenType> class GPMatrix;
 
 //matrix operations
 template <class Lhs, class Rhs> class GPMatrixSum;

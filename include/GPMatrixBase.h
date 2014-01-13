@@ -8,6 +8,9 @@
 template <class Derived>
 class GPMatrixBase {
 
+    protected:
+        GPMatrixBase() {} //only children can instantiate it
+
    public:
     // typedefs
     typedef typename traits<Derived>::scalar_type scalar_type;
@@ -15,15 +18,17 @@ class GPMatrixBase {
 
    public:
     // allow implicit casting to Derived
-    operator Derived&() { return static_cast<Derived&>(*this); }
-    operator const Derived&() const {
+    const Derived& asDerived() const {
         return static_cast<const Derived&>(*this);
+    }
+    result_type eigen() const {
+        return static_cast<const Derived*>(this)->eigen();
     }
 
     template <class Lhs, class Rhs>
-    friend const GPMatrixSum<Lhs, Rhs> operator+(const GPMatrixBase<Lhs>& lhs,
-                                                 const GPMatrixBase<Rhs>& rhs) {
-        return GPMatrixSum<Lhs, Rhs>(lhs, rhs);
+    friend GPMatrixSum<Lhs, Rhs> operator+(const GPMatrixBase<Lhs>& lhs,
+                                           const GPMatrixBase<Rhs>& rhs) {
+        return GPMatrixSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
     }
 };
 

@@ -4,18 +4,18 @@
 #include "macros.h"
 #include "GPMatrixBase.h"
 
-#include <vector>
+#include <Eigen/Dense>
 
 // specialize traits for GPMatrix
-template <typename ScalarType>
-struct traits<GPMatrix<ScalarType> > {
-    typedef ScalarType scalar_type;
-    typedef std::vector<scalar_type> result_type;
+template <typename EigenType>
+struct traits<GPMatrix<EigenType> > {
+    typedef typename EigenType::Scalar scalar_type;
+    typedef EigenType result_type;
 };
 
 //! Use this to represent any constant or Scalar-dependent matrix/vector
-template <typename ScalarType>
-class GPMatrix : public GPMatrixBase<GPMatrix<ScalarType> > {
+template <typename EigenType>
+class GPMatrix : public GPMatrixBase<GPMatrix<EigenType> > {
 
    public:
     typedef typename traits<GPMatrix>::scalar_type scalar_type;
@@ -31,13 +31,14 @@ class GPMatrix : public GPMatrixBase<GPMatrix<ScalarType> > {
     //! Construct from GP matrix expression, convert if needed
     template <class GPExpression>
     explicit GPMatrix(const GPMatrixBase<GPExpression>& expr)
-        : data_(static_cast<GPExpression>(expr).eigen()) {}
+        : data_(expr.eigen()) {}
 
     //! Return bare Implemented type
     // Use with precaution as this loses track of any dependent Scalars.
     result_type eigen() const { return data_; }
 };
 
-typedef GPMatrix<double> GPVector;
+typedef GPMatrix<Eigen::VectorXd> GPVectorXd;
+typedef GPMatrix<Eigen::MatrixXd> GPMatrixXd;
 
 #endif /* GPMATRIX_H */
