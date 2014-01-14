@@ -1,154 +1,47 @@
-#ifndef GPMATRIX_H
-#define GPMATRIX_H
+#ifndef GPMATRIX_PRODUCT_H
+#define GPMATRIX_PRODUCT_H
 
 #include "macros.h"
+#include "GPMatrixBase.h"
+#include "GPMatrix.h"
 
-#include <Eigen/Dense>
-#include <iostream>
-#include <memory>
+#include <Eigen/Core>
+#include <type_traits>
+#include <typeinfo>
 
-// declare traits class
-template<typename Derived> struct traits;
-
-//! Base class for any matrix
-template <class Derived>
-class GPMatrixBase {
-
- public:
-  // typedefs
-  typedef typename traits<Derived>::result_type result_type;
-  static const unsigned RowsAtCompileTime = result_type::RowsAtCompileTime;
-  static const unsigned ColsAtCompileTime = result_type::ColsAtCompileTime;
-
- public:
-  // allow casting to Derived
-  operator Derived&() { return static_cast<Derived&>(*this); }
-  operator const Derived&() { return static_cast<const Derived&>(*this); }
-};
-
-//! Use this to represent any constant or Scalar-dependent matrix/vector
-template <class EigenType>
-class GPMatrix : public GPMatrixBase<GPMatrix<EigenType> > {
-
- private:
-  EigenType data_;
-
- public:
-  typedef typename traits<GPMatrix<EigenType> >::result_type result_type;
-
- public:
-  //! Construct directly from Eigen expression
-  GPMatrix(const EigenType& data) : data_(data) {}
-
-  //! Construct from GP matrix expression, convert if needed
-  template <class OtherDerived>
-  GPMatrix(const GPMatrixBase<OtherDerived>& expr)
-      : data_(expr.eigen()) {}
-
-  //! Return bare Eigen type
-  // Use with precaution as this loses track of any dependent Scalars.
-  EigenType eigen() const { return data_; }
-};
-
-// specialize traits for GPMatrix
-template<typename EigenType>
-struct traits<GPMatrix<EigenType> > {
-  typedef EigenType result_type;
+// specialize traits for GPMatrixProduct
+template <class Lhs, class Rhs>
+struct traits<GPMatrixProduct<Lhs, Rhs> > {
+    static_assert(std::is_same<typename Lhs::scalar_type,
+                               typename Rhs::scalar_type>::value,
+                  "cannot mix matrices of different scalar types");
+    typedef typename Lhs::scalar_type scalar_type;
+    typedef typename Lhs::result_type result_type;
+    /*
+    typedef typename Eigen::ProductReturnType<
+        typename Lhs::result_type, typename Rhs::result_type>::Type result_type;
+        */
 };
 
 //! \addtogroup Matrix sum, difference, product and division templates @{
 template <typename Lhs, typename Rhs>
-class GPMatrixSum : public GPMatrixBase<GPMatrixSum<Lhs, Rhs> > {
- private:
-  Lhs lhs_;
-  Rhs rhs_;
-
- public:
-  typedef decltype(lhs_+rhs_) result_type;
-
- public:
-  GPMatrixSum(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
-  result_type eigen() const { return lhs_ + rhs_; }
-};
-// specialize traits for GPMatrixSum
-template<typename Lhs, typename Rhs>
-struct traits<GPMatrixSum<Lhs, Rhs> > {
-  typedef typename GPMatrixSum<Lhs, Rhs>::result_type result_type;
-};
-
-//
-template <typename Lhs, typename Rhs>
-class GPMatrixDifference : public GPMatrixBase<GPMatrixDifference<Lhs, Rhs> > {
- private:
-  Lhs lhs_;
-  Rhs rhs_;
-
- public:
-  typedef decltype(lhs_ - rhs_) result_type;
-
- public:
-  GPMatrixDifference(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
-  result_type eigen() const { return lhs_ - rhs_; }
-};
-//
-template <typename Lhs, typename Rhs>
 class GPMatrixProduct : public GPMatrixBase<GPMatrixProduct<Lhs, Rhs> > {
- private:
-  Lhs lhs_;
-  Rhs rhs_;
+   private:
+    Lhs lhs_;
+    Rhs rhs_;
 
- public:
-  typedef decltype(lhs_* rhs_) result_type;
+   public:
+    typedef typename traits<GPMatrixProduct<Lhs, Rhs> >::scalar_type
+        scalar_type;
+    typedef typename traits<GPMatrixProduct<Lhs, Rhs> >::result_type
+        result_type;
 
- public:
-  GPMatrixProduct(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
-  result_type eigen() const { return lhs_ * rhs_; }
+   public:
+    // constructor
+    GPMatrixProduct(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
+
+    // actual computation
+    result_type eval() const { return lhs_.eval() * rhs_.eval(); }
 };
-//
-template <typename Lhs, typename Rhs>
-class GPMatrixDivision : public GPMatrixBase<GPMatrixDivision<Lhs, Rhs> > {
- private:
-  Lhs lhs_;
-  Rhs rhs_;
 
- public:
-  typedef decltype(lhs_* rhs_) result_type;
-
- public:
-  GPMatrixDivision(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
-  result_type eigen() const { return lhs_ / rhs_; }
-};
-//! @}
-
-//! \addtogroup Matrix sum, difference, product and division operators @{
-template <typename Lhs, typename Rhs>
-const GPMatrixSum<Lhs, Rhs> operator+(const GPMatrixBase<Lhs>& lhs,
-                                      const GPMatrixBase<Rhs>& rhs) {
-  return GPMatrixSum<Lhs, Rhs>(lhs, rhs);
-}
-//
-template <typename Lhs, typename Rhs>
-const GPMatrixDifference<Lhs, Rhs> operator-(const GPMatrixBase<Lhs>& lhs,
-                                             const GPMatrixBase<Rhs>& rhs) {
-  return GPMatrixDifference<Lhs, Rhs>(lhs, rhs);
-}
-//
-template <typename Lhs, typename Rhs>
-const GPMatrixProduct<Lhs, Rhs> operator*(const GPMatrixBase<Lhs>& lhs,
-                                          const GPMatrixBase<Rhs>& rhs) {
-  return GPMatrixProduct<Lhs, Rhs>(lhs, rhs);
-}
-//
-template <typename Lhs, typename Rhs>
-const GPMatrixDivision<Lhs, Rhs> operator/(const GPMatrixBase<Lhs>& lhs,
-                                           const GPMatrixBase<Rhs>& rhs) {
-  return GPMatrixDivision<Lhs, Rhs>(lhs, rhs);
-}
-//! @}
-
-//! \addtogroup Common matrix typedefs @{
-typedef GPMatrix<Eigen::MatrixXd> GPMatrixXd;
-typedef GPMatrix<Eigen::VectorXd> GPVectorXd;
-//! @}
-
-#endif /* GPMATRIX_H */
+#endif /* GPMATRIX_PRODUCT_H */

@@ -1,5 +1,7 @@
 #include "GPMatrix.h"
 #include "GPMatrixSum.h"
+#include "GPMatrixDifference.h"
+#include "GPMatrixProduct.h"
 
 #include <Eigen/Dense>
 #include <type_traits>
@@ -9,13 +11,13 @@ int main(int, char * []) {
   Eigen::MatrixXd x(Eigen::MatrixXd::Constant(szx,szy,1));
   GPMatrixXd vx(x);
   GPMatrixXd vy(Eigen::MatrixXd::Constant(szx,szy,2));
-  if (vx.eigen() != x) return 1;
+  if (vx.eval() != x) return 1;
   vx+vy;
-  const Eigen::MatrixXd tmp((vx+vy).eigen());
+  const Eigen::MatrixXd tmp((vx+vy).eval());
   GPMatrixXd vsum_manual(tmp);
   GPMatrixXd vsum(vy+vx);
-  if (vsum.eigen() != Eigen::MatrixXd::Constant(szx,szy,3)) return 2;
-  if ((vx+vy).eigen() != Eigen::MatrixXd::Constant(szx,szy,3)) return 3;
+  if (vsum.eval() != Eigen::MatrixXd::Constant(szx,szy,3)) return 2;
+  if ((vx+vy).eval() != Eigen::MatrixXd::Constant(szx,szy,3)) return 3;
 
   // traits classes
   static_assert(
@@ -24,9 +26,12 @@ int main(int, char * []) {
   static_assert(std::is_same<GPMatrixXd::scalar_type, double>::value,
                 "wrong scalar_type");
   static_assert(
-      std::is_same<decltype(vsum.eigen()), Eigen::MatrixXd >::value,
-      "wrong eigen() return type");
+      std::is_same<decltype(vsum.eval()), Eigen::MatrixXd >::value,
+      "wrong eval() return type");
   GPMatrixSum<GPMatrixXd,GPMatrixXd> s(vx,vy); //type is defined
-  if (s.eigen() != vsum.eigen()) return 4; // works as expected
+  if (s.eval() != vsum.eval()) return 4; // works as expected
+  GPMatrixXd vxt(x.transpose());
+  if ((vxt*vx).eval() != x.transpose()*x) return 5;
+  if ((vx-vy).eval() != Eigen::MatrixXd::Constant(szx,szy,-1)) return 6;
   return 0;
 }

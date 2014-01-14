@@ -31,11 +31,11 @@ class GPMatrix : public GPMatrixBase<GPMatrix<EigenType> > {
     //! Construct from GP matrix expression, convert if needed
     template <class GPExpression>
     explicit GPMatrix(const GPMatrixBase<GPExpression>& expr)
-        : data_(expr.eigen()) {}
+        : data_(expr.eval()) {}
 
     //! Return bare Implemented type
     // Use with precaution as this loses track of any dependent Scalars.
-    result_type eigen() const { return data_; }
+    result_type eval() const { return data_; }
 };
 
 typedef GPMatrix<Eigen::VectorXd> GPVectorXd;

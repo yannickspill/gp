@@ -21,14 +21,29 @@ class GPMatrixBase {
     const Derived& asDerived() const {
         return static_cast<const Derived&>(*this);
     }
-    result_type eigen() const {
-        return static_cast<const Derived*>(this)->eigen();
+    result_type eval() const {
+        return static_cast<const Derived*>(this)->eval();
     }
 
+    //sum
     template <class Lhs, class Rhs>
     friend GPMatrixSum<Lhs, Rhs> operator+(const GPMatrixBase<Lhs>& lhs,
                                            const GPMatrixBase<Rhs>& rhs) {
         return GPMatrixSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+    }
+
+    //difference
+    template <class Lhs, class Rhs>
+    friend GPMatrixDifference<Lhs, Rhs> operator-(
+        const GPMatrixBase<Lhs>& lhs, const GPMatrixBase<Rhs>& rhs) {
+        return GPMatrixDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+    }
+
+    //product
+    template <class Lhs, class Rhs>
+    friend GPMatrixProduct<Lhs, Rhs> operator*(const GPMatrixBase<Lhs>& lhs,
+                                           const GPMatrixBase<Rhs>& rhs) {
+        return GPMatrixProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
     }
 };
 

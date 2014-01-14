@@ -10,6 +10,8 @@ template <class EigenType> class GPMatrix;
 
 //matrix operations
 template <class Lhs, class Rhs> class GPMatrixSum;
+template <class Lhs, class Rhs> class GPMatrixDifference;
+template <class Lhs, class Rhs> class GPMatrixProduct;
 
 
 #endif /*FORWARD_DECLARATIONS_H*/
