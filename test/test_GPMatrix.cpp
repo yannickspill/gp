@@ -1,7 +1,7 @@
 #include "GPMatrix.h"
 #include "GPMatrixSum.h"
 #include "GPMatrixDifference.h"
-#include "GPMatrixProduct.h"
+#include "GPMatrixMatrixProduct.h"
 
 #include <Eigen/Dense>
 #include <type_traits>

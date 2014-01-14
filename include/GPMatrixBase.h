@@ -39,11 +39,12 @@ class GPMatrixBase {
         return GPMatrixDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
     }
 
-    //product
+    // product
     template <class Lhs, class Rhs>
-    friend GPMatrixProduct<Lhs, Rhs> operator*(const GPMatrixBase<Lhs>& lhs,
-                                           const GPMatrixBase<Rhs>& rhs) {
-        return GPMatrixProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+    friend GPMatrixMatrixProduct<Lhs, Rhs> operator*(
+        const GPMatrixBase<Lhs>& lhs, const GPMatrixBase<Rhs>& rhs) {
+        return GPMatrixMatrixProduct<Lhs, Rhs>(lhs.asDerived(),
+                                               rhs.asDerived());
     }
 };
 
