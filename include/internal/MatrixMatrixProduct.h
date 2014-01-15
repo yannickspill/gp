@@ -23,6 +23,7 @@ struct traits<MatrixMatrixProduct<Lhs, Rhs> > {
     typedef typename Eigen::ProductReturnType<
         typename Lhs::result_type, typename Rhs::result_type>::Type result_type;
         */
+    typedef branch_tag node_type;
 };
 
 //! \addtogroup Matrix sum, difference, product and division templates @{
@@ -38,6 +39,8 @@ class MatrixMatrixProduct
         scalar_type;
     typedef typename traits<MatrixMatrixProduct<Lhs, Rhs> >::result_type
         result_type;
+    typedef typename traits<MatrixMatrixProduct<Lhs, Rhs> >::node_type
+        node_type;
 
    public:
     // constructor
@@ -45,7 +48,7 @@ class MatrixMatrixProduct
         : lhs_(lhs), rhs_(rhs) {}
 
     // actual computation
-    result_type eval() const { return lhs_.eval() * rhs_.eval(); }
+    result_type get() const { return lhs_.get() * rhs_.get(); }
 };
 }
 }

@@ -24,8 +24,8 @@ class MatrixBase {
     const Derived asDerived() const {
         return static_cast<const Derived>(*this);
     }
-    result_type eval() const {
-        return static_cast<const Derived*>(this)->eval();
+    result_type get() const {
+        return static_cast<const Derived*>(this)->get();
     }
 
     // difference

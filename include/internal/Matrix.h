@@ -3,8 +3,10 @@
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
+#include "internal/tags.h"
 
 #include <Eigen/Dense>
+#include <memory>
 
 namespace GP {
 namespace internal {
@@ -14,6 +16,7 @@ template <typename EigenType>
 struct traits<Matrix<EigenType> > {
     typedef typename EigenType::Scalar scalar_type;
     typedef EigenType result_type;
+    typedef leaf_tag node_type;
 };
 
 //! Use this to represent any constant or Scalar-dependent matrix/vector
@@ -23,25 +26,32 @@ class Matrix : public MatrixBase<Matrix<EigenType> > {
    public:
     typedef typename traits<Matrix>::scalar_type scalar_type;
     typedef typename traits<Matrix>::result_type result_type;
+    typedef typename traits<Matrix>::node_type node_type;
 
    private:
-    result_type data_;
+    struct Data {
+        result_type value_;
+        unsigned version_;
+        Data(const result_type& v) : value_(v), version_(0) {}
+    };
+    std::shared_ptr<Data> data_;
 
    public:
     //! Construct directly from underlying data type
-    Matrix(const result_type& data) : data_(data) {}
+    explicit Matrix(const result_type& data)
+        : data_(std::make_shared<Data, const result_type&>(data)) {}
 
-    //! Construct from GP matrix expression, convert if needed
+    //! Explicit cast from any GP matrix expression
     template <class GPExpression>
     explicit Matrix(const MatrixBase<GPExpression>& expr)
-        : data_(expr.eval()) {}
+        : data_(std::make_shared<Data, const result_type&>(expr.get())) {}
 
     //! Return bare Implemented type
     // Use with precaution as this loses track of any dependent Scalars.
-    result_type eval() const { return data_; }
+    result_type get() const { return data_->value_; }
 };
 
-typedef Matrix<Eigen::VectorXd> GPVectorXd;
+typedef Matrix<Eigen::VectorXd> VectorXd;
 typedef Matrix<Eigen::MatrixXd> MatrixXd;
 
 }

@@ -25,6 +25,7 @@ struct traits<MatrixSum<Lhs, Rhs> > {
         typename std::add_const<typename Lhs::result_type>::type,
         typename std::add_const<typename Rhs::result_type>::type> result_type;
         */
+    typedef branch_tag node_type;
 };
 
 //! \addtogroup Matrix sum, difference, product and division templates @{
@@ -37,13 +38,14 @@ class MatrixSum : public MatrixBase<MatrixSum<Lhs, Rhs> > {
    public:
     typedef typename traits<MatrixSum<Lhs, Rhs> >::scalar_type scalar_type;
     typedef typename traits<MatrixSum<Lhs, Rhs> >::result_type result_type;
+    typedef typename traits<MatrixSum<Lhs, Rhs> >::node_type node_type;
 
    public:
     // constructor
     MatrixSum(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
 
     // actual computation
-    result_type eval() const { return lhs_.eval() + rhs_.eval(); }
+    result_type get() const { return lhs_.get() + rhs_.get(); }
 };
 }
 }
