@@ -1,17 +1,20 @@
-#ifndef GPMATRIX_SUM_H
-#define GPMATRIX_SUM_H
+#ifndef MATRIX_SUM_H
+#define MATRIX_SUM_H
 
 #include "macros.h"
-#include "GPMatrixBase.h"
-#include "GPMatrix.h"
+#include "MatrixBase.h"
+#include "Matrix.h"
 
 #include <Eigen/Core>
 #include <type_traits>
 #include <typeinfo>
 
-// specialize traits for GPMatrixSum
+namespace GP {
+namespace internal {
+
+// specialize traits for MatrixSum
 template <class Lhs, class Rhs>
-struct traits<GPMatrixSum<Lhs, Rhs> > {
+struct traits<MatrixSum<Lhs, Rhs> > {
     static_assert(std::is_same<typename Lhs::scalar_type,
                                typename Rhs::scalar_type>::value,
                   "cannot mix matrices of different scalar types");
@@ -20,28 +23,28 @@ struct traits<GPMatrixSum<Lhs, Rhs> > {
     /*typedef const typename Eigen::CwiseBinaryOp<
         Eigen::internal::scalar_sum_op<scalar_type>,
         typename std::add_const<typename Lhs::result_type>::type,
-        typename std::add_const<typename Rhs::result_type>::type>
-        result_type;
-    */
+        typename std::add_const<typename Rhs::result_type>::type> result_type;
+        */
 };
 
 //! \addtogroup Matrix sum, difference, product and division templates @{
 template <typename Lhs, typename Rhs>
-class GPMatrixSum : public GPMatrixBase<GPMatrixSum<Lhs, Rhs> > {
+class MatrixSum : public MatrixBase<MatrixSum<Lhs, Rhs> > {
    private:
     Lhs lhs_;
     Rhs rhs_;
 
    public:
-    typedef typename traits<GPMatrixSum<Lhs, Rhs> >::scalar_type scalar_type;
-    typedef typename traits<GPMatrixSum<Lhs, Rhs> >::result_type result_type;
+    typedef typename traits<MatrixSum<Lhs, Rhs> >::scalar_type scalar_type;
+    typedef typename traits<MatrixSum<Lhs, Rhs> >::result_type result_type;
 
    public:
     // constructor
-    GPMatrixSum(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
+    MatrixSum(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
 
     // actual computation
     result_type eval() const { return lhs_.eval() + rhs_.eval(); }
 };
-
-#endif /* GPMATRIX_SUM_H */
+}
+}
+#endif /* MATRIX_SUM_H */
