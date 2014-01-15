@@ -2,7 +2,7 @@
 #define MATRIX_BASE_H
 
 #include "macros.h"
-#include "ForwardDeclarations.h"
+#include "internal/ForwardDeclarations.h"
 
 namespace GP {
 namespace internal {

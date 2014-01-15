@@ -2,8 +2,8 @@
 #define MATRIX_SUM_H
 
 #include "macros.h"
-#include "MatrixBase.h"
-#include "Matrix.h"
+#include "internal/MatrixBase.h"
+#include "internal/Matrix.h"
 
 #include <Eigen/Core>
 #include <type_traits>

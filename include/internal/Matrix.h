@@ -2,7 +2,7 @@
 #define MATRIX_H
 
 #include "macros.h"
-#include "MatrixBase.h"
+#include "internal/MatrixBase.h"
 
 #include <Eigen/Dense>
 

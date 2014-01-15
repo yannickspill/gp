@@ -15,6 +15,10 @@ template <class Lhs, class Rhs> class MatrixSum;
 template <class Lhs, class Rhs> class MatrixDifference;
 template <class Lhs, class Rhs> class MatrixMatrixProduct;
 
+//define tree types
+struct Leaf {};
+struct Branch {};
+
 }
 }
 #endif /*FORWARD_DECLARATIONS_H*/
