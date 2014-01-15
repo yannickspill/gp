@@ -49,6 +49,17 @@ class Matrix : public MatrixBase<Matrix<EigenType> > {
     //! Return bare Implemented type
     // Use with precaution as this loses track of any dependent Scalars.
     result_type get() const { return data_->value_; }
+
+    unsigned get_version() const { return data_->version_; }
+
+    void set(const result_type& data) {
+        data_->value_ = data;
+        (data_->version_)++;
+    }
+
+    bool operator==(const Matrix& other) const { return data_ == other.data_; }
+    bool operator!=(const Matrix& other) const { return !(*this == other); }
+
 };
 
 typedef Matrix<Eigen::VectorXd> VectorXd;

@@ -6,6 +6,7 @@
 #include "internal/ScalarScalarProduct.h"
 #include "internal/ScalarBuiltinProduct.h"
 #include "internal/MatrixScalarProduct.h"
+#include "internal/MatrixBuiltinProduct.h"
 
 #include <Eigen/Dense>
 #include <type_traits>
@@ -59,6 +60,10 @@ int main(int, char * []) {
   //matrix scalar product
   if ( (scal * vx).get() != ( scal.get() * x) ) return 9;
   if ( (vx * scal).get() != (scal.get() * x) ) return 10;
+
+  //matrix builtin product
+  if ( (5 * vx).get() != ( 5. * x) ) return 15;
+  if ( (vx * 5.).get() != (5. * x) ) return 16;
 
   return 0;
 }

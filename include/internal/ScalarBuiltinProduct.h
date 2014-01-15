@@ -43,6 +43,8 @@ class ScalarBuiltinProduct
 
     // actual computation
     result_type get() const { return lhs_ * rhs_.get(); }
+
+    unsigned get_version() const { return rhs_.get_version(); }
 };
 
 // operator* declared here for use of automatic type conversion

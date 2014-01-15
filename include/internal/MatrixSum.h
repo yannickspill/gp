@@ -31,14 +31,14 @@ struct traits<MatrixSum<Lhs, Rhs> > {
 //! \addtogroup Matrix sum, difference, product and division templates @{
 template <typename Lhs, typename Rhs>
 class MatrixSum : public MatrixBase<MatrixSum<Lhs, Rhs> > {
-   private:
-    Lhs lhs_;
-    Rhs rhs_;
-
    public:
     typedef typename traits<MatrixSum<Lhs, Rhs> >::scalar_type scalar_type;
     typedef typename traits<MatrixSum<Lhs, Rhs> >::result_type result_type;
     typedef typename traits<MatrixSum<Lhs, Rhs> >::node_type node_type;
+
+   private:
+    Lhs lhs_;
+    Rhs rhs_;
 
    public:
     // constructor
@@ -46,6 +46,10 @@ class MatrixSum : public MatrixBase<MatrixSum<Lhs, Rhs> > {
 
     // actual computation
     result_type get() const { return lhs_.get() + rhs_.get(); }
+
+    unsigned get_version() const {
+        return lhs_.get_version() + rhs_.get_version();
+    }
 };
 }
 }

@@ -15,6 +15,7 @@ template <class Derived> class ScalarBase;
 class Scalar;
 template <class Lhs, class Rhs> class ScalarScalarProduct;
 template <class Rhs> class ScalarBuiltinProduct;
+template <class Rhs> class ScalarBuiltinDivision;
 
 // declare basic matrix classes
 template <class Derived> class MatrixBase;
@@ -24,6 +25,8 @@ template <class EigenType> class Matrix;
 template <class Lhs, class Rhs> class MatrixSum;
 template <class Lhs, class Rhs> class MatrixDifference;
 template <class Lhs, class Rhs> class MatrixMatrixProduct;
+template <class Lhs> class MatrixBuiltinProduct;
+template <class Lhs> class MatrixBuiltinDivision;
 }
 }
 #endif /*FORWARD_DECLARATIONS_H*/

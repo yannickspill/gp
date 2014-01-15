@@ -45,6 +45,10 @@ class ScalarScalarProduct
 
     // actual computation
     result_type get() const { return lhs_.get() * rhs_.get(); }
+
+    unsigned get_version() const {
+        return lhs_.get_version() + rhs_.get_version();
+    }
 };
 
 

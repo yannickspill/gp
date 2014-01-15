@@ -21,28 +21,23 @@ class GPBase {
 
    public:
     // allow implicit casting to Derived
-    const Derived asDerived() const {
-        return static_cast<const Derived>(*this);
+    const Derived& asDerived() const {
+        return static_cast<const Derived&>(*this);
     }
-    result_type get() const {
-        return static_cast<const Derived*>(this)->get();
-    }
+    result_type get() const { return static_cast<const Derived*>(this)->get(); }
 
     // mixed product
     template <class Scal, class Mat>
     friend const MatrixScalarProduct<Mat, Scal> operator*(
         const ScalarBase<Scal>& lhs, const MatrixBase<Mat>& rhs) {
-        return MatrixScalarProduct<Mat, Scal>(rhs.asDerived(),
-                                             lhs.asDerived());
+        return MatrixScalarProduct<Mat, Scal>(rhs.asDerived(), lhs.asDerived());
     }
     template <class Mat, class Scal>
     friend const MatrixScalarProduct<Mat, Scal> operator*(
         const MatrixBase<Mat>& lhs, const ScalarBase<Scal>& rhs) {
-        return MatrixScalarProduct<Mat, Scal>(lhs.asDerived(),
-                                             rhs.asDerived());
+        return MatrixScalarProduct<Mat, Scal>(lhs.asDerived(), rhs.asDerived());
     }
 };
-
 }
 }
 #endif /* GP_BASE_H */

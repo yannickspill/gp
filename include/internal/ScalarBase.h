@@ -28,6 +28,10 @@ class ScalarBase : public GPBase<Derived> {
     result_type get() const {
         return static_cast<const Derived*>(this)->get();
     }
+
+    unsigned get_version() const {
+        return static_cast<const Derived*>(this)->get_version();
+    }
 };
 
 }
