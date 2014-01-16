@@ -11,44 +11,44 @@ namespace internal {
 template <class Derived>
 class MatrixBase : public GPBase<Derived> {
 
-   protected:
-    MatrixBase() {}  // only children can instantiate it
+ protected:
+  MatrixBase() {}  // only children can instantiate it
 
-   public:
-    // typedefs
-    typedef typename traits<Derived>::scalar_type scalar_type;
-    typedef typename traits<Derived>::result_type result_type;
+ public:
+  // typedefs
+  typedef typename traits<Derived>::scalar_type scalar_type;
+  typedef typename traits<Derived>::result_type result_type;
 
-   public:
-    // allow implicit casting to Derived
-    const Derived& asDerived() const {
-        return static_cast<const Derived&>(*this);
-    }
-    result_type get() const { return static_cast<const Derived*>(this)->get(); }
+ public:
+  // allow implicit casting to Derived
+  const Derived& asDerived() const {
+    return static_cast<const Derived&>(*this);
+  }
+  result_type get() const { return static_cast<const Derived*>(this)->get(); }
 
-    unsigned get_version() const {
-        return static_cast<const Derived*>(this)->get_version();
-    }
-
-    // difference
-    template <class Lhs, class Rhs>
-    friend const MatrixDifference<Lhs, Rhs> operator-(
-        const MatrixBase<Lhs>& lhs, const MatrixBase<Rhs>& rhs) {
-        return MatrixDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
-    }
-
-    // product
-    template <class Lhs, class Rhs>
-    friend const MatrixMatrixProduct<Lhs, Rhs> operator*(
-        const MatrixBase<Lhs>& lhs, const MatrixBase<Rhs>& rhs) {
-        return MatrixMatrixProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
-    }
+  unsigned get_version() const {
+    return static_cast<const Derived*>(this)->get_version();
+  }
 };
 // sum
 template <class Lhs, class Rhs>
 const MatrixSum<Lhs, Rhs> operator+(const MatrixBase<Lhs>& lhs,
                                     const MatrixBase<Rhs>& rhs) {
-    return MatrixSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+  return MatrixSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+}
+
+// difference
+template <class Lhs, class Rhs>
+const MatrixDifference<Lhs, Rhs> operator-(const MatrixBase<Lhs>& lhs,
+                                                  const MatrixBase<Rhs>& rhs) {
+  return MatrixDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+}
+
+// product
+template <class Lhs, class Rhs>
+const MatrixMatrixProduct<Lhs, Rhs> operator*(
+    const MatrixBase<Lhs>& lhs, const MatrixBase<Rhs>& rhs) {
+  return MatrixMatrixProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 }
 }
