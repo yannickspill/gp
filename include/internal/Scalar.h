@@ -2,6 +2,7 @@
 #define INTERNAL_SCALAR_H
 
 #include "internal/ScalarBase.h"
+#include "internal/tags.h"
 
 #include <memory>
 
