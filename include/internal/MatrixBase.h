@@ -8,8 +8,7 @@ namespace GP {
 namespace internal {
 
 //! Base class for any matrix
-template <class Derived>
-class MatrixBase : public GPBase<Derived> {
+template <class Derived> class MatrixBase : public GPBase<Derived> {
 
  protected:
   MatrixBase() {}  // only children can instantiate it
@@ -24,11 +23,6 @@ class MatrixBase : public GPBase<Derived> {
   const Derived& asDerived() const {
     return static_cast<const Derived&>(*this);
   }
-  result_type get() const { return static_cast<const Derived*>(this)->get(); }
-
-  unsigned get_version() const {
-    return static_cast<const Derived*>(this)->get_version();
-  }
 };
 // sum
 template <class Lhs, class Rhs>
@@ -40,14 +34,14 @@ const MatrixSum<Lhs, Rhs> operator+(const MatrixBase<Lhs>& lhs,
 // difference
 template <class Lhs, class Rhs>
 const MatrixDifference<Lhs, Rhs> operator-(const MatrixBase<Lhs>& lhs,
-                                                  const MatrixBase<Rhs>& rhs) {
+                                           const MatrixBase<Rhs>& rhs) {
   return MatrixDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 
 // product
 template <class Lhs, class Rhs>
-const MatrixMatrixProduct<Lhs, Rhs> operator*(
-    const MatrixBase<Lhs>& lhs, const MatrixBase<Rhs>& rhs) {
+const MatrixMatrixProduct<Lhs, Rhs> operator*(const MatrixBase<Lhs>& lhs,
+                                              const MatrixBase<Rhs>& rhs) {
   return MatrixMatrixProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 }

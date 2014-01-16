@@ -32,9 +32,6 @@ int main(int, char * []) {
   vx+vy;
   const Eigen::MatrixXd tmp((vx+vy).get());
   MatrixXd vsum(vy+vx);
-  static_assert(
-      std::is_same<decltype(vsum.get()), Eigen::MatrixXd >::value,
-      "wrong get() return type");
   if (vsum.get() != Eigen::MatrixXd::Constant(szx,szy,3)) return 2;
   if ((vx+vy).get() != Eigen::MatrixXd::Constant(szx,szy,3)) return 3;
   GP::internal::MatrixSum<MatrixXd,MatrixXd> s(vx,vy); //type is defined

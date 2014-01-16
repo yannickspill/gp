@@ -1,8 +1,8 @@
 #ifndef FORWARD_DECLARATIONS_H
 #define FORWARD_DECLARATIONS_H
 
-namespace GP{
-namespace internal{
+namespace GP {
+namespace internal {
 // declare traits class
 template <class Derived> struct traits;
 
@@ -10,7 +10,7 @@ template <class Derived> struct traits;
 template <class Derived> class GPBase;
 template <class Lhs, class Rhs> class MatrixScalarProduct;
 
-//scalar class
+// scalar class
 template <class Derived> class ScalarBase;
 class Scalar;
 template <class Lhs, class Rhs> class ScalarScalarProduct;
@@ -21,7 +21,7 @@ template <class Rhs> class ScalarBuiltinDivision;
 template <class Derived> class MatrixBase;
 template <class EigenType> class Matrix;
 
-//matrix operations
+// matrix operations
 template <class Lhs, class Rhs> class MatrixSum;
 template <class Lhs, class Rhs> class MatrixDifference;
 template <class Lhs, class Rhs> class MatrixMatrixProduct;

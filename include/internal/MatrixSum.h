@@ -12,44 +12,39 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for MatrixSum
-template <class Lhs, class Rhs>
-struct traits<MatrixSum<Lhs, Rhs> > {
-    static_assert(std::is_same<typename Lhs::scalar_type,
-                               typename Rhs::scalar_type>::value,
-                  "cannot mix matrices of different scalar types");
-    typedef typename Lhs::scalar_type scalar_type;
-    typedef typename Lhs::result_type result_type;
-    /*typedef const typename Eigen::CwiseBinaryOp<
-        Eigen::internal::scalar_sum_op<scalar_type>,
-        typename std::add_const<typename Lhs::result_type>::type,
-        typename std::add_const<typename Rhs::result_type>::type> result_type;
-        */
-    typedef branch_tag node_type;
+template <class Lhs, class Rhs> struct traits<MatrixSum<Lhs, Rhs> > {
+  static_assert(std::is_same
+                <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
+                "cannot mix matrices of different scalar types");
+  typedef typename Lhs::scalar_type scalar_type;
+  typedef const typename Eigen::CwiseBinaryOp
+      <Eigen::internal::scalar_sum_op<scalar_type>,
+       const typename Lhs::result_type, const typename Rhs::result_type>
+          result_type;
+  typedef branch_tag node_type;
 };
 
-//! \addtogroup Matrix sum, difference, product and division templates @{
 template <typename Lhs, typename Rhs>
 class MatrixSum : public MatrixBase<MatrixSum<Lhs, Rhs> > {
-   public:
-    typedef typename traits<MatrixSum<Lhs, Rhs> >::scalar_type scalar_type;
-    typedef typename traits<MatrixSum<Lhs, Rhs> >::result_type result_type;
-    typedef typename traits<MatrixSum<Lhs, Rhs> >::node_type node_type;
+ public:
+  typedef typename traits<MatrixSum<Lhs, Rhs> >::scalar_type scalar_type;
+  typedef typename traits<MatrixSum<Lhs, Rhs> >::result_type result_type;
+  typedef typename traits<MatrixSum<Lhs, Rhs> >::node_type node_type;
 
-   private:
-    Lhs lhs_;
-    Rhs rhs_;
+ private:
+  Lhs lhs_;
+  Rhs rhs_;
 
-   public:
-    // constructor
-    MatrixSum(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
+ public:
+  // constructor
+  MatrixSum(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
 
-    // actual computation
-    result_type get() const { return lhs_.get() + rhs_.get(); }
+  // actual computation
+  result_type get() const { return lhs_.get() + rhs_.get(); }
 
-    unsigned get_version() const {
-        return lhs_.get_version() + rhs_.get_version();
-    }
+  unsigned get_version() const {
+    return lhs_.get_version() + rhs_.get_version();
+  }
 };
 }
 }
