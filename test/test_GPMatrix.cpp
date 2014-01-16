@@ -26,7 +26,8 @@ int main(int, char * []) {
   const unsigned int szx=10,szy=3;
   Eigen::MatrixXd x(Eigen::MatrixXd::Constant(szx,szy,1));
   MatrixXd vx(x);
-  MatrixXd vy(Eigen::MatrixXd::Constant(szx,szy,2));
+  Eigen::MatrixXd y(Eigen::MatrixXd::Constant(szx,szy,2));
+  MatrixXd vy(y);
   if (vx.get() != x) return 1;
   //sum
   vx+vy;
@@ -61,6 +62,10 @@ int main(int, char * []) {
   //matrix builtin product
   if ( (5 * vx).get() != ( 5. * x) ) return 15;
   if ( (vx * 5.).get() != (5. * x) ) return 16;
+
+  //lots of products sums and divisions
+  if ( (vxt*(5*vx+vy-scal*vx)).get() != (x.transpose()*(5*x+y-scal.get()*x)) )
+      return 17;
 
   return 0;
 }

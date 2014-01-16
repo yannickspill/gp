@@ -18,7 +18,7 @@ template <class Lhs, class Rhs> struct traits<MatrixDifference<Lhs, Rhs> > {
                 <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
                 "cannot mix matrices of different scalar types");
   typedef typename Lhs::scalar_type scalar_type;
-  typedef const typename Eigen::CwiseBinaryOp
+  typedef typename Eigen::CwiseBinaryOp
       <Eigen::internal::scalar_difference_op<scalar_type>,
        const typename Lhs::result_type, const typename Rhs::result_type>
           result_type;

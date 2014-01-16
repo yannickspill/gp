@@ -16,7 +16,7 @@ namespace internal {
 template <class MatrixExpression>
 struct traits<MatrixBuiltinProduct<MatrixExpression> > {
   typedef typename MatrixExpression::scalar_type scalar_type;
-  typedef const typename Eigen::CwiseUnaryOp
+  typedef typename Eigen::CwiseUnaryOp
       <Eigen::internal::scalar_multiple_op<double>,
        const typename MatrixExpression::result_type> result_type;
   typedef branch_tag node_type;
