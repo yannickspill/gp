@@ -59,6 +59,7 @@ class Matrix : public MatrixBase<Matrix<EigenType> > {
   bool operator!=(const Matrix& other) const { return !(*this == other); }
 };
 
+typedef Matrix<Eigen::RowVectorXd> RowVectorXd;
 typedef Matrix<Eigen::VectorXd> VectorXd;
 typedef Matrix<Eigen::MatrixXd> MatrixXd;
 }
