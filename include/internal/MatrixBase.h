@@ -23,7 +23,12 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   const Derived& asDerived() const {
     return static_cast<const Derived&>(*this);
   }
+
+  Transpose<Derived> transpose() const {
+      return Transpose<Derived>(asDerived());
+  }
 };
+
 // sum
 template <class Lhs, class Rhs>
 const MatrixSum<Lhs, Rhs> operator+(const MatrixBase<Lhs>& lhs,

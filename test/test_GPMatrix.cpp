@@ -7,6 +7,7 @@
 #include "internal/ScalarBuiltinProduct.h"
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixBuiltinProduct.h"
+#include "internal/Transpose.h"
 
 #include <Eigen/Dense>
 #include <type_traits>
@@ -38,8 +39,7 @@ int main(int, char * []) {
   GP::internal::MatrixSum<MatrixXd,MatrixXd> s(vx,vy); //type is defined
   if (s.get() != vsum.get()) return 4; // works as expected
   //product
-  MatrixXd vxt(x.transpose());
-  if ((vxt*vx).get() != x.transpose()*x) return 5;
+  if ((vx.transpose()*vx).get() != x.transpose()*x) return 5;
   //difference
   if ((vx-vy).get() != Eigen::MatrixXd::Constant(szx,szy,-1)) return 6;
   
@@ -64,8 +64,15 @@ int main(int, char * []) {
   if ( (vx * 5.).get() != (5. * x) ) return 16;
 
   //lots of products sums and divisions
-  if ( (vxt*(5*vx+vy-scal*vx)).get() != (x.transpose()*(5*x+y-scal.get()*x)) )
+  if ((vx.transpose() * (5 * vx + vy - scal * vx)).get()
+      != (x.transpose() * (5 * x + y - scal.get() * x)))
       return 17;
 
+  //transpose
+  if ( vx.transpose().get() != x.transpose() ) return 17;
+  if ( (vx+vx).transpose().get() != (x+x).transpose() ) return 18;
+  if ( (vx-vx).transpose().get() != (x-x).transpose() ) return 19;
+  if ((vx - scal * vx).transpose().get() != (x - scal.get() * x).transpose())
+    return 20;
   return 0;
 }

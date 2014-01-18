@@ -27,6 +27,7 @@ template <class Lhs, class Rhs> class MatrixDifference;
 template <class Lhs, class Rhs> class MatrixMatrixProduct;
 template <class Lhs> class MatrixBuiltinProduct;
 template <class Lhs> class MatrixBuiltinDivision;
+template <class Derived> class Transpose;
 }
 }
 #endif /*FORWARD_DECLARATIONS_H*/
