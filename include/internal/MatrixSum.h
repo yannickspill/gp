@@ -21,7 +21,6 @@ template <class Lhs, class Rhs> struct traits<MatrixSum<Lhs, Rhs> > {
       <Eigen::internal::scalar_sum_op<scalar_type>,
        const typename Lhs::result_type, const typename Rhs::result_type>
           result_type;
-  typedef branch_tag node_type;
 };
 
 template <typename Lhs, typename Rhs>
@@ -29,7 +28,6 @@ class MatrixSum : public MatrixBase<MatrixSum<Lhs, Rhs> > {
  public:
   typedef typename traits<MatrixSum<Lhs, Rhs> >::scalar_type scalar_type;
   typedef typename traits<MatrixSum<Lhs, Rhs> >::result_type result_type;
-  typedef typename traits<MatrixSum<Lhs, Rhs> >::node_type node_type;
 
  private:
   Lhs lhs_;

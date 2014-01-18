@@ -16,7 +16,6 @@ template <class ScalarExpression>
 struct traits<ScalarBuiltinProduct<ScalarExpression> > {
   typedef typename ScalarExpression::scalar_type scalar_type;
   typedef typename ScalarExpression::result_type result_type;
-  typedef branch_tag node_type;
 };
 
 // expression template for product of a Scalar with anything convertible to a
@@ -33,8 +32,6 @@ class ScalarBuiltinProduct : public ScalarBase
       <ScalarBuiltinProduct<ScalarExpression> >::scalar_type scalar_type;
   typedef typename traits
       <ScalarBuiltinProduct<ScalarExpression> >::result_type result_type;
-  typedef typename traits
-      <ScalarBuiltinProduct<ScalarExpression> >::node_type node_type;
 
  public:
   // constructor

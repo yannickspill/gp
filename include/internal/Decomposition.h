@@ -3,7 +3,6 @@
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
-#include "internal/tags.h"
 
 #include <Eigen/Core>
 #include <type_traits>
@@ -16,7 +15,6 @@ template <class Derived, template <class> class Policy>
 struct traits<Decomposition<Derived, Policy > > {
   typedef typename Derived::scalar_type scalar_type;
   typedef typename Policy<Derived>::result_type result_type;
-  typedef branch_tag node_type;
 };
 
 // host class for any decomposition type. Uses LDLTPolicy by default.
@@ -28,8 +26,6 @@ class Decomposition : public MatrixBase<Derived>, public Policy<Derived> {
       <Decomposition<Derived, Policy> >::scalar_type scalar_type;
   typedef typename traits
       <Decomposition<Derived, Policy> >::result_type result_type;
-  typedef typename traits
-      <Decomposition<Derived, Policy> >::node_type node_type;
 
  private:
   Derived data_;

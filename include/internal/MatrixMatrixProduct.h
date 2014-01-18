@@ -18,7 +18,6 @@ template <class Lhs, class Rhs> struct traits<MatrixMatrixProduct<Lhs, Rhs> > {
   typedef typename Lhs::scalar_type scalar_type;
   typedef typename Eigen::ProductReturnType
       <typename Lhs::result_type, typename Rhs::result_type>::Type result_type;
-  typedef branch_tag node_type;
 };
 
 template <typename Lhs, typename Rhs>
@@ -32,7 +31,6 @@ class MatrixMatrixProduct : public MatrixBase<MatrixMatrixProduct<Lhs, Rhs> > {
       <MatrixMatrixProduct<Lhs, Rhs> >::scalar_type scalar_type;
   typedef typename traits
       <MatrixMatrixProduct<Lhs, Rhs> >::result_type result_type;
-  typedef typename traits<MatrixMatrixProduct<Lhs, Rhs> >::node_type node_type;
 
  public:
   // constructor

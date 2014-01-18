@@ -21,7 +21,6 @@ struct traits<MatrixScalarProduct<Mat, Scal> > {
   typedef typename Eigen::CwiseUnaryOp
       <Eigen::internal::scalar_multiple_op<scalar_type>,
        const typename Mat::result_type> result_type;
-  typedef branch_tag node_type;
 };
 
 template <typename Mat, typename Scal>
@@ -35,7 +34,6 @@ class MatrixScalarProduct : public MatrixBase<MatrixScalarProduct<Mat, Scal> > {
       <MatrixScalarProduct<Mat, Scal> >::scalar_type scalar_type;
   typedef typename traits
       <MatrixScalarProduct<Mat, Scal> >::result_type result_type;
-  typedef typename traits<MatrixScalarProduct<Mat, Scal> >::node_type node_type;
 
  public:
   // constructor

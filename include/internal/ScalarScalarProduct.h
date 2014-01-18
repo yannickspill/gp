@@ -18,7 +18,6 @@ template <class Lhs, class Rhs> struct traits<ScalarScalarProduct<Lhs, Rhs> > {
                 "cannot mix different scalar types");
   typedef typename Lhs::scalar_type scalar_type;
   typedef typename Lhs::result_type result_type;
-  typedef branch_tag node_type;
 };
 
 // expression template for products involving only Scalars
@@ -33,7 +32,6 @@ class ScalarScalarProduct : public ScalarBase<ScalarScalarProduct<Lhs, Rhs> > {
       <ScalarScalarProduct<Lhs, Rhs> >::scalar_type scalar_type;
   typedef typename traits
       <ScalarScalarProduct<Lhs, Rhs> >::result_type result_type;
-  typedef typename traits<ScalarScalarProduct<Lhs, Rhs> >::node_type node_type;
 
  public:
   // constructor

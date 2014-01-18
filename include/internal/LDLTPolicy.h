@@ -4,7 +4,6 @@
 #include "macros.h"
 #include "internal/MatrixBase.h"
 #include "internal/Matrix.h"
-#include "internal/tags.h"
 
 #include <Eigen/Core>
 #include <type_traits>
@@ -18,7 +17,6 @@ template <class Derived> struct traits<LDLTPolicy<Derived> > {
   typedef typename Eigen::LDLT
       <typename Eigen::MatrixBase<typename Derived::result_type>::PlainObject>
           result_type;
-  typedef branch_tag node_type;
 };
 
 // cholesky LDLT decomposition policy. Uses lower part by default, see Eigen
@@ -27,7 +25,6 @@ template <typename Derived> struct LDLTPolicy {
 
   typedef typename traits<LDLTPolicy<Derived> >::scalar_type scalar_type;
   typedef typename traits<LDLTPolicy<Derived> >::result_type result_type;
-  typedef typename traits<LDLTPolicy<Derived> >::node_type node_type;
 
   // actual computation
   static result_type decompose(const Derived& data) {

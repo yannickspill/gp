@@ -19,7 +19,6 @@ struct traits<MatrixBuiltinProduct<MatrixExpression> > {
   typedef typename Eigen::CwiseUnaryOp
       <Eigen::internal::scalar_multiple_op<double>,
        const typename MatrixExpression::result_type> result_type;
-  typedef branch_tag node_type;
 };
 
 // expression template for product of a Matrix with anything convertible to a
@@ -32,8 +31,6 @@ class MatrixBuiltinProduct : public MatrixBase
       <MatrixBuiltinProduct<MatrixExpression> >::scalar_type scalar_type;
   typedef typename traits
       <MatrixBuiltinProduct<MatrixExpression> >::result_type result_type;
-  typedef typename traits
-      <MatrixBuiltinProduct<MatrixExpression> >::node_type node_type;
 
  private:
   double lhs_;

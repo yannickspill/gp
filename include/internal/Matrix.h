@@ -3,7 +3,6 @@
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
-#include "internal/tags.h"
 
 #include <Eigen/Dense>
 #include <memory>
@@ -14,7 +13,6 @@ namespace internal {
 template <typename EigenType> struct traits<Matrix<EigenType> > {
   typedef typename EigenType::Scalar scalar_type;
   typedef EigenType result_type;
-  typedef leaf_tag node_type;
 };
 
 //! Use this to represent any constant or Scalar-dependent matrix/vector
@@ -24,7 +22,6 @@ class Matrix : public MatrixBase<Matrix<EigenType> > {
  public:
   typedef typename traits<Matrix>::scalar_type scalar_type;
   typedef typename traits<Matrix>::result_type result_type;
-  typedef typename traits<Matrix>::node_type node_type;
 
  private:
   struct Data {

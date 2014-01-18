@@ -22,7 +22,6 @@ template <class Lhs, class Rhs> struct traits<MatrixDifference<Lhs, Rhs> > {
       <Eigen::internal::scalar_difference_op<scalar_type>,
        const typename Lhs::result_type, const typename Rhs::result_type>
           result_type;
-  typedef branch_tag node_type;
 };
 
 template <typename Lhs, typename Rhs>
@@ -34,7 +33,6 @@ class MatrixDifference : public MatrixBase<MatrixDifference<Lhs, Rhs> > {
  public:
   typedef typename traits<MatrixDifference<Lhs, Rhs> >::scalar_type scalar_type;
   typedef typename traits<MatrixDifference<Lhs, Rhs> >::result_type result_type;
-  typedef typename traits<MatrixDifference<Lhs, Rhs> >::node_type node_type;
 
  public:
   // constructor
