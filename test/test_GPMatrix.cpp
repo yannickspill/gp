@@ -8,7 +8,8 @@
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixBuiltinProduct.h"
 #include "internal/Transpose.h"
-#include "internal/LDLT.h"
+#include "internal/LDLTPolicy.h"
+#include "internal/Decomposition.h"
 
 #include <Eigen/Dense>
 #include <type_traits>
@@ -82,10 +83,10 @@ int main(int, char * []) {
   L = L.triangularView<Eigen::Lower>();
   Eigen::MatrixXd sd(L*L.transpose());
   MatrixXd msd(sd);
-  msd.ldlt();
-  msd.ldlt().get();
+  msd.decomposition<LDLTPolicy>();
+  msd.decomposition().get();
   (sd*sd).ldlt();
-  (msd*msd).ldlt();
-  (msd*msd).ldlt().get();
+  (msd*msd).decomposition();
+  (msd*msd).decomposition().get();
   return 0;
 }

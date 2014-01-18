@@ -24,14 +24,15 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return static_cast<const Derived&>(*this);
   }
 
-  //transposition
+  // transposition
   Transpose<Derived> transpose() const {
-      return Transpose<Derived>(asDerived());
+    return Transpose<Derived>(asDerived());
   }
 
-  //Cholesky LDLT decomposition
-  LDLT<Derived> ldlt() const {
-      return LDLT<Derived>(asDerived());
+  // decomposition, Cholesky LDLT by default
+  template <template<class> class Policy = LDLTPolicy >
+  Decomposition<Derived, Policy > decomposition() const {
+    return Decomposition<Derived, Policy >(asDerived());
   }
 };
 
