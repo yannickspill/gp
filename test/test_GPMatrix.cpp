@@ -8,6 +8,7 @@
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixBuiltinProduct.h"
 #include "internal/Transpose.h"
+#include "internal/LDLT.h"
 
 #include <Eigen/Dense>
 #include <type_traits>
@@ -74,5 +75,17 @@ int main(int, char * []) {
   if ( (vx-vx).transpose().get() != (x-x).transpose() ) return 19;
   if ((vx - scal * vx).transpose().get() != (x - scal.get() * x).transpose())
     return 20;
+
+  //ldlt
+  Eigen::MatrixXd L(Eigen::MatrixXd::Random(5,5));
+  L.diagonal() = L.diagonal().array().abs();
+  L = L.triangularView<Eigen::Lower>();
+  Eigen::MatrixXd sd(L*L.transpose());
+  MatrixXd msd(sd);
+  msd.ldlt();
+  msd.ldlt().get();
+  (sd*sd).ldlt();
+  (msd*msd).ldlt();
+  (msd*msd).ldlt().get();
   return 0;
 }
