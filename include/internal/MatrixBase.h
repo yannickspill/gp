@@ -35,9 +35,10 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return LogDeterminant<Derived>(asDerived());
   }
 
-  //Cholesky LDLT decomposition
-  Decomposition<Derived> decomposition() const {
-      return Decomposition<Derived>(asDerived());
+  //decompose matrix, use Cholesky LDLT decomposition by default
+  template<template<class> class Policy = LDLTPolicy>
+  Decomposition<Derived, Policy> decomposition() const {
+      return Decomposition<Derived, Policy>(asDerived());
   }
 };
 

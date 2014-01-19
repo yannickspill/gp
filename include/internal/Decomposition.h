@@ -12,15 +12,16 @@
 namespace GP {
 namespace internal {
 
-template <class Derived> struct traits<Decomposition<Derived> > {
+template <class Derived, template <typename> class Policy>
+    struct traits<Decomposition<Derived, Policy> > {
   typedef typename Derived::scalar_type scalar_type;
-  typedef typename traits<LDLTPolicy<Derived> >::result_type result_type;
+  typedef typename traits<Policy<Derived> >::result_type result_type;
 };
 
 //cholesky Decomposition decomposition. Uses lower part by default, see Eigen doc.
-template <typename Derived>
+template <typename Derived, template <typename> class Policy = LDLTPolicy>
 class Decomposition : public MatrixBase<Decomposition<Derived> >,
-                      public LDLTPolicy<Derived> {
+                      public Policy<Derived> {
  public:
   typedef typename traits<Decomposition<Derived> >::scalar_type scalar_type;
   typedef typename traits<Decomposition<Derived> >::result_type result_type;
