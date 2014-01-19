@@ -19,25 +19,17 @@ template <class Derived> struct traits<LogDeterminant<Derived> > {
 
 //determinant of a matrix, specialization for the LDLT case
 template <typename Derived>
-class LogDeterminant
-    <Decomposition
-     <Derived, LDLTPolicy> > : public MatrixBase
-                               <LogDeterminant
-                                <Decomposition<Derived, LDLTPolicy> > > {
+class LogDeterminant : public MatrixBase<LogDeterminant<Derived> > {
  public:
-  typedef typename traits
-      <LogDeterminant<Decomposition<Derived, LDLTPolicy> > >::scalar_type
-          scalar_type;
-  typedef typename traits
-      <LogDeterminant<Decomposition<Derived, LDLTPolicy> > >::result_type
-          result_type;
+  typedef typename traits<LogDeterminant>::scalar_type scalar_type;
+  typedef typename traits <LogDeterminant>::result_type result_type;
 
  private:
-  Decomposition<Derived, LDLTPolicy> data_;
+  Derived data_;
 
  public:
   // constructor
-  LogDeterminant(const Decomposition<Derived, LDLTPolicy>& data) : data_(data) {}
+  LogDeterminant(const Derived& data) : data_(data) {}
 
   // actual computation
   result_type get() const {
