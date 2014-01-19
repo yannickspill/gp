@@ -8,8 +8,7 @@
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixBuiltinProduct.h"
 #include "internal/Transpose.h"
-#include "internal/LDLTPolicy.h"
-#include "internal/Decomposition.h"
+#include "internal/LDLT.h"
 #include "internal/LogDeterminant.h"
 
 #include <Eigen/Dense>
@@ -84,19 +83,16 @@ int main(int, char * []) {
   L = L.triangularView<Eigen::Lower>();
   Eigen::MatrixXd sd(L*L.transpose());
   MatrixXd msd(sd);
-  auto ldlt = msd.decomposition();
-  static_assert(std::is_same
-                <decltype(ldlt), Decomposition<MatrixXd, LDLTPolicy> >::value,
-                "wrong decomposition type");
+  auto ldlt = msd.ldlt();
   ldlt.get();
   (sd*sd).ldlt();
-  (msd*msd).decomposition();
-  (msd*msd).decomposition().get();
+  (msd*msd).ldlt();
+  (msd*msd).ldlt().get();
 
   //determinant
   LogDeterminant<decltype(ldlt)> det(ldlt);
   static_assert(std::is_same<decltype(det), decltype(ldlt.logdet())>::value,
-          "MatrixBase passes wrong type to LogDeterminant")
+          "MatrixBase passes wrong type to LogDeterminant");
   if (std::abs(det.get() - std::log(sd.determinant())) > 1e-7) return 21;
   std::cout << "ldlt " << typeid(ldlt).name() << std::endl;
   std::cout << "ldlt.logdet() " << typeid(ldlt.logdet()).name() << std::endl;

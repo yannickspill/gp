@@ -24,21 +24,20 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return static_cast<const Derived&>(*this);
   }
 
-  // transposition
+  //transposition
   Transpose<Derived> transpose() const {
-    return Transpose<Derived>(asDerived());
-  }
-
-  // decomposition, Cholesky LDLT by default
-  template <template <class> class Policy = LDLTPolicy>
-  Decomposition<Derived, Policy> decomposition() const {
-    return Decomposition<Derived, Policy>(asDerived());
+      return Transpose<Derived>(asDerived());
   }
 
   // log-determinant, can only be applied to LDLT decomposition for now
   // write another specialization in Determinant.h if you need more
   LogDeterminant<Derived> logdet() const {
     return LogDeterminant<Derived>(asDerived());
+  }
+
+  //Cholesky LDLT decomposition
+  LDLT<Derived> ldlt() const {
+      return LDLT<Derived>(asDerived());
   }
 };
 
