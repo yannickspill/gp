@@ -16,6 +16,27 @@ struct sum_binary_op {
     return a + b;
   }
 };
+
+struct difference_binary_op {
+  template <class ResultType, class Lhs, class Rhs>
+  const ResultType operator()(const Lhs&& a, const Rhs&& b) const {
+    return a - b;
+  }
+};
+
+struct product_binary_op {
+  template <class ResultType, class Lhs, class Rhs>
+  const ResultType operator()(const Lhs&& a, const Rhs&& b) const {
+    return a * b;
+  }
+};
+
+struct quotient_binary_op {
+  template <class ResultType, class Lhs, class Rhs>
+  const ResultType operator()(const Lhs&& a, const Rhs&& b) const {
+    return a / b;
+  }
+};
 }
 }
 

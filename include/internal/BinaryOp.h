@@ -2,6 +2,7 @@
 #define BINARY_OP_H
 
 #include "macros.h"
+#include "operator_traits.h"
 #include "internal/MatrixBase.h"
 
 #include <Eigen/Core>
@@ -11,18 +12,7 @@
 namespace GP {
 namespace internal {
 
-template <class Lhs, class Rhs>
-struct traits<BinaryOp<Lhs, Rhs, sum_binary_op> > {
-  static_assert(std::is_same
-                <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
-                "cannot mix matrices of different scalar types");
-  typedef typename Lhs::scalar_type scalar_type;
-  //typedef Eigen::MatrixXd result_type;
-  typedef typename Eigen::CwiseBinaryOp
-      <Eigen::internal::scalar_sum_op<scalar_type>,
-       const typename Lhs::result_type, const typename Rhs::result_type>
-          result_type;
-};
+
 
 template <typename Lhs, typename Rhs, class Op>
 class BinaryOp : public MatrixBase<BinaryOp<Lhs, Rhs, Op> > {
