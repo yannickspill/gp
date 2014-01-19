@@ -1,5 +1,5 @@
-#ifndef MATRIX_SUM_H
-#define MATRIX_SUM_H
+#ifndef BINARY_OP_H
+#define BINARY_OP_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -11,33 +11,41 @@
 namespace GP {
 namespace internal {
 
-template <class Lhs, class Rhs> struct traits<MatrixSum<Lhs, Rhs> > {
+template <class Lhs, class Rhs>
+struct traits<BinaryOp<Lhs, Rhs, sum_binary_op> > {
   static_assert(std::is_same
                 <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
                 "cannot mix matrices of different scalar types");
   typedef typename Lhs::scalar_type scalar_type;
+  //typedef Eigen::MatrixXd result_type;
   typedef typename Eigen::CwiseBinaryOp
       <Eigen::internal::scalar_sum_op<scalar_type>,
        const typename Lhs::result_type, const typename Rhs::result_type>
           result_type;
 };
 
-template <typename Lhs, typename Rhs>
-class MatrixSum : public MatrixBase<MatrixSum<Lhs, Rhs> > {
+template <typename Lhs, typename Rhs, class Op>
+class BinaryOp : public MatrixBase<BinaryOp<Lhs, Rhs, Op> > {
  public:
-  typedef typename traits<MatrixSum<Lhs, Rhs> >::scalar_type scalar_type;
-  typedef typename traits<MatrixSum<Lhs, Rhs> >::result_type result_type;
+  typedef typename traits
+      <BinaryOp<Lhs, Rhs, Op> >::scalar_type scalar_type;
+  typedef typename traits
+      <BinaryOp<Lhs, Rhs, Op> >::result_type result_type;
 
  private:
   const Lhs& lhs_;
   const Rhs& rhs_;
+  const Op op_;
 
  public:
   // constructor
-  MatrixSum(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
+  BinaryOp(const Lhs& lhs, const Rhs& rhs, const Op& op = Op())
+      : lhs_(lhs), rhs_(rhs), op_(op) {}
 
   // actual computation
-  result_type get() const { return lhs_.get() + rhs_.get(); }
+  result_type get() const {
+    return op_.template operator()<result_type>(lhs_.get(), rhs_.get());
+  }
 
   unsigned get_version() const {
     return lhs_.get_version() + rhs_.get_version();
@@ -45,4 +53,4 @@ class MatrixSum : public MatrixBase<MatrixSum<Lhs, Rhs> > {
 };
 }
 }
-#endif /* MATRIX_SUM_H */
+#endif /* BINARY_OP_H */

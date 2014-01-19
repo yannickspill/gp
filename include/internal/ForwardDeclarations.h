@@ -26,8 +26,7 @@ template <class Derived> class MatrixBase;
 template <class EigenType> class Matrix;
 
 // matrix operations
-template <class Lhs, class Rhs, class op> class MatrixOp;
-template <class Lhs, class Rhs> class MatrixSum;
+template <class Lhs, class Rhs, class op> class BinaryOp;
 template <class Lhs, class Rhs> class MatrixDifference;
 template <class Lhs, class Rhs> class MatrixMatrixProduct;
 template <class Lhs> class MatrixBuiltinProduct;

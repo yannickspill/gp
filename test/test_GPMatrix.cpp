@@ -1,5 +1,6 @@
 #include "internal/Matrix.h"
-#include "internal/MatrixSum.h"
+#include "internal/functors.h"
+#include "internal/BinaryOp.h"
 #include "internal/MatrixDifference.h"
 #include "internal/MatrixMatrixProduct.h"
 #include "internal/Scalar.h"
@@ -39,7 +40,8 @@ int main(int, char * []) {
   MatrixXd vsum(vy + vx);
   if (vsum.get() != Eigen::MatrixXd::Constant(szx, szy, 3)) return 2;
   if ((vx + vy).get() != Eigen::MatrixXd::Constant(szx, szy, 3)) return 3;
-  GP::internal::MatrixSum<MatrixXd, MatrixXd> s(vx, vy);  // type is defined
+  GP::internal::BinaryOp
+      <MatrixXd, MatrixXd, sum_binary_op> s(vx, vy);  // type is defined
   if (s.get() != vsum.get()) return 4;  // works as expected
   // product
   if ((vx.transpose() * vx).get() != x.transpose() * x) return 5;

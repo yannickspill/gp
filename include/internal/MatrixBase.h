@@ -3,6 +3,7 @@
 
 #include "macros.h"
 #include "internal/ForwardDeclarations.h"
+#include "functors.h"
 
 namespace GP {
 namespace internal {
@@ -51,9 +52,9 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
 
 // sum
 template <class Lhs, class Rhs>
-const MatrixSum<Lhs, Rhs> operator+(const MatrixBase<Lhs>& lhs,
-                                    const MatrixBase<Rhs>& rhs) {
-  return MatrixSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+const BinaryOp<Lhs, Rhs, sum_binary_op> operator+(const MatrixBase<Lhs>& lhs,
+                                                  const MatrixBase<Rhs>& rhs) {
+  return BinaryOp<Lhs, Rhs, sum_binary_op>(lhs.asDerived(), rhs.asDerived());
 }
 
 // difference
