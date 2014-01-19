@@ -63,11 +63,25 @@ const MatrixDifference<Lhs, Rhs> operator-(const MatrixBase<Lhs>& lhs,
   return MatrixDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 
-// product
+// products
+//    Matrix Matrix
 template <class Lhs, class Rhs>
 const MatrixMatrixProduct<Lhs, Rhs> operator*(const MatrixBase<Lhs>& lhs,
                                               const MatrixBase<Rhs>& rhs) {
   return MatrixMatrixProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+}
+//   double Matrix
+template <class MatrixExpression>
+const MatrixBuiltinProduct<MatrixExpression> operator*(
+    double lhs, const MatrixBase<MatrixExpression>& rhs) {
+  return MatrixBuiltinProduct<MatrixExpression>(lhs, rhs.asDerived());
+}
+//   Matrix double
+template <class MatrixExpression>
+const MatrixBuiltinProduct<MatrixExpression> operator*(const MatrixBase
+                                                       <MatrixExpression>& lhs,
+                                                       double rhs) {
+  return MatrixBuiltinProduct<MatrixExpression>(rhs, lhs.asDerived());
 }
 }
 }

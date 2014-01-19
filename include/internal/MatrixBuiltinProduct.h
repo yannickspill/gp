@@ -46,19 +46,6 @@ class MatrixBuiltinProduct : public MatrixBase
 
   unsigned get_version() const { return rhs_.get_version(); }
 };
-
-// operator* declared here for use of automatic type conversion
-template <class MatrixExpression>
-const MatrixBuiltinProduct<MatrixExpression> operator*(
-    double lhs, const MatrixBase<MatrixExpression>& rhs) {
-  return MatrixBuiltinProduct<MatrixExpression>(lhs, rhs.asDerived());
-}
-template <class MatrixExpression>
-const MatrixBuiltinProduct<MatrixExpression> operator*(const MatrixBase
-                                                       <MatrixExpression>& lhs,
-                                                       double rhs) {
-  return MatrixBuiltinProduct<MatrixExpression>(rhs, lhs.asDerived());
-}
 }
 }
 #endif /* MATRIX_BUILTIN_PRODUCT_H */
