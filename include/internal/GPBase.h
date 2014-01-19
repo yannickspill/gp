@@ -25,17 +25,23 @@ template <class Derived> class GPBase {
   }
 };
 
-// Scalar * Matrix product
+// Scalar * Matrix
 template <class Scal, class Mat>
 const MatrixScalarProduct<Mat, Scal> operator*(const ScalarBase<Scal>& lhs,
                                                const MatrixBase<Mat>& rhs) {
   return MatrixScalarProduct<Mat, Scal>(rhs.asDerived(), lhs.asDerived());
 }
-// Matrix * Scalar product
+// Matrix * Scalar
 template <class Mat, class Scal>
 const MatrixScalarProduct<Mat, Scal> operator*(const MatrixBase<Mat>& lhs,
                                                const ScalarBase<Scal>& rhs) {
   return MatrixScalarProduct<Mat, Scal>(lhs.asDerived(), rhs.asDerived());
+}
+// Matrix / Scalar
+template <class Mat, class Scal>
+const MatrixScalarQuotient<Mat, Scal> operator/(const MatrixBase<Mat>& lhs,
+                                               const ScalarBase<Scal>& rhs) {
+  return MatrixScalarQuotient<Mat, Scal>(lhs.asDerived(), rhs.asDerived());
 }
 }
 }
