@@ -3,7 +3,6 @@
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
-#include "internal/Matrix.h"
 
 #include <Eigen/Core>
 #include <type_traits>
@@ -34,7 +33,7 @@ class MatrixBuiltinProduct : public MatrixBase
 
  private:
   double lhs_;
-  MatrixExpression rhs_;
+  const MatrixExpression& rhs_;
 
  public:
   // constructor

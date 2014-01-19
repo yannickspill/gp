@@ -3,7 +3,6 @@
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
-#include "internal/Matrix.h"
 
 #include <Eigen/Core>
 #include <type_traits>
@@ -23,8 +22,8 @@ template <class Lhs, class Rhs> struct traits<MatrixMatrixProduct<Lhs, Rhs> > {
 template <typename Lhs, typename Rhs>
 class MatrixMatrixProduct : public MatrixBase<MatrixMatrixProduct<Lhs, Rhs> > {
  private:
-  Lhs lhs_;
-  Rhs rhs_;
+  const Lhs& lhs_;
+  const Rhs& rhs_;
 
  public:
   typedef typename traits

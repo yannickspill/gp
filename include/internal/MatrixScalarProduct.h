@@ -3,7 +3,6 @@
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
-#include "internal/Matrix.h"
 
 #include <Eigen/Core>
 #include <type_traits>

@@ -3,7 +3,6 @@
 
 #include "macros.h"
 #include "internal/ScalarBase.h"
-#include "internal/Scalar.h"
 
 #include <Eigen/Core>
 #include <type_traits>
@@ -25,7 +24,7 @@ class ScalarBuiltinProduct : public ScalarBase
                              <ScalarBuiltinProduct<ScalarExpression> > {
  private:
   double lhs_;
-  ScalarExpression rhs_;
+  const ScalarExpression& rhs_;
 
  public:
   typedef typename traits
@@ -43,19 +42,6 @@ class ScalarBuiltinProduct : public ScalarBase
 
   unsigned get_version() const { return rhs_.get_version(); }
 };
-
-// operator* declared here for use of automatic type conversion
-template <class ScalarExpression>
-const ScalarBuiltinProduct<ScalarExpression> operator*(
-    double lhs, const ScalarBase<ScalarExpression>& rhs) {
-  return ScalarBuiltinProduct<ScalarExpression>(lhs, rhs.asDerived());
-}
-template <class ScalarExpression>
-const ScalarBuiltinProduct<ScalarExpression> operator*(const ScalarBase
-                                                       <ScalarExpression>& lhs,
-                                                       double rhs) {
-  return ScalarBuiltinProduct<ScalarExpression>(rhs, lhs.asDerived());
-}
 }
 }
 #endif /* SCALAR_BUILTIN_PRODUCT_H */

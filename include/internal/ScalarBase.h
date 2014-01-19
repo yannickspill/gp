@@ -25,6 +25,27 @@ template <class Derived> class ScalarBase : public GPBase<Derived> {
     return static_cast<const Derived&>(*this);
   }
 };
+
+// products
+//    Scalar Scalar
+template <class Lhs, class Rhs>
+const ScalarScalarProduct<Lhs, Rhs> operator*(const ScalarBase<Lhs>& lhs,
+                                              const ScalarBase<Rhs>& rhs) {
+  return ScalarScalarProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+}
+//    double Scalar
+template <class ScalarExpression>
+const ScalarBuiltinProduct<ScalarExpression> operator*(
+    double lhs, const ScalarBase<ScalarExpression>& rhs) {
+  return ScalarBuiltinProduct<ScalarExpression>(lhs, rhs.asDerived());
+}
+//    Scalar double
+template <class ScalarExpression>
+const ScalarBuiltinProduct<ScalarExpression> operator*(const ScalarBase
+                                                       <ScalarExpression>& lhs,
+                                                       double rhs) {
+  return ScalarBuiltinProduct<ScalarExpression>(rhs, lhs.asDerived());
+}
 }
 }
 #endif /* SCALAR_BASE_H */

@@ -14,14 +14,13 @@ namespace internal {
 
 template <class Derived> struct traits<Transpose<Derived> > {
   typedef typename Derived::scalar_type scalar_type;
-  typedef typename Eigen::Transpose
-      <typename Derived::result_type> result_type;
+  typedef typename Eigen::Transpose<typename Derived::result_type> result_type;
 };
 
-//specialize for matrix, which needs to be constd
+// specialize for matrix, which needs to be constd
 template <class EigenType> struct traits<Transpose<Matrix<EigenType> > > {
   typedef typename Matrix<EigenType>::scalar_type scalar_type;
-  typedef typename Eigen::Transpose <const EigenType> result_type;
+  typedef typename Eigen::Transpose<const EigenType> result_type;
 };
 
 template <typename Derived>
@@ -31,19 +30,16 @@ class Transpose : public MatrixBase<Transpose<Derived> > {
   typedef typename traits<Transpose<Derived> >::result_type result_type;
 
  private:
-  Derived data_;
+  const Derived& data_;
 
  public:
   // constructor
   Transpose(const Derived& data) : data_(data) {}
 
   // actual computation
-  result_type get() const {
-      return data_.get().transpose(); }
+  result_type get() const { return data_.get().transpose(); }
 
-  unsigned get_version() const {
-    return data_.get_version();
-  }
+  unsigned get_version() const { return data_.get_version(); }
 };
 }
 }

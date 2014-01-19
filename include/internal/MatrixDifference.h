@@ -3,7 +3,6 @@
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
-#include "internal/Matrix.h"
 
 #include <Eigen/Core>
 #include <type_traits>
@@ -27,8 +26,8 @@ template <class Lhs, class Rhs> struct traits<MatrixDifference<Lhs, Rhs> > {
 template <typename Lhs, typename Rhs>
 class MatrixDifference : public MatrixBase<MatrixDifference<Lhs, Rhs> > {
  private:
-  Lhs lhs_;
-  Rhs rhs_;
+  const Lhs& lhs_;
+  const Rhs& rhs_;
 
  public:
   typedef typename traits<MatrixDifference<Lhs, Rhs> >::scalar_type scalar_type;

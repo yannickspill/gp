@@ -31,6 +31,7 @@ class Scalar : public ScalarBase<Scalar> {
  public:
   explicit Scalar(double value) : data_(std::make_shared<Data>(value)) {}
 
+  //pass as value because it is a double
   result_type get() const { return data_->value_; }
 
   unsigned get_version() const { return data_->version_; }

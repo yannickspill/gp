@@ -24,8 +24,8 @@ template <class Lhs, class Rhs> struct traits<ScalarScalarProduct<Lhs, Rhs> > {
 template <typename Lhs, typename Rhs>
 class ScalarScalarProduct : public ScalarBase<ScalarScalarProduct<Lhs, Rhs> > {
  private:
-  Lhs lhs_;
-  Rhs rhs_;
+  const Lhs& lhs_;
+  const Rhs& rhs_;
 
  public:
   typedef typename traits
@@ -44,13 +44,6 @@ class ScalarScalarProduct : public ScalarBase<ScalarScalarProduct<Lhs, Rhs> > {
     return lhs_.get_version() + rhs_.get_version();
   }
 };
-
-// operator*
-template <class Lhs, class Rhs>
-const ScalarScalarProduct<Lhs, Rhs> operator*(const ScalarBase<Lhs>& lhs,
-                                              const ScalarBase<Rhs>& rhs) {
-  return ScalarScalarProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
-}
 }
 }
 #endif /* SCALAR_SCALAR_PRODUCT_H */
