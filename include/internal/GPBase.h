@@ -25,12 +25,13 @@ template <class Derived> class GPBase {
   }
 };
 
-// mixed product
+// Scalar * Matrix product
 template <class Scal, class Mat>
 const MatrixScalarProduct<Mat, Scal> operator*(const ScalarBase<Scal>& lhs,
                                                const MatrixBase<Mat>& rhs) {
   return MatrixScalarProduct<Mat, Scal>(rhs.asDerived(), lhs.asDerived());
 }
+// Matrix * Scalar product
 template <class Mat, class Scal>
 const MatrixScalarProduct<Mat, Scal> operator*(const MatrixBase<Mat>& lhs,
                                                const ScalarBase<Scal>& rhs) {
