@@ -28,6 +28,7 @@ template <class Lhs, class Rhs> class MatrixMatrixProduct;
 template <class Lhs> class MatrixBuiltinProduct;
 template <class Lhs> class MatrixBuiltinDivision;
 template <class Derived> class Transpose;
+template <class Derived> class LDLTPolicy;
 template <class Derived> class Decomposition;
 template <class Derived> class LogDeterminant;
 }

@@ -8,6 +8,7 @@
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixBuiltinProduct.h"
 #include "internal/Transpose.h"
+#include "internal/LDLTPolicy.h"
 #include "internal/Decomposition.h"
 #include "internal/LogDeterminant.h"
 

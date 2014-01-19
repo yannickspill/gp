@@ -14,14 +14,13 @@ namespace internal {
 
 template <class Derived> struct traits<Decomposition<Derived> > {
   typedef typename Derived::scalar_type scalar_type;
-  typedef typename Eigen::LDLT
-      <typename Eigen::MatrixBase<typename Derived::result_type>::PlainObject>
-          result_type;
+  typedef typename traits<LDLTPolicy<Derived> >::result_type result_type;
 };
 
 //cholesky Decomposition decomposition. Uses lower part by default, see Eigen doc.
 template <typename Derived>
-class Decomposition : public MatrixBase<Decomposition<Derived> > {
+class Decomposition : public MatrixBase<Decomposition<Derived> >,
+                      public LDLTPolicy<Derived> {
  public:
   typedef typename traits<Decomposition<Derived> >::scalar_type scalar_type;
   typedef typename traits<Decomposition<Derived> >::result_type result_type;
@@ -34,7 +33,7 @@ class Decomposition : public MatrixBase<Decomposition<Derived> > {
   Decomposition(const Derived& data) : data_(data) {}
 
   // actual computation
-  result_type get() const { return data_.get().ldlt(); }
+  result_type get() const { return this->do_decomp(data_); }
 
   unsigned get_version() const {
     return data_.get_version();
