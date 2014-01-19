@@ -34,7 +34,7 @@ class Decomposition : public MatrixBase<Decomposition<Derived> >,
   Decomposition(const Derived& data) : data_(data) {}
 
   // actual computation
-  result_type get() const { return this->do_decomp(data_); }
+  const result_type& get() const { return this->do_decomp(data_); }
 
   unsigned get_version() const {
     return data_.get_version();

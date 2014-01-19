@@ -31,6 +31,7 @@ template <class Derived> class Transpose;
 template <class Derived> struct LDLTPolicy;
 template <class Derived, template<typename> class Policy> class Decomposition;
 template <class Derived> class LogDeterminant;
+template <class Derived, class OtherDerived> class Solve;
 }
 }
 #endif /*FORWARD_DECLARATIONS_H*/
