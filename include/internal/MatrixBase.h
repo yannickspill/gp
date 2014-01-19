@@ -36,8 +36,8 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   }
 
   //Cholesky LDLT decomposition
-  LDLT<Derived> ldlt() const {
-      return LDLT<Derived>(asDerived());
+  Decomposition<Derived> decomposition() const {
+      return Decomposition<Derived>(asDerived());
   }
 };
 

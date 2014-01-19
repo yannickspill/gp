@@ -1,5 +1,5 @@
-#ifndef LDLT_H
-#define LDLT_H
+#ifndef DECOMPOSITION_H
+#define DECOMPOSITION_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -12,26 +12,26 @@
 namespace GP {
 namespace internal {
 
-template <class Derived> struct traits<LDLT<Derived> > {
+template <class Derived> struct traits<Decomposition<Derived> > {
   typedef typename Derived::scalar_type scalar_type;
   typedef typename Eigen::LDLT
       <typename Eigen::MatrixBase<typename Derived::result_type>::PlainObject>
           result_type;
 };
 
-//cholesky LDLT decomposition. Uses lower part by default, see Eigen doc.
+//cholesky Decomposition decomposition. Uses lower part by default, see Eigen doc.
 template <typename Derived>
-class LDLT : public MatrixBase<LDLT<Derived> > {
+class Decomposition : public MatrixBase<Decomposition<Derived> > {
  public:
-  typedef typename traits<LDLT<Derived> >::scalar_type scalar_type;
-  typedef typename traits<LDLT<Derived> >::result_type result_type;
+  typedef typename traits<Decomposition<Derived> >::scalar_type scalar_type;
+  typedef typename traits<Decomposition<Derived> >::result_type result_type;
 
  private:
   Derived data_;
 
  public:
   // constructor
-  LDLT(const Derived& data) : data_(data) {}
+  Decomposition(const Derived& data) : data_(data) {}
 
   // actual computation
   result_type get() const { return data_.get().ldlt(); }
@@ -42,4 +42,4 @@ class LDLT : public MatrixBase<LDLT<Derived> > {
 };
 }
 }
-#endif /* LDLT_H */
+#endif /* DECOMPOSITION_H */

@@ -8,7 +8,7 @@
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixBuiltinProduct.h"
 #include "internal/Transpose.h"
-#include "internal/LDLT.h"
+#include "internal/Decomposition.h"
 #include "internal/LogDeterminant.h"
 
 #include <Eigen/Dense>
@@ -83,11 +83,11 @@ int main(int, char * []) {
   L = L.triangularView<Eigen::Lower>();
   Eigen::MatrixXd sd(L*L.transpose());
   MatrixXd msd(sd);
-  auto ldlt = msd.ldlt();
+  auto ldlt = msd.decomposition();
   ldlt.get();
   (sd*sd).ldlt();
-  (msd*msd).ldlt();
-  (msd*msd).ldlt().get();
+  (msd*msd).decomposition();
+  (msd*msd).decomposition().get();
 
   //determinant
   LogDeterminant<decltype(ldlt)> det(ldlt);
