@@ -13,31 +13,35 @@ namespace GP {
 namespace internal {
 
 // traits
-template <class Derived, class OtherDerived>
-struct traits<Solve<Derived, OtherDerived> > {
-  static_assert(std::is_same<typename Derived::scalar_type,
+template <class DerivedMat, template<class> class Policy, class OtherDerived>
+struct traits<Solve<Decomposition<DerivedMat, Policy>, OtherDerived> > {
+  static_assert(std::is_same<typename DerivedMat::scalar_type,
                              typename OtherDerived::scalar_type>::value,
                 "cannot mix matrices of different scalar types");
-  typedef typename Derived::scalar_type scalar_type;
+  typedef typename DerivedMat::scalar_type scalar_type;
   typedef Eigen::internal::solve_retval
-      <typename Derived::result_type, typename OtherDerived::result_type>
-          result_type;
+      <typename Decomposition<DerivedMat, Policy>::result_type,
+       typename OtherDerived::result_type> result_type;
 };
 
 // solve AX = B for X, given the decomposition for A
-template <class Derived, class OtherDerived>
-class Solve : public MatrixBase<Solve<Derived, OtherDerived> > {
+template <class DerivedMat, template<class> class Policy, class OtherDerived>
+class Solve
+    <Decomposition<DerivedMat, Policy>,
+     OtherDerived> : public MatrixBase
+                     <Solve<Decomposition<DerivedMat, Policy>, OtherDerived> > {
  public:
   typedef typename traits<Solve>::scalar_type scalar_type;
   typedef typename traits<Solve>::result_type result_type;
 
  private:
-  Derived decomp_;
+  Decomposition<DerivedMat, Policy> decomp_;
   OtherDerived mat_;
 
  public:
   // constructor
-  Solve(const Derived& decomp, const OtherDerived& mat)
+  Solve(const Decomposition<DerivedMat, Policy>& decomp,
+        const OtherDerived& mat)
       : decomp_(decomp), mat_(mat) {}
 
   // actual computation

@@ -24,15 +24,15 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return static_cast<const Derived&>(*this);
   }
 
-  //transposition
+  // transposition
   Transpose<Derived> transpose() const {
-      return Transpose<Derived>(asDerived());
+    return Transpose<Derived>(asDerived());
   }
 
-  //decompose matrix, use Cholesky LDLT decomposition by default
-  template<template<class> class Policy = LDLTPolicy>
+  // decompose matrix, use Cholesky LDLT decomposition by default
+  template <template <class> class Policy = LDLTPolicy>
   Decomposition<Derived, Policy> decomposition() const {
-      return Decomposition<Derived, Policy>(asDerived());
+    return Decomposition<Derived, Policy>(asDerived());
   }
 
   // log-determinant, can only be applied to LDLT decomposition for now
@@ -41,13 +41,12 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return LogDeterminant<Derived>(asDerived());
   }
 
-  //solve AX=B system, and yield X
-  //for now, only implemented on Decomposition child classes
-  template<class OtherDerived>
-  Solve<Derived,OtherDerived> solve(const OtherDerived& B) const {
-      return Solve<Derived, OtherDerived>(asDerived(),B);
+  // solve AX=B system, and yield X
+  // for now, only implemented on Decomposition child classes
+  template <class OtherDerived>
+  Solve<Derived, OtherDerived> solve(const OtherDerived& B) const {
+    return Solve<Derived, OtherDerived>(asDerived(), B);
   }
-
 };
 
 // sum
