@@ -30,6 +30,7 @@ template <class Lhs> class MatrixBuiltinDivision;
 template <class Derived> class Transpose;
 template <class Derived> class LDLTPolicy;
 template <class Derived, template<class> class Policy> class Decomposition;
+template <class Derived> class LogDeterminant;
 }
 }
 #endif /*FORWARD_DECLARATIONS_H*/

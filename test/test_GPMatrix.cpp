@@ -10,6 +10,7 @@
 #include "internal/Transpose.h"
 #include "internal/LDLTPolicy.h"
 #include "internal/Decomposition.h"
+#include "internal/LogDeterminant.h"
 
 #include <Eigen/Dense>
 #include <type_traits>
@@ -83,10 +84,30 @@ int main(int, char * []) {
   L = L.triangularView<Eigen::Lower>();
   Eigen::MatrixXd sd(L*L.transpose());
   MatrixXd msd(sd);
-  msd.decomposition<LDLTPolicy>();
-  msd.decomposition().get();
+  auto ldlt = msd.decomposition();
+  static_assert(std::is_same
+                <decltype(ldlt), Decomposition<MatrixXd, LDLTPolicy> >::value,
+                "wrong decomposition type");
+  ldlt.get();
   (sd*sd).ldlt();
   (msd*msd).decomposition();
   (msd*msd).decomposition().get();
+
+  //determinant
+  LogDeterminant<decltype(ldlt)> det(ldlt);
+  static_assert(std::is_same<decltype(det), decltype(ldlt.logdet())>::value,
+          "MatrixBase passes wrong type to LogDeterminant")
+  if (std::abs(det.get() - std::log(sd.determinant())) > 1e-7) return 21;
+  std::cout << "ldlt " << typeid(ldlt).name() << std::endl;
+  std::cout << "ldlt.logdet() " << typeid(ldlt.logdet()).name() << std::endl;
+  std::cout << "det " << typeid(det).name() << std::endl;
+  /*
+  MatrixBase<Decomposition<MatrixXd, LDLTPolicy> > *pB = &ldlt;
+  std::cout << "base_ldlt " << typeid(*pB) << std::endl;
+  std::cout << "re-ldlt " << typeid(static_cast<decltype(ldlt)>(*pB)) << std::endl;
+  
+  */
+  //if (std::abs(ldlt.logdet().get() - std::log(sd.determinant())) > 1e-7)
+  //  return 22;
   return 0;
 }
