@@ -1,5 +1,5 @@
-#ifndef FORWARD_DECLARATIONS_H
-#define FORWARD_DECLARATIONS_H
+#ifndef INTERNAL_FORWARD_DECLARATIONS_H
+#define INTERNAL_FORWARD_DECLARATIONS_H
 
 namespace GP {
 namespace internal {
@@ -45,4 +45,4 @@ template <class Derived> class LogDeterminant;
 template <class Derived, class OtherDerived> class Solve;
 }
 }
-#endif /*FORWARD_DECLARATIONS_H*/
+#endif /*FINTERNAL_ORWARD_DECLARATIONS_H*/

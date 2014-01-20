@@ -1,5 +1,5 @@
-#ifndef BUILTIN_SCALAR_QUOTIENT_H
-#define BUILTIN_SCALAR_QUOTIENT_H
+#ifndef INTERNAL_BUILTIN_SCALAR_QUOTIENT_H
+#define INTERNAL_BUILTIN_SCALAR_QUOTIENT_H
 
 #include "macros.h"
 #include "internal/ScalarBase.h"
@@ -44,4 +44,4 @@ class BuiltinScalarQuotient : public ScalarBase
 };
 }
 }
-#endif /* BUILTIN_SCALAR_QUOTIENT_H */
+#endif /* INTERNAL_BUILTIN_SCALAR_QUOTIENT_H */

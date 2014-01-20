@@ -1,5 +1,5 @@
-#ifndef MAKE_FUNCTION_H
-#define MAKE_FUNCTION_H
+#ifndef INTERNAL_MAKE_FUNCTION_H
+#define INTERNAL_MAKE_FUNCTION_H
 
 #include <functional>
 
@@ -17,4 +17,4 @@ make_function(const OutExpr& out_expr, InExprs&... in_exprs) {
 }
 }
 }
-#endif /* MAKE_FUNCTION_H */
+#endif /* INTERNAL_MAKE_FUNCTION_H */

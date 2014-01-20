@@ -1,5 +1,5 @@
-#ifndef MATRIX_DIFFERENCE_H
-#define MATRIX_DIFFERENCE_H
+#ifndef INTERNAL_MATRIX_DIFFERENCE_H
+#define INTERNAL_MATRIX_DIFFERENCE_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -46,4 +46,4 @@ class MatrixDifference : public MatrixBase<MatrixDifference<Lhs, Rhs> > {
 };
 }
 }
-#endif /* MATRIX_DIFFERENCE_H */
+#endif /* INTERNAL_MATRIX_DIFFERENCE_H */

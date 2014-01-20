@@ -1,5 +1,5 @@
-#ifndef TRANSPOSE_H
-#define TRANSPOSE_H
+#ifndef INTERNAL_TRANSPOSE_H
+#define INTERNAL_TRANSPOSE_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -43,4 +43,4 @@ class Transpose : public MatrixBase<Transpose<Derived> > {
 };
 }
 }
-#endif /* TRANSPOSE_H */
+#endif /* INTERNAL_TRANSPOSE_H */

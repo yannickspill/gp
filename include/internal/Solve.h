@@ -1,5 +1,5 @@
-#ifndef SOLVE_H
-#define SOLVE_H
+#ifndef INTERNAL_SOLVE_H
+#define INTERNAL SOLVE_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -53,4 +53,4 @@ class Solve
 };
 }
 }
-#endif /* SOLVE_H */
+#endif /* INTERNAL_SOLVE_H */

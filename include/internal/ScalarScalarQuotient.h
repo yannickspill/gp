@@ -1,5 +1,5 @@
-#ifndef SCALAR_SCALAR_QUOTIENT_H
-#define SCALAR_SCALAR_QUOTIENT_H
+#ifndef INTERNAL_SCALAR_SCALAR_QUOTIENT_H
+#define INTERNAL_SCALAR_SCALAR_QUOTIENT_H
 
 #include "macros.h"
 #include "internal/ScalarBase.h"
@@ -46,4 +46,4 @@ class ScalarScalarQuotient : public ScalarBase<ScalarScalarQuotient<Lhs, Rhs> > 
 };
 }
 }
-#endif /* SCALAR_SCALAR_QUOTIENT_H */
+#endif /* INTERNAL_SCALAR_SCALAR_QUOTIENT_H */

@@ -1,10 +1,9 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#ifndef INTERNAL_MATRIX_H
+#define INTERNAL_MATRIX_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
 
-#include <Eigen/Dense>
 #include <memory>
 
 namespace GP {
@@ -55,10 +54,6 @@ class Matrix : public MatrixBase<Matrix<EigenType> > {
   bool operator==(const Matrix& other) const { return data_ == other.data_; }
   bool operator!=(const Matrix& other) const { return !(*this == other); }
 };
-
-typedef Matrix<Eigen::RowVectorXd> RowVectorXd;
-typedef Matrix<Eigen::VectorXd> VectorXd;
-typedef Matrix<Eigen::MatrixXd> MatrixXd;
 }
 }
-#endif /* MATRIX_H */
+#endif /* INTERNAL_MATRIX_H */

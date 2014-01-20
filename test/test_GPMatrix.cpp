@@ -1,33 +1,10 @@
-#include "internal/Matrix.h"
-#include "internal/MatrixSum.h"
-#include "internal/MatrixDifference.h"
-#include "internal/MatrixMatrixProduct.h"
-#include "internal/Scalar.h"
-#include "internal/ScalarScalarSum.h"
-#include "internal/ScalarBuiltinSum.h"
-#include "internal/ScalarScalarDifference.h"
-#include "internal/ScalarBuiltinDifference.h"
-#include "internal/BuiltinScalarDifference.h"
-#include "internal/ScalarScalarProduct.h"
-#include "internal/ScalarBuiltinProduct.h"
-#include "internal/ScalarScalarQuotient.h"
-#include "internal/BuiltinScalarQuotient.h"
-#include "internal/ScalarBuiltinQuotient.h"
-#include "internal/MatrixScalarQuotient.h"
-#include "internal/MatrixScalarProduct.h"
-#include "internal/MatrixBuiltinProduct.h"
-#include "internal/MatrixBuiltinQuotient.h"
-#include "internal/Transpose.h"
-#include "internal/LDLTPolicy.h"
-#include "internal/Decomposition.h"
-#include "internal/LogDeterminant.h"
-#include "internal/Solve.h"
+#include "Matrix.h"
 
 #include <Eigen/Dense>
 #include <type_traits>
 #include <math.h>
 
-using namespace GP::internal;
+using namespace GP;
 
 int main(int, char * []) {
   // traits classes
@@ -49,7 +26,7 @@ int main(int, char * []) {
   MatrixXd vsum(vy + vx);
   if (vsum.get() != Eigen::MatrixXd::Constant(szx, szy, 3)) return 2;
   if ((vx + vy).get() != Eigen::MatrixXd::Constant(szx, szy, 3)) return 3;
-  GP::internal::MatrixSum<MatrixXd, MatrixXd> s(vx, vy);  // type is defined
+  internal::MatrixSum<MatrixXd, MatrixXd> s(vx, vy);  // type is defined
   if (s.get() != vsum.get()) return 4;  // works as expected
   // product
   if ((vx.transpose() * vx).get() != x.transpose() * x) return 5;
@@ -57,7 +34,7 @@ int main(int, char * []) {
   if ((vx - vy).get() != Eigen::MatrixXd::Constant(szx, szy, -1)) return 6;
 
   // scalar basics
-  GP::internal::Scalar scal(3.2);
+  Scalar scal(3.2);
   if (scal.get() != 3.2) return 7;
   // sum
   if (std::abs((scal + scal).get() - 6.4) > 1e-7) return 8;

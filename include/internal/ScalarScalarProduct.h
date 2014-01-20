@@ -1,5 +1,5 @@
-#ifndef SCALAR_SCALAR_PRODUCT_H
-#define SCALAR_SCALAR_PRODUCT_H
+#ifndef INTERNAL_SCALAR_SCALAR_PRODUCT_H
+#define INTERNAL_SCALAR_SCALAR_PRODUCT_H
 
 #include "macros.h"
 #include "internal/ScalarBase.h"
@@ -46,4 +46,4 @@ class ScalarScalarProduct : public ScalarBase<ScalarScalarProduct<Lhs, Rhs> > {
 };
 }
 }
-#endif /* SCALAR_SCALAR_PRODUCT_H */
+#endif /* INTERNAL_SCALAR_SCALAR_PRODUCT_H */

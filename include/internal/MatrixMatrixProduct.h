@@ -1,5 +1,5 @@
-#ifndef MATRIX_MATRIX_PRODUCT_H
-#define MATRIX_MATRIX_PRODUCT_H
+#ifndef INTERNAL_MATRIX_MATRIX_PRODUCT_H
+#define INTERNAL_MATRIX_MATRIX_PRODUCT_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -44,4 +44,4 @@ class MatrixMatrixProduct : public MatrixBase<MatrixMatrixProduct<Lhs, Rhs> > {
 };
 }
 }
-#endif /* MATRIX_MATRIX_PRODUCT_H */
+#endif /* INTERNAL_MATRIX_MATRIX_PRODUCT_H */

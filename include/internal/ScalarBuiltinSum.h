@@ -1,5 +1,5 @@
-#ifndef SCALAR_BUILTIN_SUM_H
-#define SCALAR_BUILTIN_SUM_H
+#ifndef INTERNAL_SCALAR_BUILTIN_SUM_H
+#define INTERNAL_SCALAR_BUILTIN_SUM_H
 
 #include "macros.h"
 #include "internal/ScalarBase.h"
@@ -44,4 +44,4 @@ class ScalarBuiltinSum : public ScalarBase
 };
 }
 }
-#endif /* SCALAR_BUILTIN_SUM_H */
+#endif /* INTERNAL_SCALAR_BUILTIN_SUM_H */

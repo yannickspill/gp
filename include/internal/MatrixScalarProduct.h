@@ -1,5 +1,5 @@
-#ifndef MATRIX_SCALAR_PRODUCT_H
-#define MATRIX_SCALAR_PRODUCT_H
+#ifndef INTERNAL_MATRIX_SCALAR_PRODUCT_H
+#define INTERNAL_MATRIX_SCALAR_PRODUCT_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -47,4 +47,4 @@ class MatrixScalarProduct : public MatrixBase<MatrixScalarProduct<Mat, Scal> > {
 };
 }
 }
-#endif /* MATRIX_SCALAR_PRODUCT_H */
+#endif /* INTERNAL_MATRIX_SCALAR_PRODUCT_H */

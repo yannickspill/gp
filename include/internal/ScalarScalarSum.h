@@ -1,5 +1,5 @@
-#ifndef SCALAR_SCALAR_SUM_H
-#define SCALAR_SCALAR_SUM_H
+#ifndef INTERNAL_SCALAR_SCALAR_SUM_H
+#define INTERNAL_SCALAR_SCALAR_SUM_H
 
 #include "macros.h"
 #include "internal/ScalarBase.h"
@@ -44,4 +44,4 @@ class ScalarScalarSum : public ScalarBase<ScalarScalarSum<Lhs, Rhs> > {
 };
 }
 }
-#endif /* SCALAR_SCALAR_SUM_H */
+#endif /* INTERNAL_SCALAR_SCALAR_SUM_H */

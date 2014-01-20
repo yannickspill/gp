@@ -1,5 +1,5 @@
-#ifndef GP_BASE_H
-#define GP_BASE_H
+#ifndef INTERNAL_GP_BASE_H
+#define INTERNAL_GP_BASE_H
 
 #include "macros.h"
 #include "internal/ForwardDeclarations.h"
@@ -45,4 +45,4 @@ const MatrixScalarQuotient<Mat, Scal> operator/(const MatrixBase<Mat>& lhs,
 }
 }
 }
-#endif /* GP_BASE_H */
+#endif /* INTERNAL_GP_BASE_H */

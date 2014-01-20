@@ -1,5 +1,5 @@
-#ifndef SCALAR_BASE_H
-#define SCALAR_BASE_H
+#ifndef INTERNAL_SCALAR_BASE_H
+#define INTERNAL_SCALAR_BASE_H
 
 #include "macros.h"
 #include "internal/ForwardDeclarations.h"
@@ -103,4 +103,4 @@ const BuiltinScalarQuotient<ScalarExpression> operator/(
 }
 }
 }
-#endif /* SCALAR_BASE_H */
+#endif /* INTERNAL_SCALAR_BASE_H */

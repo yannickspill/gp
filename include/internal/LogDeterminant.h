@@ -1,5 +1,5 @@
-#ifndef LOG_DETERMINANT_H
-#define LOG_DETERMINANT_H
+#ifndef INTERNAL_LOG_DETERMINANT_H
+#define INTERNAL_LOG_DETERMINANT_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -45,4 +45,4 @@ class LogDeterminant
 };
 }
 }
-#endif /* DETERMINANT_H */
+#endif /* INTERNAL_DETERMINANT_H */

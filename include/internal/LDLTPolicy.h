@@ -1,5 +1,5 @@
-#ifndef LDLT_POLICY_H
-#define LDLT_POLICY_H
+#ifndef INTERNAL_LDLT_POLICY_H
+#define INTERNAL_LDLT_POLICY_H
 
 #include "macros.h"
 #include "ForwardDeclarations.h"
@@ -41,4 +41,4 @@ template <class Derived> class LDLTPolicy {
 };
 }
 }
-#endif /* LDLT_POLICY_H */
+#endif /* INTERNAL_LDLT_POLICY_H */

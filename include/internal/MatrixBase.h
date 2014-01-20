@@ -1,5 +1,5 @@
-#ifndef MATRIX_BASE_H
-#define MATRIX_BASE_H
+#ifndef INTERNAL_MATRIX_BASE_H
+#define INTERNAL_MATRIX_BASE_H
 
 #include "macros.h"
 #include "internal/ForwardDeclarations.h"
@@ -92,4 +92,4 @@ const MatrixBuiltinQuotient<Lhs> operator/(const MatrixBase<Lhs>& lhs,
 }
 }
 }
-#endif /* MATRIX_BASE_H */
+#endif /* INTERNAL_MATRIX_BASE_H */

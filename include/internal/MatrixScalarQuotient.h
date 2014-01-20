@@ -1,5 +1,5 @@
-#ifndef MATRIX_SCALAR_QUOTIENT_H
-#define MATRIX_SCALAR_QUOTIENT_H
+#ifndef INTERNAL_MATRIX_SCALAR_QUOTIENT_H
+#define INTERNAL_MATRIX_SCALAR_QUOTIENT_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -49,4 +49,4 @@ class MatrixScalarQuotient : public MatrixBase
 };
 }
 }
-#endif /* MATRIX_SCALAR_QUOTIENT_H */
+#endif /* INTERNAL_MATRIX_SCALAR_QUOTIENT_H */

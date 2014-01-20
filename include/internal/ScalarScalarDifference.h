@@ -1,5 +1,5 @@
-#ifndef SCALAR_SCALAR_DIFFERENCE_H
-#define SCALAR_SCALAR_DIFFERENCE_H
+#ifndef INTERNAL_SCALAR_SCALAR_DIFFERENCE_H
+#define INTERNAL_SCALAR_SCALAR_DIFFERENCE_H
 
 #include "macros.h"
 #include "internal/ScalarBase.h"
@@ -49,4 +49,4 @@ class ScalarScalarDifference : public ScalarBase
 };
 }
 }
-#endif /* SCALAR_SCALAR_DIFFERENCE_H */
+#endif /* INTERNAL_SCALAR_SCALAR_DIFFERENCE_H */

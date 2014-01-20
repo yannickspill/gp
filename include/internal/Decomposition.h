@@ -1,5 +1,5 @@
-#ifndef DECOMPOSITION_H
-#define DECOMPOSITION_H
+#ifndef INTERNAL_DECOMPOSITION_H
+#define INTERNAL_DECOMPOSITION_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -42,4 +42,4 @@ class Decomposition : public MatrixBase<Decomposition<Derived> >,
 };
 }
 }
-#endif /* DECOMPOSITION_H */
+#endif /* INTERNAL_DECOMPOSITION_H */

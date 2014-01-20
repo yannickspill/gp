@@ -1,5 +1,5 @@
-#ifndef MATRIX_BUILTIN_PRODUCT_H
-#define MATRIX_BUILTIN_PRODUCT_H
+#ifndef INTERNAL_MATRIX_BUILTIN_PRODUCT_H
+#define INTERNAL_MATRIX_BUILTIN_PRODUCT_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -47,4 +47,4 @@ class MatrixBuiltinProduct : public MatrixBase
 };
 }
 }
-#endif /* MATRIX_BUILTIN_PRODUCT_H */
+#endif /* INTERNAL_MATRIX_BUILTIN_PRODUCT_H */

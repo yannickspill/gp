@@ -1,5 +1,5 @@
-#ifndef SCALAR_BUILTIN_DIFFERENCE_H
-#define SCALAR_BUILTIN_DIFFERENCE_H
+#ifndef INTERNAL_SCALAR_BUILTIN_DIFFERENCE_H
+#define INTERNAL_SCALAR_BUILTIN_DIFFERENCE_H
 
 #include "macros.h"
 #include "internal/ScalarBase.h"
@@ -44,4 +44,4 @@ class ScalarBuiltinDifference : public ScalarBase
 };
 }
 }
-#endif /* SCALAR_BUILTIN_DIFFERENCE_H */
+#endif /* INTERNAL_SCALAR_BUILTIN_DIFFERENCE_H */

@@ -1,5 +1,5 @@
-#ifndef MATRIX_BUILTIN_QUOTIENT_H
-#define MATRIX_BUILTIN_QUOTIENT_H
+#ifndef INTERNAL_MATRIX_BUILTIN_QUOTIENT_H
+#define INTERNAL_MATRIX_BUILTIN_QUOTIENT_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -47,4 +47,4 @@ class MatrixBuiltinQuotient : public MatrixBase
 };
 }
 }
-#endif /* MATRIX_BUILTIN_QUOTIENT_H */
+#endif /* INTERNAL_MATRIX_BUILTIN_QUOTIENT_H */

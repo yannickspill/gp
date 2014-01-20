@@ -1,5 +1,5 @@
-#ifndef MATRIX_SUM_H
-#define MATRIX_SUM_H
+#ifndef INTERNAL_MATRIX_SUM_H
+#define INTERNAL_MATRIX_SUM_H
 
 #include "macros.h"
 #include "internal/MatrixBase.h"
@@ -45,4 +45,4 @@ class MatrixSum : public MatrixBase<MatrixSum<Lhs, Rhs> > {
 };
 }
 }
-#endif /* MATRIX_SUM_H */
+#endif /* INTERNAL_MATRIX_SUM_H */
