@@ -2,6 +2,7 @@
 #define SCALAR_BASE_H
 
 #include "macros.h"
+#include "functors.h"
 #include "internal/ForwardDeclarations.h"
 #include "internal/GPBase.h"
 
@@ -26,6 +27,26 @@ template <class Derived> class ScalarBase : public GPBase<Derived> {
   }
 };
 
+// sum
+template <class Lhs, class Rhs>
+const BinaryOp<Lhs, Rhs, alt_sum_binary_op> operator+(const ScalarBase
+                                                      <Lhs>& lhs,
+                                                      const ScalarBase
+                                                      <Rhs>& rhs) {
+  return BinaryOp
+      <Lhs, Rhs, alt_sum_binary_op>(lhs.asDerived(), rhs.asDerived());
+}
+
+// difference
+template <class Lhs, class Rhs>
+const BinaryOp<Lhs, Rhs, alt_difference_binary_op> operator-(const ScalarBase
+                                                      <Lhs>& lhs,
+                                                      const ScalarBase
+                                                      <Rhs>& rhs) {
+  return BinaryOp
+      <Lhs, Rhs, alt_difference_binary_op>(lhs.asDerived(), rhs.asDerived());
+}
+
 // products
 //    Scalar Scalar
 template <class Lhs, class Rhs>
@@ -45,6 +66,16 @@ const ScalarBuiltinProduct<ScalarExpression> operator*(const ScalarBase
                                                        <ScalarExpression>& lhs,
                                                        double rhs) {
   return ScalarBuiltinProduct<ScalarExpression>(rhs, lhs.asDerived());
+}
+
+// quotient
+template <class Lhs, class Rhs>
+const BinaryOp<Lhs, Rhs, quotient_binary_op> operator/(const ScalarBase
+                                                           <Lhs>& lhs,
+                                                           const ScalarBase
+                                                           <Rhs>& rhs) {
+  return BinaryOp
+      <Lhs, Rhs, quotient_binary_op>(lhs.asDerived(), rhs.asDerived());
 }
 }
 }

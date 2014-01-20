@@ -18,6 +18,7 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   // typedefs
   typedef typename traits<Derived>::scalar_type scalar_type;
   typedef typename traits<Derived>::result_type result_type;
+  typedef Derived DerivedType;
 
  public:
   // allow implicit casting to Derived

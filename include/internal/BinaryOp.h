@@ -3,7 +3,7 @@
 
 #include "macros.h"
 #include "operator_traits.h"
-#include "internal/MatrixBase.h"
+#include "internal/GPBase.h"
 
 #include <Eigen/Core>
 #include <type_traits>
@@ -12,15 +12,32 @@
 namespace GP {
 namespace internal {
 
-
+namespace {
+//Parent<Lhs, Rhs, Derived> will be
+//  MatrixBase<Derived> if both Lhs and Rhs inherit from it
+//  ScalarBase<Derived> if both Lhs and Rhs do not inherit from MatrixBase
+//  GPBase<Derived> in the mixed case
+template <class Lhs, class Rhs, class Derived>
+using Parent = typename std::conditional<
+        std::is_convertible<Lhs, MatrixBase<Lhs> >::value,
+        typename std::conditional<
+            std::is_convertible<Rhs, MatrixBase<Rhs> >::value,
+            MatrixBase<Derived>,
+            GPBase<Derived>
+           >::type,
+        typename std::conditional<
+            std::is_convertible<Rhs, MatrixBase<Rhs> >::value,
+            GPBase<Derived>,
+            ScalarBase<Derived>
+           >::type
+       >::type;
+}
 
 template <typename Lhs, typename Rhs, class Op>
-class BinaryOp : public MatrixBase<BinaryOp<Lhs, Rhs, Op> > {
+class BinaryOp : public Parent<Lhs, Rhs, BinaryOp<Lhs, Rhs, Op> > {
  public:
-  typedef typename traits
-      <BinaryOp<Lhs, Rhs, Op> >::scalar_type scalar_type;
-  typedef typename traits
-      <BinaryOp<Lhs, Rhs, Op> >::result_type result_type;
+  typedef typename traits<BinaryOp<Lhs, Rhs, Op> >::scalar_type scalar_type;
+  typedef typename traits<BinaryOp<Lhs, Rhs, Op> >::result_type result_type;
 
  private:
   const Lhs& lhs_;
