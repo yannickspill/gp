@@ -1,8 +1,6 @@
 #include "internal/Matrix.h"
 #include "internal/functors.h"
 #include "internal/BinaryOp.h"
-#include "internal/MatrixDifference.h"
-#include "internal/MatrixMatrixProduct.h"
 #include "internal/Scalar.h"
 #include "internal/ScalarBuiltinProduct.h"
 #include "internal/MatrixScalarProduct.h"

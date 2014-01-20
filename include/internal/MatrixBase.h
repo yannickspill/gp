@@ -60,17 +60,23 @@ const BinaryOp<Lhs, Rhs, sum_binary_op> operator+(const MatrixBase<Lhs>& lhs,
 
 // difference
 template <class Lhs, class Rhs>
-const MatrixDifference<Lhs, Rhs> operator-(const MatrixBase<Lhs>& lhs,
-                                           const MatrixBase<Rhs>& rhs) {
-  return MatrixDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+const BinaryOp<Lhs, Rhs, difference_binary_op> operator-(const MatrixBase
+                                                         <Lhs>& lhs,
+                                                         const MatrixBase
+                                                         <Rhs>& rhs) {
+  return BinaryOp
+      <Lhs, Rhs, difference_binary_op>(lhs.asDerived(), rhs.asDerived());
 }
 
 // products
 //    Matrix Matrix
 template <class Lhs, class Rhs>
-const MatrixMatrixProduct<Lhs, Rhs> operator*(const MatrixBase<Lhs>& lhs,
-                                              const MatrixBase<Rhs>& rhs) {
-  return MatrixMatrixProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+const BinaryOp<Lhs, Rhs, product_binary_op> operator*(const MatrixBase
+                                                      <Lhs>& lhs,
+                                                      const MatrixBase
+                                                      <Rhs>& rhs) {
+  return BinaryOp
+      <Lhs, Rhs, product_binary_op>(lhs.asDerived(), rhs.asDerived());
 }
 //   double Matrix
 template <class MatrixExpression>
