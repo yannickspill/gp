@@ -1,5 +1,5 @@
-#ifndef SCALAR_SUM_H
-#define SCALAR_SUM_H
+#ifndef SCALAR_DIFFERENCE_H
+#define SCALAR_DIFFERENCE_H
 
 #include "macros.h"
 #include "internal/ScalarBase.h"
@@ -46,4 +46,4 @@ class ScalarDifference : public ScalarBase<ScalarDifference<Lhs, Rhs> > {
 };
 }
 }
-#endif /* SCALAR_SUM_H */
+#endif /* SCALAR_DIFFERENCE_H */

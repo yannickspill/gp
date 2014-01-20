@@ -26,6 +26,18 @@ template <class Derived> class ScalarBase : public GPBase<Derived> {
   }
 };
 
+// sum
+template <class Lhs, class Rhs>
+const ScalarSum<Lhs, Rhs> operator+(const ScalarBase<Lhs>& lhs,
+                                    const ScalarBase<Rhs>& rhs) {
+  return ScalarSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+}
+// difference
+template <class Lhs, class Rhs>
+const ScalarDifference<Lhs, Rhs> operator-(const ScalarBase<Lhs>& lhs,
+                                           const ScalarBase<Rhs>& rhs) {
+  return ScalarDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+}
 // products
 //    Scalar Scalar
 template <class Lhs, class Rhs>
@@ -45,6 +57,12 @@ const ScalarBuiltinProduct<ScalarExpression> operator*(const ScalarBase
                                                        <ScalarExpression>& lhs,
                                                        double rhs) {
   return ScalarBuiltinProduct<ScalarExpression>(rhs, lhs.asDerived());
+}
+// quotient
+template <class Lhs, class Rhs>
+const ScalarScalarQuotient<Lhs, Rhs> operator/(const ScalarBase<Lhs>& lhs,
+                                               const ScalarBase<Rhs>& rhs) {
+  return ScalarScalarQuotient<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 }
 }

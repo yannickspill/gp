@@ -3,7 +3,10 @@
 #include "internal/MatrixDifference.h"
 #include "internal/MatrixMatrixProduct.h"
 #include "internal/Scalar.h"
+#include "internal/ScalarSum.h"
+#include "internal/ScalarDifference.h"
 #include "internal/ScalarScalarProduct.h"
+#include "internal/ScalarScalarQuotient.h"
 #include "internal/ScalarBuiltinProduct.h"
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixBuiltinProduct.h"
@@ -49,8 +52,14 @@ int main(int, char * []) {
   // scalar basics
   GP::internal::Scalar scal(3.2);
   if (scal.get() != 3.2) return 7;
+  // sum
+  if (std::abs((scal + scal).get() - 6.4) > 1e-7) return 8;
+  // difference
+  if (std::abs((scal - scal).get() - 0.) > 1e-7) return 24;
   // product
-  if (std::abs((scal * scal).get() - 10.24) > 1e-7) return 8;
+  if (std::abs((scal * scal).get() - 10.24) > 1e-7) return 25;
+  // quotient
+  if (std::abs((scal / scal).get() - 1.) > 1e-7) return 26;
 
   // builtin scalar product
   if ((scal * 3.).get() != (scal.get() * 3.)) return 11;
