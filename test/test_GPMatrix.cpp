@@ -1,3 +1,4 @@
+#include "Scalar.h"
 #include "Matrix.h"
 
 #include <Eigen/Dense>

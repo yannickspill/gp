@@ -12,21 +12,6 @@
 #include "internal/LogDeterminant.h"
 #include "internal/Solve.h"
 
-// scalar ops
-#include "internal/Scalar.h"
-#include "internal/ScalarScalarSum.h"
-#include "internal/ScalarScalarDifference.h"
-#include "internal/ScalarScalarProduct.h"
-#include "internal/ScalarScalarQuotient.h"
-
-// scalar builtin ops
-#include "internal/ScalarBuiltinSum.h"
-#include "internal/ScalarBuiltinDifference.h"
-#include "internal/BuiltinScalarDifference.h"
-#include "internal/ScalarBuiltinProduct.h"
-#include "internal/BuiltinScalarQuotient.h"
-#include "internal/ScalarBuiltinQuotient.h"
-
 // matrix builtin ops
 #include "internal/MatrixBuiltinProduct.h"
 #include "internal/MatrixBuiltinQuotient.h"
@@ -35,17 +20,12 @@
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixScalarQuotient.h"
 
-//misc
-#include "make_function.h"
-
-
 //external libs
 #include <Eigen/Dense>
 
 namespace GP {
 // promote some internal things to GP namespace
 using internal::Matrix;
-using internal::Scalar;
 using internal::Transpose;
 using internal::Decomposition;
 using internal::LDLTPolicy;
