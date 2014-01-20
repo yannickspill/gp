@@ -58,11 +58,24 @@ const ScalarBuiltinProduct<ScalarExpression> operator*(const ScalarBase
                                                        double rhs) {
   return ScalarBuiltinProduct<ScalarExpression>(rhs, lhs.asDerived());
 }
-// quotient
+// quotients
+//    Scalar Scalar
 template <class Lhs, class Rhs>
 const ScalarScalarQuotient<Lhs, Rhs> operator/(const ScalarBase<Lhs>& lhs,
                                                const ScalarBase<Rhs>& rhs) {
   return ScalarScalarQuotient<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+}
+//    Scalar double
+template <class ScalarExpression>
+const ScalarBuiltinQuotient<ScalarExpression> operator/(
+    const ScalarBase<ScalarExpression>& lhs, double rhs) {
+  return ScalarBuiltinQuotient<ScalarExpression>(lhs.asDerived(), rhs);
+}
+//    double Scalar
+template <class ScalarExpression>
+const BuiltinScalarQuotient<ScalarExpression> operator/(
+    double lhs, const ScalarBase<ScalarExpression>& rhs) {
+  return BuiltinScalarQuotient<ScalarExpression>(lhs, rhs.asDerived());
 }
 }
 }

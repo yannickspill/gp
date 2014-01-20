@@ -20,6 +20,8 @@ template <class Lhs, class Rhs> class ScalarDifference;
 template <class Lhs, class Rhs> class ScalarScalarProduct;
 template <class Rhs> class ScalarBuiltinProduct;
 template <class Lhs, class Rhs> class ScalarScalarQuotient;
+template <class Lhs> class ScalarBuiltinQuotient;
+template <class Rhs> class BuiltinScalarQuotient;
 
 // declare basic matrix classes
 template <class Derived> class MatrixBase;
