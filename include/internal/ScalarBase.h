@@ -50,10 +50,14 @@ const BinaryOp<Lhs, Rhs, alt_difference_binary_op> operator-(const ScalarBase
 // products
 //    Scalar Scalar
 template <class Lhs, class Rhs>
-const ScalarScalarProduct<Lhs, Rhs> operator*(const ScalarBase<Lhs>& lhs,
-                                              const ScalarBase<Rhs>& rhs) {
-  return ScalarScalarProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+const BinaryOp<Lhs, Rhs, alt_product_binary_op> operator*(const ScalarBase
+                                                      <Lhs>& lhs,
+                                                      const ScalarBase
+                                                      <Rhs>& rhs) {
+  return BinaryOp
+      <Lhs, Rhs, alt_product_binary_op>(lhs.asDerived(), rhs.asDerived());
 }
+
 //    double Scalar
 template <class ScalarExpression>
 const ScalarBuiltinProduct<ScalarExpression> operator*(

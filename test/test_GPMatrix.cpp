@@ -4,7 +4,6 @@
 #include "internal/MatrixDifference.h"
 #include "internal/MatrixMatrixProduct.h"
 #include "internal/Scalar.h"
-#include "internal/ScalarScalarProduct.h"
 #include "internal/ScalarBuiltinProduct.h"
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixBuiltinProduct.h"
