@@ -1,7 +1,9 @@
 #include "internal/Matrix.h"
-#include "internal/functors.h"
-#include "internal/BinaryOp.h"
+#include "internal/MatrixSum.h"
+#include "internal/MatrixDifference.h"
+#include "internal/MatrixMatrixProduct.h"
 #include "internal/Scalar.h"
+#include "internal/ScalarScalarProduct.h"
 #include "internal/ScalarBuiltinProduct.h"
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixBuiltinProduct.h"
@@ -37,8 +39,7 @@ int main(int, char * []) {
   MatrixXd vsum(vy + vx);
   if (vsum.get() != Eigen::MatrixXd::Constant(szx, szy, 3)) return 2;
   if ((vx + vy).get() != Eigen::MatrixXd::Constant(szx, szy, 3)) return 3;
-  GP::internal::BinaryOp
-      <MatrixXd, MatrixXd, sum_binary_op> s(vx, vy);  // type is defined
+  GP::internal::MatrixSum<MatrixXd, MatrixXd> s(vx, vy);  // type is defined
   if (s.get() != vsum.get()) return 4;  // works as expected
   // product
   if ((vx.transpose() * vx).get() != x.transpose() * x) return 5;
@@ -48,14 +49,8 @@ int main(int, char * []) {
   // scalar basics
   GP::internal::Scalar scal(3.2);
   if (scal.get() != 3.2) return 7;
-  // sum
-  if (std::abs((scal + scal).get() - 6.4) > 1e-7) return 25;
-  // difference
-  if (std::abs((scal - scal).get() - 0.) > 1e-7) return 26;
   // product
-  if (std::abs((scal * scal).get() - 10.24) > 1e-7) return 27;
-  // quotient
-  if (std::abs((scal / scal).get() - 1.) > 1e-7) return 28;
+  if (std::abs((scal * scal).get() - 10.24) > 1e-7) return 8;
 
   // builtin scalar product
   if ((scal * 3.).get() != (scal.get() * 3.)) return 11;
