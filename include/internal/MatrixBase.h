@@ -83,6 +83,13 @@ const MatrixBuiltinProduct<MatrixExpression> operator*(const MatrixBase
                                                        double rhs) {
   return MatrixBuiltinProduct<MatrixExpression>(rhs, lhs.asDerived());
 }
+
+//    Matrix / builtin
+template <class Lhs>
+const MatrixBuiltinQuotient<Lhs> operator/(const MatrixBase<Lhs>& lhs,
+                                           double rhs) {
+  return MatrixBuiltinQuotient<Lhs>(lhs.asDerived(), rhs);
+}
 }
 }
 #endif /* MATRIX_BASE_H */

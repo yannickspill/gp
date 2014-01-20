@@ -7,9 +7,11 @@
 #include "internal/ScalarDifference.h"
 #include "internal/ScalarScalarProduct.h"
 #include "internal/ScalarScalarQuotient.h"
+#include "internal/MatrixScalarQuotient.h"
 #include "internal/ScalarBuiltinProduct.h"
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixBuiltinProduct.h"
+#include "internal/MatrixBuiltinQuotient.h"
 #include "internal/Transpose.h"
 #include "internal/LDLTPolicy.h"
 #include "internal/Decomposition.h"
@@ -70,10 +72,14 @@ int main(int, char * []) {
   // matrix scalar product
   if ((scal * vx).get() != (scal.get() * x)) return 9;
   if ((vx * scal).get() != (scal.get() * x)) return 10;
+  // matrix scalar quotient
+  if ((vx / scal).get() != (x / scal.get())) return 27;
 
   // matrix builtin product
   if ((5 * vx).get() != (5. * x)) return 15;
   if ((vx * 5.).get() != (5. * x)) return 16;
+  // matrix builtin quotient
+  if ((vx / 5.).get() != (x/5.)) return 28;
 
   // lots of products sums and divisions
   if ((vx.transpose() * (5 * vx + vy - scal * vx)).get()

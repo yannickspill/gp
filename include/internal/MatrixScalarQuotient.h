@@ -12,31 +12,33 @@ namespace GP {
 namespace internal {
 
 template <class Mat, class Scal>
-struct traits<MatrixScalarProduct<Mat, Scal> > {
+struct traits<MatrixScalarQuotient<Mat, Scal> > {
   static_assert(std::is_same
                 <typename Mat::scalar_type, typename Scal::scalar_type>::value,
                 "cannot mix different scalar types");
   typedef typename Mat::scalar_type scalar_type;
-  typedef typename Eigen::CwiseUnaryOp
-      <Eigen::internal::scalar_multiple_op<scalar_type>,
+  typedef const typename Eigen::CwiseUnaryOp
+      <Eigen::internal::scalar_quotient1_op<scalar_type>,
        const typename Mat::result_type> result_type;
 };
 
 template <typename Mat, typename Scal>
-class MatrixScalarProduct : public MatrixBase<MatrixScalarProduct<Mat, Scal> > {
+class MatrixScalarQuotient : public MatrixBase
+                             <MatrixScalarQuotient<Mat, Scal> > {
  private:
   Mat lhs_;
   Scal rhs_;
 
  public:
   typedef typename traits
-      <MatrixScalarProduct<Mat, Scal> >::scalar_type scalar_type;
+      <MatrixScalarQuotient<Mat, Scal> >::scalar_type scalar_type;
   typedef typename traits
-      <MatrixScalarProduct<Mat, Scal> >::result_type result_type;
+      <MatrixScalarQuotient<Mat, Scal> >::result_type result_type;
 
  public:
   // constructor
-  MatrixScalarProduct(const Mat& lhs, const Scal& rhs) : lhs_(lhs), rhs_(rhs) {}
+  MatrixScalarQuotient(const Mat& lhs, const Scal& rhs)
+      : lhs_(lhs), rhs_(rhs) {}
 
   // actual computation
   result_type get() const { return lhs_.get() / rhs_.get(); }
