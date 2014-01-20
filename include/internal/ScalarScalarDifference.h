@@ -1,5 +1,5 @@
-#ifndef SCALAR_DIFFERENCE_H
-#define SCALAR_DIFFERENCE_H
+#ifndef SCALAR_SCALAR_DIFFERENCE_H
+#define SCALAR_SCALAR_DIFFERENCE_H
 
 #include "macros.h"
 #include "internal/ScalarBase.h"
@@ -11,8 +11,9 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for ScalarDifference
-template <class Lhs, class Rhs> struct traits<ScalarDifference<Lhs, Rhs> > {
+// specialize traits for ScalarScalarDifference
+template <class Lhs, class Rhs>
+struct traits<ScalarScalarDifference<Lhs, Rhs> > {
   static_assert(std::is_same
                 <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
                 "cannot mix different scalar types");
@@ -22,20 +23,22 @@ template <class Lhs, class Rhs> struct traits<ScalarDifference<Lhs, Rhs> > {
 
 // expression template for products involving only Scalars
 template <typename Lhs, typename Rhs>
-class ScalarDifference : public ScalarBase<ScalarDifference<Lhs, Rhs> > {
+class ScalarScalarDifference : public ScalarBase
+                               <ScalarScalarDifference<Lhs, Rhs> > {
  private:
   const Lhs& lhs_;
   const Rhs& rhs_;
 
  public:
   typedef typename traits
-      <ScalarDifference<Lhs, Rhs> >::scalar_type scalar_type;
+      <ScalarScalarDifference<Lhs, Rhs> >::scalar_type scalar_type;
   typedef typename traits
-      <ScalarDifference<Lhs, Rhs> >::result_type result_type;
+      <ScalarScalarDifference<Lhs, Rhs> >::result_type result_type;
 
  public:
   // constructor
-  ScalarDifference(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
+  ScalarScalarDifference(const Lhs& lhs, const Rhs& rhs)
+      : lhs_(lhs), rhs_(rhs) {}
 
   // actual computation
   result_type get() const { return lhs_.get() - rhs_.get(); }
@@ -46,4 +49,4 @@ class ScalarDifference : public ScalarBase<ScalarDifference<Lhs, Rhs> > {
 };
 }
 }
-#endif /* SCALAR_DIFFERENCE_H */
+#endif /* SCALAR_SCALAR_DIFFERENCE_H */

@@ -3,8 +3,11 @@
 #include "internal/MatrixDifference.h"
 #include "internal/MatrixMatrixProduct.h"
 #include "internal/Scalar.h"
-#include "internal/ScalarSum.h"
-#include "internal/ScalarDifference.h"
+#include "internal/ScalarScalarSum.h"
+#include "internal/ScalarBuiltinSum.h"
+#include "internal/ScalarScalarDifference.h"
+#include "internal/ScalarBuiltinDifference.h"
+#include "internal/BuiltinScalarDifference.h"
 #include "internal/ScalarScalarProduct.h"
 #include "internal/ScalarBuiltinProduct.h"
 #include "internal/ScalarScalarQuotient.h"
@@ -70,9 +73,15 @@ int main(int, char * []) {
   if ((scal * 3).get() != (scal.get() * 3.)) return 12;
   if ((3. * scal).get() != (scal.get() * 3.)) return 13;
   if ((3 * scal).get() != (scal.get() * 3.)) return 14;
-  // builtin scalar quotients
+  // builtin scalar quotient
   if ((scal / 3.).get() != (scal.get() / 3.)) return 28;
   if ((3. / scal).get() != (3./scal.get())) return 29;
+  // builtin scalar difference
+  if ((scal - 3.).get() != (scal.get() - 3.)) return 30;
+  if ((3. - scal).get() != (3.-scal.get())) return 31;
+  // builtin scalar sum
+  if ((scal + 3.).get() != (scal.get() + 3.)) return 32;
+  if ((3. + scal).get() != (3.+scal.get())) return 33;
 
   // matrix scalar product
   if ((scal * vx).get() != (scal.get() * x)) return 9;

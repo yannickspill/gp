@@ -26,17 +26,41 @@ template <class Derived> class ScalarBase : public GPBase<Derived> {
   }
 };
 
-// sum
+// sums
+//    Scalar + Scalar
 template <class Lhs, class Rhs>
-const ScalarSum<Lhs, Rhs> operator+(const ScalarBase<Lhs>& lhs,
+const ScalarScalarSum<Lhs, Rhs> operator+(const ScalarBase<Lhs>& lhs,
                                     const ScalarBase<Rhs>& rhs) {
-  return ScalarSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+  return ScalarScalarSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
-// difference
+//    Scalar + Builtin
+template <class Lhs>
+const ScalarBuiltinSum<Lhs> operator+(const ScalarBase<Lhs>& lhs, double rhs) {
+  return ScalarBuiltinSum<Lhs>(lhs.asDerived(), rhs);
+}
+//    Builtin + Scalar
+template <class Rhs>
+const ScalarBuiltinSum<Rhs> operator+(double lhs, const ScalarBase<Rhs>& rhs) {
+  return ScalarBuiltinSum<Rhs>(rhs.asDerived(), lhs);
+}
+// differences
+//    Scalar - Scalar
 template <class Lhs, class Rhs>
-const ScalarDifference<Lhs, Rhs> operator-(const ScalarBase<Lhs>& lhs,
+const ScalarScalarDifference<Lhs, Rhs> operator-(const ScalarBase<Lhs>& lhs,
                                            const ScalarBase<Rhs>& rhs) {
-  return ScalarDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+  return ScalarScalarDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+}
+//    Scalar - Builtin
+template <class Lhs>
+const ScalarBuiltinDifference<Lhs> operator-(const ScalarBase<Lhs>& lhs,
+                                             double rhs) {
+  return ScalarBuiltinDifference<Lhs>(lhs.asDerived(), rhs);
+}
+//    Builtin - Scalar
+template <class Rhs>
+const BuiltinScalarDifference<Rhs> operator-(double lhs,
+                                           const ScalarBase<Rhs>& rhs) {
+  return BuiltinScalarDifference<Rhs>(lhs, rhs.asDerived());
 }
 // products
 //    Scalar Scalar
