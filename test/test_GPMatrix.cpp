@@ -115,5 +115,10 @@ int main(int, char * []) {
   if ((ldlt.solve(mB).get() - sd.ldlt().solve(B)).array().abs().matrix().norm()
       > 1e-5)
     return 24;
+
+  //rows and columns
+  MatrixXd dummy(Eigen::MatrixXd::Random(szx,szy));
+  if (dummy.rows() != szx) return 26;
+  if (dummy.cols() != szy) return 27;
   return 0;
 }

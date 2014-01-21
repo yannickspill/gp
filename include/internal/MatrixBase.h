@@ -24,6 +24,14 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return static_cast<const Derived&>(*this);
   }
 
+  // rows and columns
+  unsigned rows() const {
+    return asDerived().get().rows();
+  }
+  unsigned cols() const {
+    return asDerived().get().cols();
+  }
+
   // transposition
   Transpose<Derived> transpose() const {
     return Transpose<Derived>(asDerived());
