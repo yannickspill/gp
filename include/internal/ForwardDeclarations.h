@@ -38,6 +38,7 @@ template <class Lhs, class Rhs> class MatrixMatrixProduct;
 template <class Lhs> class MatrixBuiltinProduct;
 template <class Lhs, class Rhs> class MatrixScalarQuotient;
 template <class Lhs> class MatrixBuiltinQuotient;
+template <class Derived> class Trace;
 template <class Derived> class Transpose;
 template <class Derived> struct LDLTPolicy;
 template <class Derived, template<typename> class Policy> class Decomposition;

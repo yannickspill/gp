@@ -32,6 +32,11 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return asDerived().get().cols();
   }
 
+  // trace
+  Trace<Derived> trace() const {
+    return Trace<Derived>(asDerived());
+  }
+
   // transposition
   Transpose<Derived> transpose() const {
     return Transpose<Derived>(asDerived());

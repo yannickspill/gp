@@ -120,5 +120,8 @@ int main(int, char * []) {
   MatrixXd dummy(Eigen::MatrixXd::Random(szx,szy));
   if (dummy.rows() != szx) return 26;
   if (dummy.cols() != szy) return 27;
+
+  //trace
+  if (dummy.trace().get() != dummy.get().trace()) return 28;
   return 0;
 }
