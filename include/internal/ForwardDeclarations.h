@@ -43,6 +43,9 @@ template <class Derived> struct LDLTPolicy;
 template <class Derived, template<typename> class Policy> class Decomposition;
 template <class Derived> class LogDeterminant;
 template <class Derived, class OtherDerived> class Solve;
+
+//cache
+template <class Object> class Cache;
 }
 }
 #endif /*FINTERNAL_ORWARD_DECLARATIONS_H*/

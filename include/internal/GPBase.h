@@ -23,6 +23,10 @@ template <class Derived> class GPBase {
   const Derived& asDerived() const {
     return static_cast<const Derived&>(*this);
   }
+
+  //caching
+  Cache<Derived> cache() const {
+      return Cache<Derived>(asDerived()); }
 };
 
 // Scalar * Matrix

@@ -18,7 +18,7 @@ template <class Derived, template <typename> class Policy>
   typedef typename traits<Policy<Derived> >::result_type result_type;
 };
 
-//cholesky Decomposition decomposition. Uses lower part by default, see Eigen doc.
+//General class for decomposition. Uses LDLT by default.
 template <typename Derived, template <typename> class Policy = LDLTPolicy>
 class Decomposition : public MatrixBase<Decomposition<Derived> >,
                       public Policy<Derived> {
