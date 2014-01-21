@@ -19,11 +19,11 @@ namespace {
 template <class Object>
 using Parent = typename std::conditional
     <std::is_convertible<Object, MatrixBase<Object> >::value,
-     MatrixBase<Object>,
+     MatrixBase<Cache<Object> >,
      typename std::conditional<
          std::is_convertible<Object, ScalarBase<Object> >::value,
-         ScalarBase<Object>,
-         GPBase<Object>
+         ScalarBase<Cache<Object> >,
+         GPBase<Cache<Object> >
         >::type
     >::type;
 //helper to strip const reference
@@ -73,7 +73,7 @@ typedef typename has_eval<typename Object::result_type>::value_type eval_called;
    produces a matrix, but you want to store the computed matrix. On the other
    hand LDLT decomposition objects etc. should be stored as-is.
 */
-template <class Object> class Cache : Parent<Object> {
+template <class Object> class Cache : public Parent<Object> {
  public:
   typedef typename traits<Cache>::scalar_type scalar_type;
   typedef typename traits<Cache>::result_type result_type;
@@ -115,8 +115,8 @@ template <class Object> class Cache : Parent<Object> {
   Cache(const Object& obj) : obj_(obj), data_(nullptr) {
     LOG("Cache for object " << typeid(Object).name() << std::endl
                             << "   inheriting from "
-                            << typeid(Parent<Object>).name() << std::endl
-                            << "   object result_type "
+                            << typeid(Parent<Object>).name()
+                            << std::endl << "   object result_type "
                             << typeid(typename Object::result_type).name()
                             << std::endl << "   cache result_type "
                             << typeid(result_type).name() << std::endl);

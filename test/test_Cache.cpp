@@ -117,6 +117,22 @@ int main(int, char * []) {
   if (cache_fails(s+2*s, s, 1.0, 2.0)) return 18;
   if (cache_fails(s*mat, s, 1.0, 2.0)) return 19;
 
+  // Cache<Object> must behave like Object for operators
+  //cached matrix
+  mat.set(Eigen::MatrixXd::Identity(5,5));
+  auto cmat = mat.cache();
+  (cmat*vec).get();
+  if ((mat*vec).get() != (cmat*vec).get()) return 20;
+  //cached matrix product
+  auto prod = mat*mat;
+  auto cprod= prod.cache();
+  std::cout << "test 4" << std::endl;
+  Eigen::VectorXd lvec((prod*vec).get());
+  std::cout << lvec.transpose() << std::endl;
+  Eigen::VectorXd rvec((cprod*vec).get());
+  std::cout << rvec.transpose() << std::endl;
+  if (lvec != rvec) return 21;
+  //cached ldlt
 
   return 0;
 }
