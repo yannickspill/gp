@@ -1,7 +1,7 @@
 #include "MVN.h"
 #include "FNormal.h"
 #include "macros.h"
-#include "ConstEigenObject.h"
+#include "Matrix.h"
 #include <math.h>
 #include <boost/random.hpp>
 #include <boost/generator_iterator.hpp>
@@ -13,11 +13,8 @@ namespace {
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
-using Eigen::VectorXi;
 
-typedef ConstEigenObject<MatrixXd> ConstMat;
-typedef ConstEigenObject<VectorXd> ConstVec;
-typedef MVN<ConstVec, ConstVec, ConstMat> MultivariateNormal;
+typedef GP::MVN<GP::VectorXd, GP::VectorXd, GP::MatrixXd> MultivariateNormal;
 
 typedef boost::mt19937 RNGType;
 RNGType generator;
@@ -75,19 +72,19 @@ bool naeq(double a, double b, double delta = 1e-7) {
 // when N=M=1
 bool test_degenerate() {
     // observation matrix
-    MatrixXd FA(1, 1);
+    Eigen::MatrixXd FA(1, 1);
     FA(0, 0) = rand() * 10;
     // Jacobian
     double JA = 1.0;
     double lJA = std::log(JA);
     // mean vector
-    VectorXd FM(1);
+    Eigen::VectorXd FM(1);
     FM(0) = rand() * 10;
     // Precision matrix
-    MatrixXd Sigma(1, 1);
+    Eigen::MatrixXd Sigma(1, 1);
     Sigma(0, 0) = 1.0 + rand();
 
-    MultivariateNormal mv((ConstVec(FA)), (ConstVec(FM)), (ConstMat(Sigma)));
+    MultivariateNormal mv((GP::VectorXd(FA)), (GP::VectorXd(FM)), (GP::MatrixXd(Sigma)));
     FNormal fn(FA(0, 0), JA, FM(0), sqrt(Sigma(0, 0)));
 
     {
@@ -99,7 +96,7 @@ bool test_degenerate() {
 
     {
         // evaluate_derivative_FM
-        double observed = mv.get_derivative_MU()(0);
+        double observed = mv.get_derivative_mu()(0);
         double expected = fn.evaluate_derivative_FM();
         if (naeq(observed, expected)) FAIL("evaluate_derivative_FM");
     }
@@ -118,23 +115,23 @@ bool test_degenerate() {
 // when N=1 and M=2 in the absence of correlations
 bool test_degenerate_N1M2() {
     // observation matrix
-    VectorXd FA(2);
+    Eigen::VectorXd FA(2);
     FA(0) = rand() * 10;
     FA(1) = rand() * 10;
     // Jacobian
     double JA = 1.0;
     double lJA = std::log(JA);
     // mean vector
-    VectorXd FM(2);
+    Eigen::VectorXd FM(2);
     FM(0) = rand() * 10;
     FM(1) = rand() * 10;
     // Covariance matrix
-    MatrixXd Sigma(2, 2);
+    Eigen::MatrixXd Sigma(2, 2);
     Sigma << 1.0 + rand(), 0.0, 0.0, 1.0 + rand();
 
-    ConstVec cvFA(FA);
-    ConstVec cvFM(FM);
-    ConstMat cmS(Sigma);
+    GP::VectorXd cvFA(FA);
+    GP::VectorXd cvFM(FM);
+    GP::MatrixXd cmS(Sigma);
     MultivariateNormal mv(cvFA, cvFM, cmS);
     FNormal fn(FA(0), JA, FM(0), sqrt(Sigma(0, 0)));
     FNormal fn2(FA(1), JA, FM(1), sqrt(Sigma(1, 1)));
@@ -148,7 +145,7 @@ bool test_degenerate_N1M2() {
 
     {
         // evaluate_derivative_FM
-        VectorXd observed = mv.get_derivative_MU();
+        Eigen::VectorXd observed = mv.get_derivative_mu();
         double expected = fn.evaluate_derivative_FM();
         if (naeq(observed(0), expected)) FAIL("evaluate_derivative_FM 1");
         expected = fn2.evaluate_derivative_FM();
@@ -172,7 +169,7 @@ bool test_degenerate_N1M2() {
 // test when M=2 and N=1
 bool test_2D() {
     // observation matrix
-    VectorXd FA(2);
+    Eigen::VectorXd FA(2);
     FA(0) = 0.5;
     FA(1) = 1.0;
     // FA(1,0)=0.7;
@@ -181,11 +178,11 @@ bool test_2D() {
     double JA = 1.0;
     double lJA = std::log(JA);
     // mean vector
-    VectorXd FM(2);
+    Eigen::VectorXd FM(2);
     FM(0) = 0.0;
     FM(1) = 2.0;
     // Covariance matrix
-    MatrixXd Sigma(2, 2);
+    Eigen::MatrixXd Sigma(2, 2);
     double sigma1 = 2.0;
     double sigma2 = 1.0;
     double rho = 0.5;
@@ -194,7 +191,7 @@ bool test_2D() {
     Sigma(0, 1) = rho * sigma1 * sigma2;
     Sigma(1, 0) = rho * sigma1 * sigma2;
 
-    MultivariateNormal mv((ConstVec(FA)), (ConstVec(FM)), (ConstMat(Sigma)));
+    MultivariateNormal mv((GP::VectorXd(FA)), (GP::VectorXd(FM)), (GP::MatrixXd(Sigma)));
 
     {
         // evaluate
@@ -210,7 +207,7 @@ bool test_2D() {
 
     {
         // test_evaluate_derivative_FM
-        VectorXd observed = mv.get_derivative_MU();
+        Eigen::VectorXd observed = mv.get_derivative_mu();
         double expected =
             ((FM(1) - FA(1)) * rho * sigma1 + (FA(0) - FM(0)) * sigma2) /
             ((-1 + rho * rho) * sigma1 * sigma1 * sigma2);
@@ -226,7 +223,7 @@ bool test_2D() {
         double det = Sigma(0, 0) * Sigma(1, 1) - Sigma(0, 1) * Sigma(1, 0);
         double eps1 = FA(0) - FM(0);
         double eps2 = FA(1) - FM(1);
-        MatrixXd observed = mv.get_derivative_Sigma();
+        Eigen::MatrixXd observed = mv.get_derivative_Sigma();
         double expected = 0.5 / SQUARE(det) *
                           (SQUARE(Sigma(1, 1)) * (Sigma(0, 0) - SQUARE(eps1)) -
                            SQUARE(Sigma(0, 1)) * (Sigma(1, 1) + SQUARE(eps2)) +
