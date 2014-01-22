@@ -2,7 +2,7 @@
 #define INTERNAL_LOG_DETERMINANT_H
 
 #include "macros.h"
-#include "internal/MatrixBase.h"
+#include "internal/ScalarBase.h"
 
 #include <Eigen/Core>
 #include <type_traits>
@@ -21,7 +21,7 @@ template <class Derived> struct traits<LogDeterminant<Derived> > {
 template <class DerivedMat>
 class LogDeterminant
     <Decomposition
-     <DerivedMat, LDLTPolicy> > : public MatrixBase
+     <DerivedMat, LDLTPolicy> > : public ScalarBase
                                   <LogDeterminant
                                    <Decomposition<DerivedMat, LDLTPolicy> > > {
  public:

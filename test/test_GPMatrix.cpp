@@ -125,9 +125,9 @@ int main(int, char * []) {
   if (dummy.trace().get() != dummy.get().trace()) return 28;
 
   //ops on determinants and traces should be possible
-  //double tmp4((msd.decomposition().logdet()
-  //            *msd.decomposition().logdet()).get());
-  //double tmp6((msd.trace() + (msd*msd).trace()).get());
+  double tmp4((msd.decomposition().logdet()
+              *msd.decomposition().logdet()).get());
+  double tmp6((msd.trace() + (msd*msd).trace()).get());
 
   //multiple products should work too
   if ( (msd*3*msd).get() != (sd*3*sd) ) return 29;

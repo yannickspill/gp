@@ -2,7 +2,7 @@
 #define INTERNAL_TRACE_H
 
 #include "macros.h"
-#include "internal/MatrixBase.h"
+#include "internal/ScalarBase.h"
 #include "internal/Matrix.h"
 
 #include <Eigen/Core>
@@ -18,7 +18,7 @@ template <class Derived> struct traits<Trace<Derived> > {
 };
 
 template <typename Derived>
-class Trace : public MatrixBase<Trace<Derived> > {
+class Trace : public ScalarBase<Trace<Derived> > {
  public:
   typedef typename traits<Trace<Derived> >::scalar_type scalar_type;
   typedef typename traits<Trace<Derived> >::result_type result_type;
