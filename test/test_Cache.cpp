@@ -93,6 +93,11 @@ int main(int, char * []) {
                   3*Eigen::MatrixXd::Identity(5, 5),
                   2*Eigen::MatrixXd::Identity(5, 5)))
     return 13;
+  // trace(mat)
+  if (cache_fails(mat.trace(), mat,
+                  3*Eigen::MatrixXd::Identity(5, 5),
+                  2*Eigen::MatrixXd::Identity(5, 5)))
+    return 22;
   // ldlt(mat*mat)
   if (cache_fails((mat*mat).decomposition(), mat,
                   3*Eigen::MatrixXd::Identity(5, 5),
@@ -126,13 +131,16 @@ int main(int, char * []) {
   //cached matrix product
   auto prod = mat*mat;
   auto cprod= prod.cache();
-  std::cout << "test 4" << std::endl;
   Eigen::VectorXd lvec((prod*vec).get());
-  std::cout << lvec.transpose() << std::endl;
   Eigen::VectorXd rvec((cprod*vec).get());
-  std::cout << rvec.transpose() << std::endl;
   if (lvec != rvec) return 21;
   //cached ldlt
+  auto ldlt = mat.decomposition();
+  auto cldlt = ldlt.cache();
+  GP::VectorXd dummy(Eigen::VectorXd::Random(5));
+  if (cldlt.solve(dummy).get() != ldlt.solve(dummy).get()) return 23;
+  if (cldlt.logdet().get() != ldlt.logdet().get()) return 24;
+  if ((s*cldlt.logdet()).get() != (s*ldlt.logdet()).get()) return 26;
 
   return 0;
 }

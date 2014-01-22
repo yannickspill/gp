@@ -6,6 +6,7 @@
 #include "GPBase.h"
 #include "MatrixBase.h"
 #include "ScalarBase.h"
+#include "CachePlugins.h"
 
 #include <typeinfo>
 #include <type_traits>
@@ -75,7 +76,8 @@ typedef typename has_eval<typename Object::result_type>::value_type eval_called;
    \note it is supposed to behave transparently most of the time. The idea was
    to follow the Compound object pattern.
 */
-template <class Object> class Cache : public Parent<Object> {
+template <class Object>
+class Cache : public Parent<Object>, public CachePlugins<Object> {
  public:
   typedef typename traits<Cache>::scalar_type scalar_type;
   typedef typename traits<Cache>::result_type result_type;

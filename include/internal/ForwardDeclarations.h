@@ -47,6 +47,7 @@ template <class Derived, class OtherDerived> class Solve;
 
 //cache
 template <class Object> class Cache;
+template <class Object> class CachePlugins;
 }
 }
 #endif /*FINTERNAL_ORWARD_DECLARATIONS_H*/

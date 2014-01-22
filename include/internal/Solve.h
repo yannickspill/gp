@@ -12,8 +12,8 @@
 namespace GP {
 namespace internal {
 
-// traits
-template <class DerivedMat, template<class> class Policy, class OtherDerived>
+// traits for Solve<Decomposition<...> >
+template <class DerivedMat, template <class> class Policy, class OtherDerived>
 struct traits<Solve<Decomposition<DerivedMat, Policy>, OtherDerived> > {
   static_assert(std::is_same<typename DerivedMat::scalar_type,
                              typename OtherDerived::scalar_type>::value,
@@ -23,25 +23,32 @@ struct traits<Solve<Decomposition<DerivedMat, Policy>, OtherDerived> > {
       <typename Decomposition<DerivedMat, Policy>::result_type,
        typename OtherDerived::result_type> result_type;
 };
+// traits for Solve<Cache<Decomposition<...> > >
+template <class DecompType, class OtherDerived>
+struct traits<Solve<Cache<DecompType>, OtherDerived> > {
+  static_assert(std::is_same<typename DecompType::scalar_type,
+                             typename OtherDerived::scalar_type>::value,
+                "cannot mix matrices of different scalar types");
+  typedef typename traits
+      <Solve<DecompType, OtherDerived> >::scalar_type scalar_type;
+  typedef typename traits
+      <Solve<DecompType, OtherDerived> >::result_type result_type;
+};
 
-// solve AX = B for X, given the decomposition for A
-template <class DerivedMat, template<class> class Policy, class OtherDerived>
-class Solve
-    <Decomposition<DerivedMat, Policy>,
-     OtherDerived> : public MatrixBase
-                     <Solve<Decomposition<DerivedMat, Policy>, OtherDerived> > {
+//! solve AX = B for X, given the decomposition for A
+template <class DecompType, class OtherDerived>
+class Solve : public MatrixBase<Solve<DecompType, OtherDerived> > {
  public:
   typedef typename traits<Solve>::scalar_type scalar_type;
   typedef typename traits<Solve>::result_type result_type;
 
  private:
-  Decomposition<DerivedMat, Policy> decomp_;
+  DecompType decomp_;
   OtherDerived mat_;
 
  public:
   // constructor
-  Solve(const Decomposition<DerivedMat, Policy>& decomp,
-        const OtherDerived& mat)
+  Solve(const DecompType& decomp, const OtherDerived& mat)
       : decomp_(decomp), mat_(mat) {}
 
   // actual computation

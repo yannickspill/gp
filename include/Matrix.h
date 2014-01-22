@@ -1,7 +1,12 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-// matrix ops
+//base classes
+#include "internal/ForwardDeclarations.h"
+#include "internal/GPBase.h"
+#include "internal/MatrixBase.h"
+
+// matrix matrix ops
 #include "internal/Matrix.h"
 #include "internal/MatrixSum.h"
 #include "internal/MatrixDifference.h"
@@ -20,6 +25,9 @@
 // matrix scalar ops
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixScalarQuotient.h"
+
+// caching
+#include "internal/Cache.h"
 
 //external libs
 #include <Eigen/Dense>

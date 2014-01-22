@@ -43,6 +43,35 @@ class LogDeterminant
 
   unsigned get_version() const { return data_.get_version(); }
 };
+
+// determinant of a matrix, specialization for the cached LDLT case
+template <class DerivedMat>
+class LogDeterminant
+    <Cache
+     <Decomposition
+      <DerivedMat,
+       LDLTPolicy> > > : public ScalarBase
+                         <LogDeterminant
+                          <Cache<Decomposition<DerivedMat, LDLTPolicy> > > > {
+ public:
+  typedef typename traits<LogDeterminant>::scalar_type scalar_type;
+  typedef typename traits<LogDeterminant>::result_type result_type;
+
+ private:
+  Cache<Decomposition<DerivedMat, LDLTPolicy> > data_;
+
+ public:
+  // constructor
+  LogDeterminant(const Cache<Decomposition<DerivedMat, LDLTPolicy> >& data)
+      : data_(data) {}
+
+  // actual computation
+  result_type get() const {
+    return data_.get().vectorD().array().abs().log().sum();
+  }
+
+  unsigned get_version() const { return data_.get_version(); }
+};
 }
 }
 #endif /* INTERNAL_DETERMINANT_H */
