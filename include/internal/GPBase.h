@@ -27,7 +27,8 @@ template <class Derived> class GPBase {
 
   //caching
   Cache<Derived> cache() const {
-      return Cache<Derived>(asDerived()); }
+      return Cache<Derived>(asDerived());
+  }
 
   //Eigen stuff
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
