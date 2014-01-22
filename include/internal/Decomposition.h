@@ -17,7 +17,8 @@ template <class Derived, template <typename> class Policy>
 
 //General class for decomposition. Uses LDLT by default.
 template <typename Derived, template <typename> class Policy = LDLTPolicy>
-class Decomposition : public Policy<Derived> {
+class Decomposition : public Policy<Derived>,
+                      public GPBase<Decomposition<Derived, Policy> > {
  public:
   typedef typename traits<Decomposition<Derived> >::scalar_type scalar_type;
   typedef typename traits<Decomposition<Derived> >::result_type result_type;
