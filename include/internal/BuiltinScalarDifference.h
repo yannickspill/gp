@@ -25,7 +25,7 @@ class BuiltinScalarDifference : public ScalarBase
                                 <BuiltinScalarDifference<Rhs> > {
  private:
   double lhs_;
-  const Rhs& rhs_;
+  Rhs rhs_;
 
  public:
   typedef typename traits

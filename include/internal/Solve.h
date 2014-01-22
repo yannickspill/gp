@@ -35,8 +35,8 @@ class Solve
   typedef typename traits<Solve>::result_type result_type;
 
  private:
-  const Decomposition<DerivedMat, Policy>& decomp_;
-  const OtherDerived& mat_;
+  Decomposition<DerivedMat, Policy> decomp_;
+  OtherDerived mat_;
 
  public:
   // constructor

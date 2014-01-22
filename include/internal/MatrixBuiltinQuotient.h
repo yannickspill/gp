@@ -32,7 +32,7 @@ class MatrixBuiltinQuotient : public MatrixBase
       <MatrixBuiltinQuotient<MatrixExpression> >::result_type result_type;
 
  private:
-  const MatrixExpression& lhs_;
+  MatrixExpression lhs_;
   double rhs_;
 
  public:

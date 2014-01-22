@@ -30,7 +30,7 @@ class Transpose : public MatrixBase<Transpose<Derived> > {
   typedef typename traits<Transpose<Derived> >::result_type result_type;
 
  private:
-  const Derived& data_;
+  Derived data_;
 
  public:
   // constructor

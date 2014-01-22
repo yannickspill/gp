@@ -29,8 +29,8 @@ class MatrixSum : public MatrixBase<MatrixSum<Lhs, Rhs> > {
   typedef typename traits<MatrixSum<Lhs, Rhs> >::result_type result_type;
 
  private:
-  const Lhs& lhs_;
-  const Rhs& rhs_;
+  Lhs lhs_;
+  Rhs rhs_;
 
  public:
   // constructor

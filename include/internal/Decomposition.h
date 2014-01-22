@@ -27,7 +27,7 @@ class Decomposition : public MatrixBase<Decomposition<Derived> >,
   typedef typename traits<Decomposition<Derived> >::result_type result_type;
 
  private:
-  const Derived& data_;
+  Derived data_;
 
  public:
   // constructor
