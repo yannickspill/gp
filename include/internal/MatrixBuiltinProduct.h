@@ -7,6 +7,7 @@
 #include <Eigen/Core>
 #include <type_traits>
 #include <memory>
+#include <utility>
 
 namespace GP {
 namespace internal {
@@ -15,9 +16,9 @@ namespace internal {
 template <class MatrixExpression>
 struct traits<MatrixBuiltinProduct<MatrixExpression> > {
   typedef typename MatrixExpression::scalar_type scalar_type;
-  typedef typename Eigen::CwiseUnaryOp
-      <Eigen::internal::scalar_multiple_op<double>,
-       const typename MatrixExpression::result_type> result_type;
+  typedef typename std::remove_const
+      <decltype(2. * std::declval
+                <typename MatrixExpression::result_type>())>::type result_type;
 };
 
 // expression template for product of a Matrix with anything convertible to a

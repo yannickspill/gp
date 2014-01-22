@@ -124,7 +124,14 @@ int main(int, char * []) {
   //trace
   if (dummy.trace().get() != dummy.get().trace()) return 28;
 
-  //triple product test (dangling refs causing BAD_ALLOC / segfault)
-  Eigen::MatrixXd triple((msd*msd*msd).get());
+  //products of determinants should be possible
+  //double tmp4((msd.decomposition().logdet()
+  //            *msd.decomposition().logdet()).get());
+
+  //dangling refs causing BAD_ALLOC / segfault
+  double tmp2((scal-1.0-scal-3.0-scal-5.0).get());
+  double tmp3((scal/(1.0/scal)/scal).get());
+  Eigen::MatrixXd((MatrixXd(msd*msd)*msd).get());
+  Eigen::MatrixXd((msd*3*msd*3).get());
   return 0;
 }
