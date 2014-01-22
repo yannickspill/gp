@@ -123,5 +123,8 @@ int main(int, char * []) {
 
   //trace
   if (dummy.trace().get() != dummy.get().trace()) return 28;
+
+  //triple product test (dangling refs causing BAD_ALLOC / segfault)
+  Eigen::MatrixXd triple((msd*msd*msd).get());
   return 0;
 }
