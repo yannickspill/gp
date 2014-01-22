@@ -3,6 +3,7 @@
 
 #include "macros.h"
 #include "internal/ForwardDeclarations.h"
+#include <Eigen/Core>
 
 namespace GP {
 namespace internal {
@@ -27,6 +28,9 @@ template <class Derived> class GPBase {
   //caching
   Cache<Derived> cache() const {
       return Cache<Derived>(asDerived()); }
+
+  //Eigen stuff
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 // Scalar * Matrix
