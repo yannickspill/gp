@@ -124,9 +124,10 @@ int main(int, char * []) {
   //trace
   if (dummy.trace().get() != dummy.get().trace()) return 28;
 
-  //products of determinants should be possible
+  //ops on determinants and traces should be possible
   //double tmp4((msd.decomposition().logdet()
   //            *msd.decomposition().logdet()).get());
+  //double tmp6((msd.trace() + (msd*msd).trace()).get());
 
   //multiple products should work too
   if ( (msd*3*msd).get() != (sd*3*sd) ) return 29;
@@ -136,7 +137,7 @@ int main(int, char * []) {
   scal.set(5.0);
   Eigen::MatrixXd eId(Eigen::MatrixXd::Identity(5,5));
   MatrixXd Id(eId);
-  if ((scal-1.0-scal-3.0-scal-5.0).get() != -14.) return 31;
+  if ((1.0-(3.0-(5.0-scal))).get() != -2.) return 31;
   if ((scal/(1.0/scal)/scal).get() != 5.0/(1.0/5.0)/5.0) return 32;
   if ((MatrixXd(msd*Id)*Id).get() != sd*eId*eId) return 33;
   if (((((3 * msd) * 3) * 3).get() - (sd * 27)).array().abs().matrix().norm()
@@ -157,5 +158,21 @@ int main(int, char * []) {
           .norm() > 1e-5) return 39;
   if (((msd+Id)+Id+(msd+Id)).get() != sd+eId+eId+(sd+eId)) return 40;
   if ((Scalar(scal*3)*scal).get() != 75) return 41;
+  if ((((scal-1.0)-2.0)-3.0).get() != -1.) return 42;
+  if (((2*(scal*1.0)*2.0)*3.0).get() != 60.) return 43;
+  if ((((scal/1.0)/2.0)/3.0).get() != 5./6.) return 44;
+  if (((2+(scal+1.0)+scal)+3.0).get() != 16.) return 45;
+  if (((scal-scal)-scal-(scal-scal)).get() != -5) return 46;
+  if (((scal*scal)*scal*(scal*scal)).get() != 3125) return 47;
+  if (((scal/scal)/scal/(scal/scal)).get() != 1/5.) return 48;
+  if (((scal+scal)+scal+(scal+scal)).get() != 25) return 48;
+  if (((msd.transpose() + Id * Id.transpose()).get() - sd.transpose()
+       - eId * eId.transpose())
+          .array()
+          .abs()
+          .matrix()
+          .norm() > 1e-5)
+    return 49;
+
   return 0;
 }
