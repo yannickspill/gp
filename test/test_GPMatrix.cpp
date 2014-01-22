@@ -128,10 +128,23 @@ int main(int, char * []) {
   //double tmp4((msd.decomposition().logdet()
   //            *msd.decomposition().logdet()).get());
 
+  //multiple products should work too
+  if ( (msd*3*msd).get() != (sd*3*sd) ) return 29;
+  if ( (3*msd*msd).get() != (3*sd*sd) ) return 30;
+
   //dangling refs causing BAD_ALLOC / segfault
-  double tmp2((scal-1.0-scal-3.0-scal-5.0).get());
-  double tmp3((scal/(1.0/scal)/scal).get());
-  Eigen::MatrixXd((MatrixXd(msd*msd)*msd).get());
-  Eigen::MatrixXd((msd*3*msd*3).get());
+  scal.set(5.0);
+  Eigen::MatrixXd eId(Eigen::MatrixXd::Identity(5,5));
+  MatrixXd Id(eId);
+  if ((scal-1.0-scal-3.0-scal-5.0).get() != 5-1-5-3-5-5) return 31;
+  if ((scal/(1.0/scal)/scal).get() != 5.0/(1.0/5.0)/5.0) return 32;
+  if ((MatrixXd(msd*Id)*Id).get() != sd*eId*eId) return 33;
+  if (((((3 * msd) * 3) * 3).get() - (sd * 27)).array().abs().matrix().norm()
+      > 1e-5) return 34;
+  if (((((msd / 3) / 3) / 3).get() - (sd / 27)).array().abs().matrix().norm()
+      > 1e-5) return 35;
+  if (((msd-Id)-Id-(msd-Id)).get() != sd-eId-eId-(sd-eId)) return 36;
+  if (((msd*Id)*Id).get() != sd*eId*eId) return 37;
+  //Eigen::MatrixXd((msd*3*msd*3*msd).get());
   return 0;
 }

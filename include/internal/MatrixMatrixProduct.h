@@ -6,6 +6,7 @@
 
 #include <Eigen/Core>
 #include <type_traits>
+#include <memory>
 
 namespace GP {
 namespace internal {
@@ -21,9 +22,6 @@ template <class Lhs, class Rhs> struct traits<MatrixMatrixProduct<Lhs, Rhs> > {
 
 template <typename Lhs, typename Rhs>
 class MatrixMatrixProduct : public MatrixBase<MatrixMatrixProduct<Lhs, Rhs> > {
- private:
-  const Lhs& lhs_;
-  const Rhs& rhs_;
 
  public:
   typedef typename traits
@@ -31,12 +29,21 @@ class MatrixMatrixProduct : public MatrixBase<MatrixMatrixProduct<Lhs, Rhs> > {
   typedef typename traits
       <MatrixMatrixProduct<Lhs, Rhs> >::result_type result_type;
 
+ private:
+  const Lhs& lhs_;
+  const Rhs& rhs_;
+  mutable std::shared_ptr<result_type> ret_;
+
  public:
   // constructor
-  MatrixMatrixProduct(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
+  MatrixMatrixProduct(const Lhs& lhs, const Rhs& rhs)
+      : lhs_(lhs), rhs_(rhs), ret_(nullptr) {}
 
   // actual computation
-  result_type get() const { return lhs_.get() * rhs_.get(); }
+  const result_type& get() const {
+    ret_ = std::make_shared<result_type>(lhs_.get(), rhs_.get());
+    return *ret_;
+  }
 
   unsigned get_version() const {
     return lhs_.get_version() + rhs_.get_version();
