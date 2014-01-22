@@ -132,11 +132,11 @@ int main(int, char * []) {
   if ( (msd*3*msd).get() != (sd*3*sd) ) return 29;
   if ( (3*msd*msd).get() != (3*sd*sd) ) return 30;
 
-  //dangling refs causing BAD_ALLOC / segfault
+  //dangling refs causing BAD_ALLOC / segfault (all classes, alphabetical)
   scal.set(5.0);
   Eigen::MatrixXd eId(Eigen::MatrixXd::Identity(5,5));
   MatrixXd Id(eId);
-  if ((scal-1.0-scal-3.0-scal-5.0).get() != 5-1-5-3-5-5) return 31;
+  if ((scal-1.0-scal-3.0-scal-5.0).get() != -14.) return 31;
   if ((scal/(1.0/scal)/scal).get() != 5.0/(1.0/5.0)/5.0) return 32;
   if ((MatrixXd(msd*Id)*Id).get() != sd*eId*eId) return 33;
   if (((((3 * msd) * 3) * 3).get() - (sd * 27)).array().abs().matrix().norm()
@@ -145,6 +145,17 @@ int main(int, char * []) {
       > 1e-5) return 35;
   if (((msd-Id)-Id-(msd-Id)).get() != sd-eId-eId-(sd-eId)) return 36;
   if (((msd*Id)*Id).get() != sd*eId*eId) return 37;
-  //Eigen::MatrixXd((msd*3*msd*3*msd).get());
+  if ((((msd * scal) * msd * (scal * msd)).get() - sd * sd * sd * 25)
+          .array()
+          .abs()
+          .matrix()
+          .norm() > 1e-5) return 38;
+  if (((((msd / scal) / scal) / scal).get() - sd / 125.)
+          .array()
+          .abs()
+          .matrix()
+          .norm() > 1e-5) return 39;
+  if (((msd+Id)+Id+(msd+Id)).get() != sd+eId+eId+(sd+eId)) return 40;
+  if ((Scalar(scal*3)*scal).get() != 75) return 41;
   return 0;
 }

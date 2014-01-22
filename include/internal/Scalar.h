@@ -31,6 +31,11 @@ class Scalar : public ScalarBase<Scalar> {
  public:
   explicit Scalar(double value) : data_(std::make_shared<Data>(value)) {}
 
+  //! Explicit cast from any GP scalar expression
+  template <class GPExpression>
+  explicit Scalar(const ScalarBase<GPExpression>& expr)
+      : data_(std::make_shared<Data>(expr.asDerived().get())) {}
+
   //pass as value because it is a double
   result_type get() const { return data_->value_; }
 
