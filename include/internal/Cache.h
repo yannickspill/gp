@@ -72,6 +72,8 @@ typedef typename has_eval<typename Object::result_type>::value_type eval_called;
    The rationale is that you don't want to cache an expression template that
    produces a matrix, but you want to store the computed matrix. On the other
    hand LDLT decomposition objects etc. should be stored as-is.
+   \note it is supposed to behave transparently most of the time. The idea was
+   to follow the Compound object pattern.
 */
 template <class Object> class Cache : public Parent<Object> {
  public:
