@@ -16,23 +16,23 @@ int main(int, char * []) {
 
   // matrix basics
   const unsigned int szx = 10, szy = 3;
-  Eigen::MatrixXd x(Eigen::MatrixXd::Constant(szx, szy, 1));
+  Eigen::MatrixXd x(Eigen::MatrixXd::Random(szx, szy));
   MatrixXd vx(x);
-  Eigen::MatrixXd y(Eigen::MatrixXd::Constant(szx, szy, 2));
+  Eigen::MatrixXd y(Eigen::MatrixXd::Random(szx, szy));
   MatrixXd vy(y);
   if (vx.get() != x) return 1;
   // sum
   vx + vy;
   const Eigen::MatrixXd tmp((vx + vy).get());
   MatrixXd vsum(vy + vx);
-  if (vsum.get() != Eigen::MatrixXd::Constant(szx, szy, 3)) return 2;
-  if ((vx + vy).get() != Eigen::MatrixXd::Constant(szx, szy, 3)) return 3;
+  if (vsum.get() != x+y) return 2;
+  if ((vx + vy).get() != x+y) return 3;
   internal::MatrixSum<MatrixXd, MatrixXd> s(vx, vy);  // type is defined
   if (s.get() != vsum.get()) return 4;  // works as expected
   // product
-  if ((vx.transpose() * vx).get() != x.transpose() * x) return 5;
+  if ((vx.transpose() * vy).get() != x.transpose() * y) return 5;
   // difference
-  if ((vx - vy).get() != Eigen::MatrixXd::Constant(szx, szy, -1)) return 6;
+  if ((vx - vy).get() != x-y) return 6;
 
   // scalar basics
   Scalar scal(3.2);
@@ -115,6 +115,17 @@ int main(int, char * []) {
   if ((ldlt.solve(mB).get() - sd.ldlt().solve(B)).array().abs().matrix().norm()
       > 1e-5)
     return 24;
+
+  //should be able to perform matrix ops on solve result
+  if (((mB.transpose() * ldlt.solve(mB)).get()
+       - (B.transpose() * sd.ldlt().solve(B)))
+          .array()
+          .abs()
+          .matrix()
+          .norm() > 1e-5)
+    return 50;
+
+  return 0;
 
   //rows and columns
   MatrixXd dummy(Eigen::MatrixXd::Random(szx,szy));

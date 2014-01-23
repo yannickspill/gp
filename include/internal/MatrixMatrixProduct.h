@@ -16,8 +16,8 @@ template <class Lhs, class Rhs> struct traits<MatrixMatrixProduct<Lhs, Rhs> > {
                 <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
                 "cannot mix matrices of different scalar types");
   typedef typename Lhs::scalar_type scalar_type;
-  typedef typename Eigen::ProductReturnType
-      <typename Lhs::result_type, typename Rhs::result_type>::Type result_type;
+  typedef decltype(std::declval<typename Lhs::result_type>() * std::declval
+                   <typename Rhs::result_type>()) result_type;
 };
 
 template <typename Lhs, typename Rhs>
@@ -41,7 +41,7 @@ class MatrixMatrixProduct : public MatrixBase<MatrixMatrixProduct<Lhs, Rhs> > {
 
   // actual computation
   const result_type& get() const {
-    ret_ = std::make_shared<result_type>(lhs_.get(), rhs_.get());
+    ret_ = std::make_shared<result_type>(lhs_.get() * rhs_.get());
     return *ret_;
   }
 
