@@ -103,13 +103,11 @@ int main(int, char * []) {
                   3*Eigen::MatrixXd::Identity(5, 5),
                   2*Eigen::MatrixXd::Identity(5, 5)))
     return 14;
-  // solve: does not work. Need to cast to matrix first.
-  /*
-  if (cache_fails((mat*mat).decomposition().solve(vec), vec,
+  // solve
+  if (cache_fails(mat.decomposition().solve(vec), vec,
                   Eigen::VectorXd::LinSpaced(5, 2, 3),
                   Eigen::VectorXd::LinSpaced(5, -2., 10)))
     return 15;
-    */
   // vec^T * mat * vec
   if (cache_fails(vec.transpose(), vec,
                   Eigen::VectorXd::LinSpaced(5, 2, 3),
@@ -141,6 +139,10 @@ int main(int, char * []) {
   if (cldlt.solve(dummy).get() != ldlt.solve(dummy).get()) return 23;
   if (cldlt.logdet().get() != ldlt.logdet().get()) return 24;
   if ((s*cldlt.logdet()).get() != (s*ldlt.logdet()).get()) return 26;
+  //cached solve
+  auto slv = ldlt.solve(dummy);
+  auto cslv = slv.cache();
+  if ((mat*slv).get() != (mat*cslv).get()) return 27;
 
   return 0;
 }

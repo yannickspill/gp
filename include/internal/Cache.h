@@ -34,8 +34,7 @@ using StripConstRef = typename std::remove_const
 //if EigenExpr is an Eigen expression, then this returns whatever the expression
 //can be evaluated into. Can be T or const T& depending on expression.
 template <class EigenExpr> struct EigenEval {
-  typedef StripConstRef<EigenExpr> bare_eigen;
-  typedef typename Eigen::internal::eval<bare_eigen>::type eigen_eval_type;
+  typedef decltype(std::declval<EigenExpr>().eval()) eigen_eval_type;
   typedef StripConstRef<eigen_eval_type> type;
   typedef std::true_type value_type;
 };
