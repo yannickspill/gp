@@ -89,6 +89,12 @@ const BuiltinMatrixDifference<MatrixExpression> operator-(
     double lhs, const MatrixBase<MatrixExpression>& rhs) {
   return BuiltinMatrixDifference<MatrixExpression>(lhs, rhs.asDerived());
 }
+// Matrix opposite
+template <class MatrixExpression>
+const MatrixOpposite<MatrixExpression> operator-(
+    const MatrixBase<MatrixExpression>& rhs) {
+  return MatrixOpposite<MatrixExpression>(rhs.asDerived());
+}
 
 // products
 //    Matrix Matrix

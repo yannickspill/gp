@@ -87,6 +87,13 @@ int main(int, char * []) {
   // matrix builtin quotient
   if ((vx / 5.).get() != (x/5.)) return 28;
 
+  //matrix and scalar opposites
+  if ((-vx).get() != -x) return 69;
+  if ((-scal).get() != -(scal.get())) return 70;
+
+  //mixed stuff
+  if (((scal * 5.)+small).get() != (small.get()(0,0) + 5*scal.get())) return 68;
+
   // lots of products sums and divisions
   if ((vx.transpose() * (5 * vx + vy - scal * vx)).get()
       != (x.transpose() * (5 * x + y - scal.get() * x)))

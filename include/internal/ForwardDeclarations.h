@@ -19,6 +19,7 @@ template <class Lhs, class Rhs> class ScalarScalarSum;
 template <class Lhs, class Rhs> class ScalarScalarDifference;
 template <class Lhs, class Rhs> class ScalarScalarProduct;
 template <class Lhs, class Rhs> class ScalarScalarQuotient;
+template <class Lhs> class ScalarOpposite;
 
 //scalar builtin ops
 template <class Lhs> class ScalarBuiltinSum;
@@ -36,6 +37,7 @@ template <class EigenType> class Matrix;
 template <class Lhs, class Rhs> class MatrixSum;
 template <class Lhs, class Rhs> class MatrixDifference;
 template <class Lhs, class Rhs> class MatrixMatrixProduct;
+template <class Lhs> class MatrixOpposite;
 template <class Derived> class Trace;
 template <class Derived> class Transpose;
 template <class Derived> struct LDLTPolicy;
