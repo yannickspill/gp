@@ -34,18 +34,49 @@ template <class Derived> class GPBase {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
-// Scalar * Matrix
+// sums
+//  Scalar + Matrix (only matrix is 1x1)
+template <class Scal, class Mat>
+const MatrixScalarSum<Mat, Scal> operator+(const ScalarBase<Scal>& lhs,
+                                           const MatrixBase<Mat>& rhs) {
+  return MatrixScalarSum<Mat, Scal>(rhs.asDerived(), lhs.asDerived());
+}
+//  Matix + Scalar (only matrix is 1x1)
+template <class Mat, class Scal>
+const MatrixScalarSum<Mat, Scal> operator+(const MatrixBase<Mat>& lhs,
+                                           const ScalarBase<Scal>& rhs) {
+  return MatrixScalarSum<Mat, Scal>(lhs.asDerived(), rhs.asDerived());
+}
+
+//differences
+//  Scalar - Matrix (only matrix is 1x1)
+template <class Scal, class Mat>
+const ScalarMatrixDifference<Scal, Mat> operator-(const ScalarBase<Scal>& lhs,
+                                           const MatrixBase<Mat>& rhs) {
+  return ScalarMatrixDifference<Scal, Mat>(lhs.asDerived(), rhs.asDerived());
+}
+//  Matix - Scalar (only matrix is 1x1)
+template <class Mat, class Scal>
+const MatrixScalarDifference<Mat, Scal> operator-(const MatrixBase<Mat>& lhs,
+                                           const ScalarBase<Scal>& rhs) {
+  return MatrixScalarDifference<Mat, Scal>(lhs.asDerived(), rhs.asDerived());
+}
+
+//products
+//  Scalar * Matrix
 template <class Scal, class Mat>
 const MatrixScalarProduct<Mat, Scal> operator*(const ScalarBase<Scal>& lhs,
                                                const MatrixBase<Mat>& rhs) {
   return MatrixScalarProduct<Mat, Scal>(rhs.asDerived(), lhs.asDerived());
 }
-// Matrix * Scalar
+//  Matrix * Scalar
 template <class Mat, class Scal>
 const MatrixScalarProduct<Mat, Scal> operator*(const MatrixBase<Mat>& lhs,
                                                const ScalarBase<Scal>& rhs) {
   return MatrixScalarProduct<Mat, Scal>(lhs.asDerived(), rhs.asDerived());
 }
+
+//quotients
 // Matrix / Scalar
 template <class Mat, class Scal>
 const MatrixScalarQuotient<Mat, Scal> operator/(const MatrixBase<Mat>& lhs,

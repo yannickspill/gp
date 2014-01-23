@@ -66,7 +66,19 @@ int main(int, char * []) {
   if ((vx * scal).get() != (scal.get() * x)) return 10;
   // matrix scalar quotient
   if ((vx / scal).get() != (x / scal.get())) return 27;
+  // matrix scalar sum (1D)
+  MatrixXd small(Eigen::Matrix<double, 1, 1>::Constant(2.));
+  if ((small + scal).get() != (scal.get() + small.get()(0,0))) return 60;
+  // matrix scalar difference (1D)
+  if ((small - scal).get() != (-scal.get() + small.get()(0,0))) return 60;
+  if ((scal - small).get() != (scal.get() - small.get()(0,0))) return 61;
 
+  // matrix builtin sum
+  if ((5 + small).get() != (5. + small.get()(0,0))) return 62;
+  if ((small + 5.).get() != (5. + small.get()(0,0))) return 63;
+  // matrismall.get()(0,0) builtin difference
+  if ((5 - small).get() != (5. - small.get()(0,0))) return 64;
+  if ((small - 5.).get() != (-5. + small.get()(0,0))) return 65;
   // matrix builtin product
   if ((5 * vx).get() != (5. * x)) return 15;
   if ((vx * 5.).get() != (5. * x)) return 16;

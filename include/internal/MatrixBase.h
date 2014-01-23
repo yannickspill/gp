@@ -50,18 +50,44 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
 
 };
 
-// sum
+// sums
+//  Matrix Matrix
 template <class Lhs, class Rhs>
 const MatrixSum<Lhs, Rhs> operator+(const MatrixBase<Lhs>& lhs,
                                     const MatrixBase<Rhs>& rhs) {
   return MatrixSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
+//  double Matrix
+template <class MatrixExpression>
+const MatrixBuiltinSum<MatrixExpression> operator+(
+    double lhs, const MatrixBase<MatrixExpression>& rhs) {
+  return MatrixBuiltinSum<MatrixExpression>(rhs.asDerived(), lhs);
+}
+//  Matrix double
+template <class MatrixExpression>
+const MatrixBuiltinSum<MatrixExpression> operator+(
+    const MatrixBase<MatrixExpression>& lhs, double rhs) {
+  return MatrixBuiltinSum<MatrixExpression>(lhs.asDerived(), rhs);
+}
 
-// difference
+// differences
+//  Matrix Matrix
 template <class Lhs, class Rhs>
 const MatrixDifference<Lhs, Rhs> operator-(const MatrixBase<Lhs>& lhs,
                                            const MatrixBase<Rhs>& rhs) {
   return MatrixDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+}
+//  double Matrix
+template <class MatrixExpression>
+const MatrixBuiltinDifference<MatrixExpression> operator-(
+    const MatrixBase<MatrixExpression>& lhs, double rhs) {
+  return MatrixBuiltinDifference<MatrixExpression>(lhs.asDerived(), rhs);
+}
+//  Matrix double
+template <class MatrixExpression>
+const BuiltinMatrixDifference<MatrixExpression> operator-(
+    double lhs, const MatrixBase<MatrixExpression>& rhs) {
+  return BuiltinMatrixDifference<MatrixExpression>(lhs, rhs.asDerived());
 }
 
 // products

@@ -19,12 +19,18 @@
 #include "internal/Solve.h"
 
 // matrix builtin ops
+#include "internal/MatrixBuiltinSum.h"
+#include "internal/MatrixBuiltinDifference.h"
+#include "internal/BuiltinMatrixDifference.h"
 #include "internal/MatrixBuiltinProduct.h"
 #include "internal/MatrixBuiltinQuotient.h"
 
 // matrix scalar ops
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixScalarQuotient.h"
+#include "internal/MatrixScalarSum.h"
+#include "internal/MatrixScalarDifference.h"
+#include "internal/ScalarMatrixDifference.h"
 
 // caching
 #include "internal/Cache.h"
