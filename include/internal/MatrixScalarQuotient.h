@@ -17,9 +17,8 @@ struct traits<MatrixScalarQuotient<Mat, Scal> > {
                 <typename Mat::scalar_type, typename Scal::scalar_type>::value,
                 "cannot mix different scalar types");
   typedef typename Mat::scalar_type scalar_type;
-  typedef const typename Eigen::CwiseUnaryOp
-      <Eigen::internal::scalar_quotient1_op<scalar_type>,
-       const typename Mat::result_type> result_type;
+  typedef decltype(std::declval<typename Mat::result_type>() / std::declval
+                   <typename Scal::result_type>()) result_type;
 };
 
 template <typename Mat, typename Scal>

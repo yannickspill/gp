@@ -19,9 +19,10 @@ struct traits<Solve<Decomposition<DerivedMat, Policy>, OtherDerived> > {
                              typename OtherDerived::scalar_type>::value,
                 "cannot mix matrices of different scalar types");
   typedef typename DerivedMat::scalar_type scalar_type;
-  typedef Eigen::internal::solve_retval
-      <typename Decomposition<DerivedMat, Policy>::result_type,
-       typename OtherDerived::result_type> result_type;
+  typedef decltype(
+      std::declval
+      <typename Decomposition<DerivedMat, Policy>::result_type>().solve(
+          std::declval<typename OtherDerived::result_type>())) result_type;
 };
 // traits for Solve<Cache<Decomposition<...> > >
 template <class DecompType, class OtherDerived>

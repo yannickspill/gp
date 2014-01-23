@@ -117,6 +117,7 @@ int main(int, char * []) {
     return 24;
 
   //should be able to perform matrix ops on solve result
+  //product
   if (((mB.transpose() * ldlt.solve(mB)).get()
        - (B.transpose() * sd.ldlt().solve(B)))
           .array()
@@ -124,6 +125,64 @@ int main(int, char * []) {
           .matrix()
           .norm() > 1e-5)
     return 50;
+  //sum
+  if (((mB + ldlt.solve(mB)).get() - (B + sd.ldlt().solve(B)))
+          .array()
+          .abs()
+          .matrix()
+          .norm() > 1e-5)
+    return 51;
+  //difference
+  if (((mB - ldlt.solve(mB)).get() - (B - sd.ldlt().solve(B)))
+          .array()
+          .abs()
+          .matrix()
+          .norm() > 1e-5)
+    return 52;
+  //product with scalar
+  if (((scal * ldlt.solve(mB)).get() - (scal.get()*sd.ldlt().solve(B)))
+          .array()
+          .abs()
+          .matrix()
+          .norm() > 1e-5)
+    return 53;
+  //product with double
+  if (((2 * ldlt.solve(mB)).get() - (2*sd.ldlt().solve(B)))
+          .array()
+          .abs()
+          .matrix()
+          .norm() > 1e-5)
+    return 54;
+  //quotient with scalar
+  if (((ldlt.solve(mB)/scal).get() - (sd.ldlt().solve(B))/scal.get())
+          .array()
+          .abs()
+          .matrix()
+          .norm() > 1e-5)
+    return 55;
+  //trace
+  if ((ldlt.solve(msd).trace()).get() != (sd.ldlt().solve(sd).trace()))
+    return 56;
+  //transpose
+  if (((ldlt.solve(mB).transpose()).get() - (sd.ldlt().solve(B).transpose()))
+          .array()
+          .abs()
+          .matrix()
+          .norm() > 1e-5)
+    return 57;
+  //why not decompose it again?!
+  if (((msd + ldlt.solve(msd)).decomposition().solve(msd)).get()
+      != ((sd + sd.ldlt().solve(sd)).ldlt().solve(sd)))
+    return 58;
+  if (((msd + ldlt.solve(msd)).decomposition().logdet()).get()
+      != ((sd + sd.ldlt().solve(sd))
+              .ldlt()
+              .vectorD()
+              .array()
+              .abs()
+              .log()
+              .sum()))
+    return 59;
 
   return 0;
 

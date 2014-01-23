@@ -14,13 +14,16 @@ namespace internal {
 
 template <class Derived> struct traits<Transpose<Derived> > {
   typedef typename Derived::scalar_type scalar_type;
-  typedef typename Eigen::Transpose<typename Derived::result_type> result_type;
+  typedef decltype(
+      std::declval<typename Derived::result_type>().transpose()) result_type;
 };
 
 // specialize for matrix, which needs to be constd
+// TODO: avoid this, and write const and non-const versions of operators
+// and get() everywhere
 template <class EigenType> struct traits<Transpose<Matrix<EigenType> > > {
   typedef typename Matrix<EigenType>::scalar_type scalar_type;
-  typedef typename Eigen::Transpose<const EigenType> result_type;
+  typedef decltype(std::declval<const EigenType>().transpose()) result_type;
 };
 
 template <typename Derived>

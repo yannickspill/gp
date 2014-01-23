@@ -15,10 +15,10 @@ namespace internal {
 template <class MatrixExpression>
 struct traits<MatrixBuiltinQuotient<MatrixExpression> > {
   typedef typename MatrixExpression::scalar_type scalar_type;
-  typedef typename Eigen::CwiseUnaryOp
-      <Eigen::internal::scalar_quotient1_op<scalar_type>,
-       const typename MatrixExpression::result_type> result_type;
+ typedef decltype(
+      std::declval<typename MatrixExpression::result_type>()/2.) result_type;
 };
+
 
 // expression template for product of a Matrix with anything convertible to a
 // double
