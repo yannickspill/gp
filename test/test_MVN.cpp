@@ -84,7 +84,9 @@ bool test_degenerate() {
     Eigen::MatrixXd Sigma(1, 1);
     Sigma(0, 0) = 1.0 + rand();
 
-    MultivariateNormal mv((GP::VectorXd(FA)), (GP::VectorXd(FM)), (GP::MatrixXd(Sigma)));
+    GP::VectorXd gFA(FA), gFM(FM);
+    GP::MatrixXd gSigma(Sigma);
+    MultivariateNormal mv(gFA, gFM, gSigma);
     FNormal fn(FA(0, 0), JA, FM(0), sqrt(Sigma(0, 0)));
 
     {
@@ -191,7 +193,9 @@ bool test_2D() {
     Sigma(0, 1) = rho * sigma1 * sigma2;
     Sigma(1, 0) = rho * sigma1 * sigma2;
 
-    MultivariateNormal mv((GP::VectorXd(FA)), (GP::VectorXd(FM)), (GP::MatrixXd(Sigma)));
+    GP::VectorXd gFA(FA), gFM(FM);
+    GP::MatrixXd gSigma(Sigma);
+    MultivariateNormal mv(gFA, gFM, gSigma);
 
     {
         // evaluate

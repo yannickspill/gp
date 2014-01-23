@@ -91,9 +91,6 @@ int main(int, char * []) {
   if ((-vx).get() != -x) return 69;
   if ((-scal).get() != -(scal.get())) return 70;
 
-  //mixed stuff
-  if (((scal * 5.)+small).get() != (small.get()(0,0) + 5*scal.get())) return 68;
-
   // lots of products sums and divisions
   if ((vx.transpose() * (5 * vx + vy - scal * vx)).get()
       != (x.transpose() * (5 * x + y - scal.get() * x)))
@@ -219,6 +216,7 @@ int main(int, char * []) {
   double tmp4((msd.decomposition().logdet()
               *msd.decomposition().logdet()).get());
   double tmp6((msd.trace() + (msd*msd).trace()).get());
+  double tmp7((1.0 + 0.5*msd.decomposition().cache().logdet()).get());
 
   //multiple products should work too
   if ( (msd*3*msd).get() != (sd*3*sd) ) return 29;

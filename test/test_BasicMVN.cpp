@@ -1,7 +1,6 @@
 #include "BasicMVN.h"
 #include "FNormal.h"
 #include "macros.h"
-#include "ConstEigenObject.h"
 #include <math.h>
 #include <boost/random.hpp>
 #include <boost/generator_iterator.hpp>

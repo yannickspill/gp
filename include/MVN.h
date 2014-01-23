@@ -2,6 +2,7 @@
 #define MVN_H
 
 #include "Matrix.h"
+#include "Scalar.h"
 
 #include <Eigen/Dense>
 
@@ -29,7 +30,7 @@ template <class YVectorType, class MVectorType, class MatrixType> class MVN {
   MVectorType mu_;
   MatrixType Sigma_;
   decltype(y_ - mu_) eps_;
-  decltype(Sigma_.decomposition().cache()) ldlt_;
+  decltype(Sigma_.decomposition()) ldlt_;
 
  public:
   /** Constructor
@@ -39,7 +40,7 @@ template <class YVectorType, class MVectorType, class MatrixType> class MVN {
   * */
   MVN(const YVectorType& y, const MVectorType& mu, const MatrixType& Sigma)
       : y_(y), mu_(mu), Sigma_(Sigma), eps_(y - mu),
-        ldlt_(Sigma.decomposition().cache()) {}
+        ldlt_(Sigma.decomposition()) {}
 
   /// return -log(p)
   double get() const { return value().get(); }
@@ -56,7 +57,7 @@ template <class YVectorType, class MVectorType, class MatrixType> class MVN {
 
   auto value() const -> decltype(0.5 * eps_.transpose() * ldlt_.solve(eps_)
                                  + eps_.rows() / 2. * std::log(2 * M_PI)
-                                 + 0.5 * ldlt_.logdet()) {
+                                  + 0.5 * ldlt_.logdet()) {
     // -log(p) = 1/2 * eps^T * Sigma^{-1} * eps
     //           + M/2 * log(2*pi) + 1/2*log(det(Sigma))
     LOG(" mvn value" << std::endl);

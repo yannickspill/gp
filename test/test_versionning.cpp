@@ -1,12 +1,4 @@
-#include "internal/Matrix.h"
-#include "internal/MatrixSum.h"
-#include "internal/MatrixDifference.h"
-#include "internal/MatrixMatrixProduct.h"
-#include "internal/Scalar.h"
-#include "internal/ScalarScalarProduct.h"
-#include "internal/ScalarBuiltinProduct.h"
-#include "internal/MatrixScalarProduct.h"
-#include "internal/MatrixBuiltinProduct.h"
+#include "Matrix.h"
 
 #include <Eigen/Dense>
 
@@ -16,7 +8,7 @@ int main(int, char * []) {
   const unsigned int szx=10, szy=3;
   Eigen::MatrixXd x(Eigen::MatrixXd::Random(szx,szy));
   Eigen::MatrixXd y(Eigen::MatrixXd::Random(szx,szy));
-  MatrixXd vx(x);
+  GP::MatrixXd vx(x);
   unsigned version = vx.get_version();
   //test get/set
   if (vx.get() != x) return 1;
@@ -25,7 +17,7 @@ int main(int, char * []) {
   if (vx.get_version() != version+1) return 3;
   //test cloning
   version = vx.get_version();
-  MatrixXd vxclone(vx);
+  GP::MatrixXd vxclone(vx);
   if (version != vxclone.get_version()) return 4;
   vx.set(x);
   version = vx.get_version();
