@@ -1,7 +1,7 @@
 #include "benchmark_helpers.h"
 #include "macros.h"
 #include "MVN.h"
-#include "ConstEigenObject.h"
+#include "Matrix.h"
 
 #include <Eigen/Dense>
 #include <iostream>
@@ -16,9 +16,9 @@ using boost::posix_time::time_duration;
 
 typedef Eigen::VectorXd EigenVec;
 typedef Eigen::MatrixXd EigenMat;
-typedef ConstEigenObject<EigenVec> Vec;
-typedef ConstEigenObject<EigenMat> Mat;
-typedef MVN<Vec, Vec, Mat> Multivariate;
+typedef GP::VectorXd Vec;
+typedef GP::MatrixXd Mat;
+typedef GP::MVN<Vec, Vec, Mat> Multivariate;
 
 // Examine the scaling of MVN::get() when called for the first time
 int main(int, char*[]) {
@@ -52,7 +52,7 @@ int main(int, char*[]) {
             // BENCHMARK
             ptime start = microsec_clock::local_time();
             mvn.get();
-            mvn.get_derivative_MU();
+            mvn.get_derivative_mu();
             mvn.get_derivative_Sigma();
             ptime end = microsec_clock::local_time();
             //
