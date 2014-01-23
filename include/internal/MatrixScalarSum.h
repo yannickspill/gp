@@ -2,7 +2,7 @@
 #define INTERNAL_MATRIX_SCALAR_SUM_H
 
 #include "macros.h"
-#include "internal/MatrixBase.h"
+#include "internal/ScalarBase.h"
 
 #include <Eigen/Core>
 #include <type_traits>
@@ -24,7 +24,7 @@ struct traits<MatrixScalarSum<Mat, Scal> > {
 // type(matrix + scalar) = type(scalar)
 // will check if matrix is 1x1 at runtime
 template <typename Mat, typename Scal>
-class MatrixScalarSum : public MatrixBase<MatrixScalarSum<Mat, Scal> > {
+class MatrixScalarSum : public ScalarBase<MatrixScalarSum<Mat, Scal> > {
  private:
   Mat lhs_;
   Scal rhs_;

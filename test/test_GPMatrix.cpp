@@ -76,6 +76,8 @@ int main(int, char * []) {
   // matrix builtin sum
   if ((5 + small).get() != (5. + small.get()(0,0))) return 62;
   if ((small + 5.).get() != (5. + small.get()(0,0))) return 63;
+  if (((small + 5.)+5.).get() != (10. + small.get()(0,0))) return 66;
+  if (((small + 5.)+small).get() != (5. + 2*small.get()(0,0))) return 67;
   // matrismall.get()(0,0) builtin difference
   if ((5 - small).get() != (5. - small.get()(0,0))) return 64;
   if ((small - 5.).get() != (-5. + small.get()(0,0))) return 65;

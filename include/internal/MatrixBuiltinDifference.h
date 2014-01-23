@@ -2,7 +2,7 @@
 #define INTERNAL_MATRIX_BUILTIN_DIFFERENCE_H
 
 #include "macros.h"
-#include "internal/MatrixBase.h"
+#include "internal/ScalarBase.h"
 
 #include <Eigen/Core>
 #include <type_traits>
@@ -22,7 +22,7 @@ struct traits<MatrixBuiltinDifference<MatrixExpression> > {
 // expression template for product of a Matrix with anything convertible to a
 // double
 template <class MatrixExpression>
-class MatrixBuiltinDifference : public MatrixBase
+class MatrixBuiltinDifference : public ScalarBase
                              <MatrixBuiltinDifference<MatrixExpression> > {
  public:
   typedef typename traits

@@ -2,7 +2,7 @@
 #define INTERNAL_MATRIX_SCALAR_DIFFERENCE_H
 
 #include "macros.h"
-#include "internal/MatrixBase.h"
+#include "internal/ScalarBase.h"
 
 #include <Eigen/Core>
 #include <type_traits>
@@ -21,7 +21,7 @@ struct traits<MatrixScalarDifference<Mat, Scal> > {
 };
 
 template <typename Mat, typename Scal>
-class MatrixScalarDifference : public MatrixBase
+class MatrixScalarDifference : public ScalarBase
                                <MatrixScalarDifference<Mat, Scal> > {
  private:
   Mat lhs_;

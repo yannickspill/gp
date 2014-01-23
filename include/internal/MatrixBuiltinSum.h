@@ -2,7 +2,7 @@
 #define INTERNAL_MATRIX_BUILTIN_SUM_H
 
 #include "macros.h"
-#include "internal/MatrixBase.h"
+#include "internal/ScalarBase.h"
 
 #include <Eigen/Core>
 #include <type_traits>
@@ -22,7 +22,7 @@ struct traits<MatrixBuiltinSum<MatrixExpression> > {
 // expression template for product of a Matrix with anything convertible to a
 // double
 template <class MatrixExpression>
-class MatrixBuiltinSum : public MatrixBase
+class MatrixBuiltinSum : public ScalarBase
                              <MatrixBuiltinSum<MatrixExpression> > {
  public:
   typedef typename traits
