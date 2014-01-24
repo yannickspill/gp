@@ -26,8 +26,8 @@ struct traits<MatrixScalarSum<Mat, Scal> > {
 template <typename Mat, typename Scal>
 class MatrixScalarSum : public ScalarBase<MatrixScalarSum<Mat, Scal> > {
  private:
-  const Mat& lhs_;
-  const Scal& rhs_;
+  Mat lhs_;
+  Scal rhs_;
 
  public:
   typedef typename traits

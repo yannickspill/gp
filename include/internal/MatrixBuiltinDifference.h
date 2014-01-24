@@ -31,7 +31,7 @@ class MatrixBuiltinDifference : public ScalarBase
       <MatrixBuiltinDifference<MatrixExpression> >::result_type result_type;
 
  private:
-  const MatrixExpression& lhs_;
+  MatrixExpression lhs_;
   double rhs_;
 
  public:

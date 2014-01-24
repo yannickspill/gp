@@ -33,7 +33,7 @@ class MatrixBuiltinProduct : public MatrixBase
 
  private:
   double lhs_;
-  const MatrixExpression& rhs_;
+  MatrixExpression rhs_;
 
  public:
   // constructor

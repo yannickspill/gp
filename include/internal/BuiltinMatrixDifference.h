@@ -32,7 +32,7 @@ class BuiltinMatrixDifference : public ScalarBase
 
  private:
   double lhs_;
-  const MatrixExpression& rhs_;
+  MatrixExpression rhs_;
 
  public:
   // constructor

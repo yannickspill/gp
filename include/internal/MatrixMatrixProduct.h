@@ -30,8 +30,8 @@ class MatrixMatrixProduct : public MatrixBase<MatrixMatrixProduct<Lhs, Rhs> > {
       <MatrixMatrixProduct<Lhs, Rhs> >::result_type result_type;
 
  private:
-  const Lhs& lhs_;
-  const Rhs& rhs_;
+  Lhs lhs_;
+  Rhs rhs_;
   mutable std::shared_ptr<result_type> ret_;
 
  public:

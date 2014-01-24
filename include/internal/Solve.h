@@ -44,8 +44,8 @@ class Solve : public MatrixBase<Solve<DecompType, OtherDerived> > {
   typedef typename traits<Solve>::result_type result_type;
 
  private:
-  const DecompType& decomp_;
-  const OtherDerived& mat_;
+  DecompType decomp_;
+  OtherDerived mat_;
 
  public:
   // constructor
