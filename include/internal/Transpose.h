@@ -8,6 +8,7 @@
 #include <Eigen/Core>
 #include <type_traits>
 #include <typeinfo>
+#include <utility>
 
 namespace GP {
 namespace internal {
