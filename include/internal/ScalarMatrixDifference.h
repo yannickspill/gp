@@ -24,8 +24,8 @@ template <typename Scal, typename Mat>
 class ScalarMatrixDifference : public ScalarBase
                                <ScalarMatrixDifference<Scal, Mat> > {
  private:
-  Scal lhs_;
-  Mat rhs_;
+  const Scal& lhs_;
+  const Mat& rhs_;
 
  public:
   typedef typename traits

@@ -24,8 +24,8 @@ template <class Lhs, class Rhs> struct traits<ScalarScalarProduct<Lhs, Rhs> > {
 template <typename Lhs, typename Rhs>
 class ScalarScalarProduct : public ScalarBase<ScalarScalarProduct<Lhs, Rhs> > {
  private:
-  Lhs lhs_;
-  Rhs rhs_;
+  const Lhs& lhs_;
+  const Rhs& rhs_;
 
  public:
   typedef typename traits

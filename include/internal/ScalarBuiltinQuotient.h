@@ -23,7 +23,7 @@ template <class ScalarExpression>
 class ScalarBuiltinQuotient : public ScalarBase
                              <ScalarBuiltinQuotient<ScalarExpression> > {
  private:
-  ScalarExpression lhs_;
+  const ScalarExpression& lhs_;
   double rhs_;
 
  public:

@@ -26,9 +26,9 @@ namespace GP {
  */
 template <class YVectorType, class MVectorType, class MatrixType> class MVN {
 
-  YVectorType y_;
-  MVectorType mu_;
-  MatrixType Sigma_;
+  const YVectorType& y_;
+  const MVectorType& mu_;
+  const MatrixType& Sigma_;
   decltype(y_ - mu_) eps_;
   decltype(Sigma_.decomposition()) ldlt_;
 

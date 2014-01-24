@@ -24,7 +24,7 @@ class Decomposition : public Policy<Derived>,
   typedef typename traits<Decomposition<Derived> >::result_type result_type;
 
  private:
-  Derived data_;
+  const Derived& data_;
 
  public:
   // constructor

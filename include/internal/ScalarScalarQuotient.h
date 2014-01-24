@@ -24,8 +24,8 @@ template <class Lhs, class Rhs> struct traits<ScalarScalarQuotient<Lhs, Rhs> > {
 template <typename Lhs, typename Rhs>
 class ScalarScalarQuotient : public ScalarBase<ScalarScalarQuotient<Lhs, Rhs> > {
  private:
-  Lhs lhs_;
-  Rhs rhs_;
+  const Lhs& lhs_;
+  const Rhs& rhs_;
 
  public:
   typedef typename traits

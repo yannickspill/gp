@@ -31,7 +31,7 @@ class MatrixOpposite : public MatrixBase
       <MatrixOpposite<MatrixExpression> >::result_type result_type;
 
  private:
-  MatrixExpression val_;
+  const MatrixExpression& val_;
 
  public:
   // constructor

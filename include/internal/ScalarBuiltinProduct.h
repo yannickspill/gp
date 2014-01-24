@@ -24,7 +24,7 @@ class ScalarBuiltinProduct : public ScalarBase
                              <ScalarBuiltinProduct<ScalarExpression> > {
  private:
   double lhs_;
-  ScalarExpression rhs_;
+  const ScalarExpression& rhs_;
 
  public:
   typedef typename traits

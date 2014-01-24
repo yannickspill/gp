@@ -29,7 +29,7 @@ class LogDeterminant
   typedef typename traits<LogDeterminant>::result_type result_type;
 
  private:
-  Decomposition<DerivedMat, LDLTPolicy> data_;
+  const Decomposition<DerivedMat, LDLTPolicy>& data_;
 
  public:
   // constructor
@@ -58,7 +58,7 @@ class LogDeterminant
   typedef typename traits<LogDeterminant>::result_type result_type;
 
  private:
-  Cache<Decomposition<DerivedMat, LDLTPolicy> > data_;
+  const Cache<Decomposition<DerivedMat, LDLTPolicy> >& data_;
 
  public:
   // constructor

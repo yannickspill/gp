@@ -24,7 +24,7 @@ template <typename Lhs>
 class ScalarBuiltinDifference : public ScalarBase
                                 <ScalarBuiltinDifference<Lhs> > {
  private:
-  Lhs lhs_;
+  const Lhs& lhs_;
   double rhs_;
 
  public:

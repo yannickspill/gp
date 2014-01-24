@@ -24,8 +24,8 @@ struct traits<MatrixScalarProduct<Mat, Scal> > {
 template <typename Mat, typename Scal>
 class MatrixScalarProduct : public MatrixBase<MatrixScalarProduct<Mat, Scal> > {
  private:
-  Mat lhs_;
-  Scal rhs_;
+  const Mat& lhs_;
+  const Scal& rhs_;
 
  public:
   typedef typename traits

@@ -31,7 +31,7 @@ class MatrixBuiltinSum : public ScalarBase
       <MatrixBuiltinSum<MatrixExpression> >::result_type result_type;
 
  private:
-  MatrixExpression lhs_;
+  const MatrixExpression& lhs_;
   double rhs_;
 
  public:

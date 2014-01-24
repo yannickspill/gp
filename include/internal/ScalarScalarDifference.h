@@ -26,8 +26,8 @@ template <typename Lhs, typename Rhs>
 class ScalarScalarDifference : public ScalarBase
                                <ScalarScalarDifference<Lhs, Rhs> > {
  private:
-  Lhs lhs_;
-  Rhs rhs_;
+  const Lhs& lhs_;
+  const Rhs& rhs_;
 
  public:
   typedef typename traits

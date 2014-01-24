@@ -24,7 +24,7 @@ class Trace : public ScalarBase<Trace<Derived> > {
   typedef typename traits<Trace<Derived> >::result_type result_type;
 
  private:
-  Derived data_;
+  const Derived& data_;
 
  public:
   // constructor

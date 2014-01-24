@@ -30,7 +30,7 @@ class ScalarOpposite : public ScalarBase
       <ScalarOpposite<ScalarExpression> >::result_type result_type;
 
  private:
-  ScalarExpression val_;
+  const ScalarExpression& val_;
 
  public:
   // constructor

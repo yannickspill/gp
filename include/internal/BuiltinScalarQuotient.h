@@ -24,7 +24,7 @@ class BuiltinScalarQuotient : public ScalarBase
                              <BuiltinScalarQuotient<ScalarExpression> > {
  private:
   double lhs_;
-  ScalarExpression rhs_;
+  const ScalarExpression& rhs_;
 
  public:
   typedef typename traits

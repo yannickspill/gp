@@ -24,8 +24,8 @@ template <class Lhs, class Rhs> struct traits<ScalarScalarSum<Lhs, Rhs> > {
 template <typename Lhs, typename Rhs>
 class ScalarScalarSum : public ScalarBase<ScalarScalarSum<Lhs, Rhs> > {
  private:
-  Lhs lhs_;
-  Rhs rhs_;
+  const Lhs& lhs_;
+  const Rhs& rhs_;
 
  public:
   typedef typename traits<ScalarScalarSum<Lhs, Rhs> >::scalar_type scalar_type;

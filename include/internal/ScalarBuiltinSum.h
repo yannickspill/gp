@@ -24,7 +24,7 @@ template <typename Lhs>
 class ScalarBuiltinSum : public ScalarBase
                                 <ScalarBuiltinSum<Lhs> > {
  private:
-  Lhs lhs_;
+  const Lhs& lhs_;
   double rhs_;
 
  public:
