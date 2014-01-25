@@ -11,7 +11,9 @@ namespace internal {
 template <class Derived> class MatrixBase : public GPBase<Derived> {
 
  protected:
-  MatrixBase() {}  // only children can instantiate it
+  MatrixBase() {
+      std::cout << "Construct MatrixBase " << std::endl;
+  }  // only children can instantiate it
 
  public:
   // typedefs
@@ -39,6 +41,7 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
 
   // transposition
   Transpose<Derived> transpose() const {
+      std::cout << "Call Transpose " << std::endl;
     return Transpose<Derived>(asDerived());
   }
 
@@ -55,6 +58,7 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
 template <class Lhs, class Rhs>
 const MatrixSum<Lhs, Rhs> operator+(const MatrixBase<Lhs>& lhs,
                                     const MatrixBase<Rhs>& rhs) {
+      std::cout << "Call operator+ " << std::endl;
   return MatrixSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 //  double Matrix

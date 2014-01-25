@@ -39,6 +39,11 @@ class MatrixMatrixProduct : public MatrixBase<MatrixMatrixProduct<Lhs, Rhs> > {
   MatrixMatrixProduct(const Lhs& lhs, const Rhs& rhs)
       : lhs_(lhs), rhs_(rhs), ret_(nullptr) {}
 
+  MatrixMatrixProduct(Lhs&& lhs, Rhs&& rhs)
+      : lhs_(lhs), rhs_(rhs), ret_(nullptr) {
+          std::cout << "second called" << std::endl;
+      }
+
   // actual computation
   const result_type& get() const {
     ret_ = std::make_shared<result_type>(lhs_.get() * rhs_.get());
