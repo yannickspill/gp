@@ -32,17 +32,12 @@ class MatrixSum : public MatrixBase<MatrixSum<Lhs, Rhs> > {
 
  public:
   // constructor
-  MatrixSum(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {
-      std::cout << "Construct MatrixSum" << std::endl;
-  }
+  MatrixSum(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
 
   // actual computation
-  result_type get() const { 
-      std::cout << "Get MatrixSum" << std::endl;
-      return lhs_.get() + rhs_.get(); }
+  result_type get() const { return lhs_.get() + rhs_.get(); }
 
   unsigned get_version() const {
-      std::cout << "get MatrixSum version" << std::endl;
     return lhs_.get_version() + rhs_.get_version();
   }
 };

@@ -12,7 +12,7 @@ namespace internal {
 template <class Derived> class GPBase {
 
  protected:
-  GPBase() { std::cout << "Construct GPBase " << std::endl;}  // only children can instantiate it
+  GPBase() {}  // only children can instantiate it
 
  public:
   // typedefs

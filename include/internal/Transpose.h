@@ -37,18 +37,12 @@ class Transpose : public MatrixBase<Transpose<Derived> > {
 
  public:
   // constructor
-  Transpose(const Derived& data) : data_(data) {
-      std::cout << "Construct Transpose" << std::endl;
-  }
+  Transpose(const Derived& data) : data_(data) {}
 
   // actual computation
-  result_type get() const { 
-      std::cout << "get Transpose" << std::endl;
-      return data_.get().transpose(); }
+  result_type get() const { return data_.get().transpose(); }
 
-  unsigned get_version() const { 
-      std::cout << "get Transpose version" << std::endl;
-      return data_.get_version(); }
+  unsigned get_version() const { return data_.get_version(); }
 };
 }
 }

@@ -26,33 +26,25 @@ class Matrix : public MatrixBase<Matrix<EigenType> > {
   struct Data {
     result_type value_;
     unsigned version_;
-    Data(const result_type& v) : value_(v), version_(0) {
-          std::cout << "Construct Matrix::Data " << this << std::endl;
-    }
+    Data(const result_type& v) : value_(v), version_(0) {}
   };
   std::shared_ptr<Data> data_;
 
  public:
   //! Construct directly from underlying data type
   explicit Matrix(const result_type& data)
-      : data_(std::make_shared<Data>(data)) {
-          std::cout << "Construct Matrix " << this << " with data_ " << data_ << std::endl;
-      }
+      : data_(std::make_shared<Data>(data)) {}
 
   //! Explicit cast from any GP matrix expression
   template <class GPExpression>
   explicit Matrix(const MatrixBase<GPExpression>& expr)
-      : data_(std::make_shared<Data>(expr.asDerived().get())) { }
+      : data_(std::make_shared<Data>(expr.asDerived().get())) {}
 
   //! Return bare Implemented type
   // Use with precaution as this loses track of any dependent Scalars.
-  const result_type& get() const {
-          std::cout << "get Matrix " << this<< " with data_ " << data_ << std::endl;
-      return data_->value_; }
+  const result_type& get() const { return data_->value_; }
 
-  unsigned get_version() const {
-          std::cout << "get Matrix version " << this << " with data_ " << data_ << std::endl;
-      return data_->version_; }
+  unsigned get_version() const { return data_->version_; }
 
   void set(const result_type& data) {
     data_->value_ = data;

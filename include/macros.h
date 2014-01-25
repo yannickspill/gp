@@ -10,7 +10,7 @@
     { std::cout << msg; }
 #else
 #define LOG(msg) \
-    { std::cout << msg; }
+    {}
 #endif
 
 #define CHECK(expr, message)                   \
