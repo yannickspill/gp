@@ -128,15 +128,16 @@ class Cache : public Parent<Object>, public CachePlugins<Object> {
   //! Get an up-to-date version of the cached object's get() return value
   const result_type& get() const {
     if (!data_) {  // first call
+        LOG("Cache::get() : data init" << std::endl)
       data_ = std::make_shared<Data>(obj_);
     } else {
       unsigned version = obj_.get_version();
       if (version != data_->get_version()) {
-        LOG("   Cache invalid, updating from version "
-            << data_->get_version() << " to version " << version << std::endl);
+        LOG("Cache::get() : invalid, updating " << std::endl);
         data_->set_value(obj_);
       }
     }
+        LOG("Cache::get() : returning data" << std::endl);
     return data_->get();
   }
 
@@ -145,8 +146,10 @@ class Cache : public Parent<Object>, public CachePlugins<Object> {
   //cache.
   unsigned get_version() const {
     if (!data_) {  // first call
+        LOG("Cache::get_version() : data init" << std::endl)
       data_ = std::make_shared<Data>(obj_);
     }
+    LOG("Cache::get_version() : returning data" << std::endl);
     return data_->get_version();
   }
 };
