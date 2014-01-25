@@ -111,7 +111,7 @@ class Cache : public Parent<Object>, public CachePlugins<Object> {
     }
   };
 
-  const Object& obj_;
+  Object obj_;
   mutable std::shared_ptr<Data> data_;
 
  public:
