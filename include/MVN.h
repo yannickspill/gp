@@ -30,7 +30,7 @@ template <class YVectorType, class MVectorType, class MatrixType> class MVN {
   MVectorType mu_;
   MatrixType Sigma_;
   decltype(y_ - mu_) eps_;
-  decltype(Sigma_.decomposition()) ldlt_;
+  decltype(Sigma_.decomposition().cache()) ldlt_;
 
  public:
   /** Constructor
@@ -40,7 +40,7 @@ template <class YVectorType, class MVectorType, class MatrixType> class MVN {
   * */
   MVN(const YVectorType& y, const MVectorType& mu, const MatrixType& Sigma)
       : y_(y), mu_(mu), Sigma_(Sigma), eps_(y - mu),
-        ldlt_(Sigma.decomposition()) {}
+        ldlt_(Sigma.decomposition().cache()) {}
 
   /// return -log(p)
   double get() const { return value().get(); }
@@ -60,14 +60,14 @@ template <class YVectorType, class MVectorType, class MatrixType> class MVN {
                                   + 0.5 * ldlt_.logdet()) {
     // -log(p) = 1/2 * eps^T * Sigma^{-1} * eps
     //           + M/2 * log(2*pi) + 1/2*log(det(Sigma))
-    LOG(" mvn value" << std::endl);
+    LOG("MVN::value()" << std::endl);
     return 0.5 * eps_.transpose() * ldlt_.solve(eps_)
            + eps_.rows() / 2. * std::log(2 * M_PI) + 0.5 * ldlt_.logdet();
   }
 
   auto deriv_mu_value() const -> decltype(-ldlt_.solve(eps_)) {
     // d(-log(p))/d(MU) = - Sigma^{-1} * epsilon
-    LOG("mvn deriv_mu" << std::endl);
+    LOG("MVN::deriv_mu_value()" << std::endl);
     return -ldlt_.solve(eps_);
   }
 
@@ -75,6 +75,7 @@ template <class YVectorType, class MVectorType, class MatrixType> class MVN {
       -> decltype(0.5 * (ldlt_.solve(std::declval<MatrixXd>())
                          - ldlt_.solve(eps_) * ldlt_.solve(eps_).transpose())) {
     // d(-log(p))/dSigma = 1/2 (P -  P epsilon transpose(epsilon) P)
+    LOG("MVN::deriv_sigma_value()" << std::endl);
     MatrixXd Id(Eigen::MatrixXd::Identity(Sigma_.rows(), Sigma_.cols()));
     auto P = ldlt_.solve(Id);
     auto Peps = ldlt_.solve(eps_);
