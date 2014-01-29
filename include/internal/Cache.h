@@ -84,39 +84,59 @@ class Cache : public Parent<Object>, public CachePlugins<Object> {
   typedef typename traits<Cache>::eval_called eval_called;
 
  private:
-  class Data {
+  class CacheData {
    private:
+    mutable bool first_call_;
     mutable unsigned version_;
-    mutable result_type val_;
+    Object obj_; 
+    mutable std::unique_ptr<result_type> val_;
 
    private:
     void set_value(const Object& obj, std::true_type) const {
       version_ = obj.get_version();
-      val_ = obj.get().eval();  // force evaluation
+      // force evaluation (e.g. as matrix, not expr)
+      val_.reset(new result_type(obj.get().eval()));
     }
     void set_value(const Object& obj, std::false_type) const {
       version_ = obj.get_version();
-      val_ = obj.get();  // obj.get() does not have eval(): store as-is
+      // obj.get() does not have eval(): store as-is
+      val_.reset(new result_type(obj.get()));
     }
+    void set_value(const Object& obj) const { set_value(obj, eval_called()); }
+    void init(const Object& obj) const {
+      LOG("CacheData::init() : data init" << std::endl)
+      set_value(obj);
+    }
+
+    CacheData(const CacheData&); // cannot be copied
 
    public:
-    const result_type& get() const { return val_; }
-    unsigned get_version() const { return version_; }
-    void set_value(const Object& obj) {
-      set_value(obj, eval_called());
+    const result_type& get() const {
+      if (!val_) {
+        init(obj_);
+      } else if (obj_.get_version() != get_version()) {
+        LOG("Cache::get() : invalid, updating " << std::endl);
+        set_value(obj_);
+      }
+      return *val_;
+    }
+    unsigned get_version() const {
+      if (!val_) {
+        init(obj_);
+      }
+      return version_;
     }
 
-    Data(const Object& obj) {
-      set_value(obj);
-      LOG("   Cache data init : version = " << version_ << std::endl);
+    CacheData(const Object& obj)
+        : version_(0), obj_(obj), val_(nullptr) {
+      LOG("CacheData init " << std::endl);
     }
   };
 
-  const Object& obj_;
-  mutable std::shared_ptr<Data> data_;
+  mutable std::shared_ptr<CacheData> data_;
 
  public:
-  Cache(const Object& obj) : obj_(obj), data_(nullptr) {
+  Cache(const Object& obj) : data_(std::make_shared<CacheData>(obj)) {
     LOG("Cache for object " << typeid(Object).name() << std::endl
                             << "   inheriting from "
                             << typeid(Parent<Object>).name()
@@ -128,16 +148,7 @@ class Cache : public Parent<Object>, public CachePlugins<Object> {
 
   //! Get an up-to-date version of the cached object's get() return value
   const result_type& get() const {
-    if (!data_) {  // first call
-      data_ = std::make_shared<Data>(obj_);
-    } else {
-      unsigned version = obj_.get_version();
-      if (version != data_->get_version()) {
-        LOG("   Cache invalid, updating from version "
-            << data_->get_version() << " to version " << version << std::endl);
-        data_->set_value(obj_);
-      }
-    }
+    LOG("Cache::get() : returning data" << std::endl);
     return data_->get();
   }
 
@@ -145,9 +156,7 @@ class Cache : public Parent<Object>, public CachePlugins<Object> {
   //Object::get_version() to know if the next call to get() will invalidate the
   //cache.
   unsigned get_version() const {
-    if (!data_) {  // first call
-      data_ = std::make_shared<Data>(obj_);
-    }
+    LOG("Cache::get_version() : returning data" << std::endl);
     return data_->get_version();
   }
 };

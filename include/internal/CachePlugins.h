@@ -20,12 +20,14 @@ class CachePlugins<Decomposition<Derived, Policy> > {
   // log-determinant, can only be applied to LDLT decomposition for now
   // write another specialization in LogDeterminant.h if you need more
   LogDeterminant<Child> logdet() const {
+      LOG("   Cache Plugin logdet" << std::endl);
     return LogDeterminant<Child>(static_cast<const Child&>(*this));
   }
 
   // solve AX=B system, and yield X
   template <class OtherDerived>
   Solve<Child, OtherDerived> solve(const OtherDerived& B) const {
+      LOG("   Cache Plugin solve" << std::endl);
     return Solve<Child, OtherDerived>(static_cast<const Child&>(*this), B);
   }
 

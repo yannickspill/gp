@@ -53,6 +53,9 @@ int main(int, char*[]) {
             //
             // BENCHMARK
             Multivariate mvn(y,m,Sigma);
+            auto value = mvn.value();
+            auto deriv_mu = mvn.deriv_mu_value();
+            auto deriv_Sigma = mvn.deriv_Sigma_value();
             //
             //
             ptime end = microsec_clock::local_time();

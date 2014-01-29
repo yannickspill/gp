@@ -48,6 +48,12 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return Decomposition<Derived, Policy>(asDerived());
   }
 
+  // apply func to every row of mat and return the resulting object
+  template <class FArgs, class Other>
+  static const ApplyMatrix<FArgs, Other> Apply(const std::function<FArgs>& func,
+                                               const MatrixBase<Other>& mat) {
+    return ApplyMatrix<FArgs, Other>(func, mat.asDerived());
+  }
 };
 
 // sums

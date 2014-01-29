@@ -50,10 +50,11 @@ int main(int, char*[]) {
         ptime run = microsec_clock::local_time();
         do {
             Multivariate mvn(y,m,Sigma);
+            auto value = mvn.value();
             //
             // BENCHMARK
             ptime start = microsec_clock::local_time();
-            mvn.get();
+            value.get();
             ptime end = microsec_clock::local_time();
             //
             //
