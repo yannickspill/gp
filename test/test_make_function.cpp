@@ -1,7 +1,7 @@
 #include "Scalar.h"
 #include "Matrix.h"
 
-#include "internal/make_function.h"
+#include "internal/Functor.h"
 
 #include <Eigen/Dense>
 #include <iostream>
@@ -26,6 +26,10 @@ int main(int, char*[]){
     VectorXd gprvec(rvec);
     auto f3 = internal::make_function(gplvec*gpmat*gprvec, gplvec);
     if (f3(lvec) != lvec*mat*rvec) return 5;
+    if (gplvec.get() != lvec) return 6;
+    Eigen::RowVectorXd randvec(Eigen::RowVectorXd::Random(3));
+    if (f3(randvec) != randvec*mat*rvec) return 7;
+    if (gplvec.get() != lvec) return 8;
 
     return 0;
 }

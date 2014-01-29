@@ -62,6 +62,10 @@ template <class Lhs, class Rhs> class MatrixScalarQuotient;
 //cache
 template <class Object> class Cache;
 template <class Object> class CachePlugins;
+
+//functor related
+template <class OutExpr, class... InExprs> class Functor;
+template <class FArgs, class Other> class ApplyMatrix;
 }
 }
 #endif /*FINTERNAL_ORWARD_DECLARATIONS_H*/
