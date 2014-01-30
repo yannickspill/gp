@@ -20,20 +20,29 @@ struct traits<MatrixScalarQuotient<Mat, Scal> > {
   typedef typename Mat::scalar_type scalar_type;
   typedef decltype(std::declval<typename Mat::result_type>() / std::declval
                    <typename Scal::result_type>()) result_type;
+    enum {
+    RowsAtCompileTime = Mat::RowsAtCompileTime,
+    ColsAtCompileTime = Mat::ColsAtCompileTime
+  };
+
+
 };
 
 template <typename Mat, typename Scal>
 class MatrixScalarQuotient : public MatrixBase
                              <MatrixScalarQuotient<Mat, Scal> > {
+  public:
+  // typedefs
+  typedef typename traits<MatrixScalarQuotient>::scalar_type scalar_type;
+  typedef typename traits<MatrixScalarQuotient>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<MatrixScalarQuotient>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<MatrixScalarQuotient>::ColsAtCompileTime
+  };
+
  private:
   Mat lhs_;
   Scal rhs_;
-
- public:
-  typedef typename traits
-      <MatrixScalarQuotient<Mat, Scal> >::scalar_type scalar_type;
-  typedef typename traits
-      <MatrixScalarQuotient<Mat, Scal> >::result_type result_type;
 
  public:
   // constructor

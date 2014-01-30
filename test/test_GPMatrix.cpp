@@ -21,6 +21,8 @@ int main(int, char * []) {
   Eigen::MatrixXd y(Eigen::MatrixXd::Random(szx, szy));
   MatrixXd vy(y);
   if (vx.get() != x) return 1;
+  vx.transpose();
+  /*
   // sum
   vx + vy;
   const Eigen::MatrixXd tmp((vx + vy).get());
@@ -87,8 +89,13 @@ int main(int, char * []) {
   // matrix builtin quotient
   if ((vx / 5.).get() != (x/5.)) return 28;
 
-  //matrix and scalar opposites
-  if ((-vx).get() != -x) return 69;
+  //matrix builtin difference traits
+  auto smdiff = 5. - small;
+  if (smdiff.RowsAtCompileTime != small.get().RowsAtCompileTime) return 71;
+  if (smdiff.ColsAtCompileTime != small.get().ColsAtCompileTime) return 72;
+
+      // matrix and scalar opposites
+      if ((-vx).get() != -x) return 69;
   if ((-scal).get() != -(scal.get())) return 70;
 
   // lots of products sums and divisions
@@ -260,6 +267,7 @@ int main(int, char * []) {
           .matrix()
           .norm() > 1e-5)
     return 49;
+  */
 
   //broadcast a Scalar to a matrix
   GP::Scalar tbb(0.5);

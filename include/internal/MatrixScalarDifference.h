@@ -28,10 +28,9 @@ class MatrixScalarDifference : public ScalarBase
   Scal rhs_;
 
  public:
-  typedef typename traits
-      <MatrixScalarDifference<Mat, Scal> >::scalar_type scalar_type;
-  typedef typename traits
-      <MatrixScalarDifference<Mat, Scal> >::result_type result_type;
+  // typedefs
+  typedef typename traits<MatrixScalarDifference>::scalar_type scalar_type;
+  typedef typename traits<MatrixScalarDifference>::result_type result_type;
 
  public:
   // constructor

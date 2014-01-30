@@ -25,6 +25,7 @@ class LogDeterminant
                                   <LogDeterminant
                                    <Decomposition<DerivedMat, LDLTPolicy> > > {
  public:
+  // typedefs
   typedef typename traits<LogDeterminant>::scalar_type scalar_type;
   typedef typename traits<LogDeterminant>::result_type result_type;
 

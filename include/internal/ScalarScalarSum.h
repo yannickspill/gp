@@ -23,13 +23,14 @@ template <class Lhs, class Rhs> struct traits<ScalarScalarSum<Lhs, Rhs> > {
 // expression template for products involving only Scalars
 template <typename Lhs, typename Rhs>
 class ScalarScalarSum : public ScalarBase<ScalarScalarSum<Lhs, Rhs> > {
+ public:
+  // typedefs
+  typedef typename traits<ScalarScalarSum>::scalar_type scalar_type;
+  typedef typename traits<ScalarScalarSum>::result_type result_type;
+
  private:
   Lhs lhs_;
   Rhs rhs_;
-
- public:
-  typedef typename traits<ScalarScalarSum<Lhs, Rhs> >::scalar_type scalar_type;
-  typedef typename traits<ScalarScalarSum<Lhs, Rhs> >::result_type result_type;
 
  public:
   // constructor

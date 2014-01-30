@@ -22,10 +22,9 @@ template <class MatrixExpression>
 class MatrixBuiltinSum : public ScalarBase
                              <MatrixBuiltinSum<MatrixExpression> > {
  public:
-  typedef typename traits
-      <MatrixBuiltinSum<MatrixExpression> >::scalar_type scalar_type;
-  typedef typename traits
-      <MatrixBuiltinSum<MatrixExpression> >::result_type result_type;
+  // typedefs
+  typedef typename traits<MatrixBuiltinSum>::scalar_type scalar_type;
+  typedef typename traits<MatrixBuiltinSum>::result_type result_type;
 
  private:
   MatrixExpression lhs_;

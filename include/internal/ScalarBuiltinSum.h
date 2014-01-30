@@ -23,15 +23,14 @@ template <class Lhs> struct traits<ScalarBuiltinSum<Lhs> > {
 template <typename Lhs>
 class ScalarBuiltinSum : public ScalarBase
                                 <ScalarBuiltinSum<Lhs> > {
+ public:
+  // typedefs
+  typedef typename traits<ScalarBuiltinSum>::scalar_type scalar_type;
+  typedef typename traits<ScalarBuiltinSum>::result_type result_type;
+
  private:
   Lhs lhs_;
   double rhs_;
-
- public:
-  typedef typename traits
-      <ScalarBuiltinSum<Lhs> >::scalar_type scalar_type;
-  typedef typename traits
-      <ScalarBuiltinSum<Lhs> >::result_type result_type;
 
  public:
   // constructor

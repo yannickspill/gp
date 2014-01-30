@@ -19,16 +19,25 @@ template <class Lhs, class Rhs> struct traits<MatrixMatrixProduct<Lhs, Rhs> > {
   typedef typename Lhs::scalar_type scalar_type;
   typedef decltype(std::declval<typename Lhs::result_type>() * std::declval
                    <typename Rhs::result_type>()) result_type;
+  enum {
+    RowsAtCompileTime = Lhs::RowsAtCompileTime,
+    ColsAtCompileTime = Lhs::ColsAtCompileTime
+  };
+
+
 };
 
 template <typename Lhs, typename Rhs>
 class MatrixMatrixProduct : public MatrixBase<MatrixMatrixProduct<Lhs, Rhs> > {
 
  public:
-  typedef typename traits
-      <MatrixMatrixProduct<Lhs, Rhs> >::scalar_type scalar_type;
-  typedef typename traits
-      <MatrixMatrixProduct<Lhs, Rhs> >::result_type result_type;
+  // typedefs
+  typedef typename traits<MatrixMatrixProduct>::scalar_type scalar_type;
+  typedef typename traits<MatrixMatrixProduct>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<MatrixMatrixProduct>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<MatrixMatrixProduct>::ColsAtCompileTime
+  };
 
  private:
   Lhs lhs_;

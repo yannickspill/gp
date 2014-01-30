@@ -20,17 +20,28 @@ template <class Lhs, class Rhs> struct traits<MatrixDifference<Lhs, Rhs> > {
   typedef typename Lhs::scalar_type scalar_type;
   typedef decltype(std::declval<typename Lhs::result_type>() - std::declval
                    <typename Rhs::result_type>()) result_type;
+    enum {
+    RowsAtCompileTime = Lhs::RowsAtCompileTime,
+    ColsAtCompileTime = Lhs::ColsAtCompileTime
+  };
+
+
 };
 
 template <typename Lhs, typename Rhs>
 class MatrixDifference : public MatrixBase<MatrixDifference<Lhs, Rhs> > {
+ public:
+  // typedefs
+  typedef typename traits<MatrixDifference>::scalar_type scalar_type;
+  typedef typename traits<MatrixDifference>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<MatrixDifference>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<MatrixDifference>::ColsAtCompileTime
+  };
+
  private:
   Lhs lhs_;
   Rhs rhs_;
-
- public:
-  typedef typename traits<MatrixDifference<Lhs, Rhs> >::scalar_type scalar_type;
-  typedef typename traits<MatrixDifference<Lhs, Rhs> >::result_type result_type;
 
  public:
   // constructor

@@ -25,8 +25,12 @@ template <class OutExpr, class... InExprs>
 class Functor {
 
  public:
+  // typedefs
   typedef typename traits<Functor>::scalar_type scalar_type;
   typedef typename traits<Functor>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<Functor>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<Functor>::ColsAtCompileTime
 
  private:
   std::tuple<InExprs...> in_exprs_;

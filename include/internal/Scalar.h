@@ -18,6 +18,7 @@ template <> struct traits<Scalar> {
 // modifiable double
 class Scalar : public ScalarBase<Scalar> {
  public:
+  // typedefs
   typedef typename traits<Scalar>::scalar_type scalar_type;
   typedef typename traits<Scalar>::result_type result_type;
 

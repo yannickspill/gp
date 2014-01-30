@@ -23,15 +23,14 @@ struct traits<ScalarMatrixDifference<Scal, Mat> > {
 template <typename Scal, typename Mat>
 class ScalarMatrixDifference : public ScalarBase
                                <ScalarMatrixDifference<Scal, Mat> > {
+  public:
+  // typedefs
+  typedef typename traits<ScalarMatrixDifference>::scalar_type scalar_type;
+  typedef typename traits<ScalarMatrixDifference>::result_type result_type;
+
  private:
   Scal lhs_;
   Mat rhs_;
-
- public:
-  typedef typename traits
-      <ScalarMatrixDifference<Scal, Mat> >::scalar_type scalar_type;
-  typedef typename traits
-      <ScalarMatrixDifference<Scal, Mat> >::result_type result_type;
 
  public:
   // constructor

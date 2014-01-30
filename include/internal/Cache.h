@@ -79,8 +79,13 @@ typedef typename has_eval<typename Object::result_type>::value_type eval_called;
 template <class Object>
 class Cache : public Parent<Object>, public CachePlugins<Object> {
  public:
+  // typedefs
   typedef typename traits<Cache>::scalar_type scalar_type;
   typedef typename traits<Cache>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<Cache>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<Cache>::ColsAtCompileTime
+  };
   typedef typename traits<Cache>::eval_called eval_called;
 
  private:

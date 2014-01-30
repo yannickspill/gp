@@ -27,10 +27,9 @@ class BuiltinScalarQuotient : public ScalarBase
   ScalarExpression rhs_;
 
  public:
-  typedef typename traits
-      <BuiltinScalarQuotient<ScalarExpression> >::scalar_type scalar_type;
-  typedef typename traits
-      <BuiltinScalarQuotient<ScalarExpression> >::result_type result_type;
+  // typedefs
+  typedef typename traits<BuiltinScalarQuotient>::scalar_type scalar_type;
+  typedef typename traits<BuiltinScalarQuotient>::result_type result_type;
 
  public:
   // constructor

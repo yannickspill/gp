@@ -25,15 +25,14 @@ struct traits<ScalarScalarDifference<Lhs, Rhs> > {
 template <typename Lhs, typename Rhs>
 class ScalarScalarDifference : public ScalarBase
                                <ScalarScalarDifference<Lhs, Rhs> > {
+ public:
+  // typedefs
+  typedef typename traits<ScalarScalarDifference>::scalar_type scalar_type;
+  typedef typename traits<ScalarScalarDifference>::result_type result_type;
+
  private:
   Lhs lhs_;
   Rhs rhs_;
-
- public:
-  typedef typename traits
-      <ScalarScalarDifference<Lhs, Rhs> >::scalar_type scalar_type;
-  typedef typename traits
-      <ScalarScalarDifference<Lhs, Rhs> >::result_type result_type;
 
  public:
   // constructor

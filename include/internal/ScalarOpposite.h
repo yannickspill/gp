@@ -21,10 +21,9 @@ template <class ScalarExpression>
 class ScalarOpposite : public ScalarBase
                              <ScalarOpposite<ScalarExpression> > {
  public:
-  typedef typename traits
-      <ScalarOpposite<ScalarExpression> >::scalar_type scalar_type;
-  typedef typename traits
-      <ScalarOpposite<ScalarExpression> >::result_type result_type;
+  // typedefs
+  typedef typename traits<ScalarOpposite>::scalar_type scalar_type;
+  typedef typename traits<ScalarOpposite>::result_type result_type;
 
  private:
   ScalarExpression val_;

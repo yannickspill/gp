@@ -23,15 +23,14 @@ template <class Lhs, class Rhs> struct traits<ScalarScalarQuotient<Lhs, Rhs> > {
 // expression template for products involving only Scalars
 template <typename Lhs, typename Rhs>
 class ScalarScalarQuotient : public ScalarBase<ScalarScalarQuotient<Lhs, Rhs> > {
+ public:
+  // typedefs
+  typedef typename traits<ScalarScalarQuotient>::scalar_type scalar_type;
+  typedef typename traits<ScalarScalarQuotient>::result_type result_type;
+
  private:
   Lhs lhs_;
   Rhs rhs_;
-
- public:
-  typedef typename traits
-      <ScalarScalarQuotient<Lhs, Rhs> >::scalar_type scalar_type;
-  typedef typename traits
-      <ScalarScalarQuotient<Lhs, Rhs> >::result_type result_type;
 
  public:
   // constructor

@@ -24,6 +24,12 @@ struct traits<Solve<Decomposition<DerivedMat, Policy>, OtherDerived> > {
       std::declval
       <typename Decomposition<DerivedMat, Policy>::result_type>().solve(
           std::declval<typename OtherDerived::result_type>())) result_type;
+    enum {
+    RowsAtCompileTime = DerivedMat::RowsAtCompileTime,
+    ColsAtCompileTime = OtherDerived::ColsAtCompileTime
+  };
+
+
 };
 // traits for Solve<Cache<Decomposition<...> > >
 template <class DecompType, class OtherDerived>
@@ -41,6 +47,7 @@ struct traits<Solve<Cache<DecompType>, OtherDerived> > {
 template <class DecompType, class OtherDerived>
 class Solve : public MatrixBase<Solve<DecompType, OtherDerived> > {
  public:
+  // typedefs
   typedef typename traits<Solve>::scalar_type scalar_type;
   typedef typename traits<Solve>::result_type result_type;
 

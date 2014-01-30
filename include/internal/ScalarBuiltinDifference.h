@@ -23,15 +23,14 @@ template <class Lhs> struct traits<ScalarBuiltinDifference<Lhs> > {
 template <typename Lhs>
 class ScalarBuiltinDifference : public ScalarBase
                                 <ScalarBuiltinDifference<Lhs> > {
+ public:
+  // typedefs
+  typedef typename traits<ScalarBuiltinDifference>::scalar_type scalar_type;
+  typedef typename traits<ScalarBuiltinDifference>::result_type result_type;
+
  private:
   Lhs lhs_;
   double rhs_;
-
- public:
-  typedef typename traits
-      <ScalarBuiltinDifference<Lhs> >::scalar_type scalar_type;
-  typedef typename traits
-      <ScalarBuiltinDifference<Lhs> >::result_type result_type;
 
  public:
   // constructor

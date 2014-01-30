@@ -12,6 +12,10 @@ namespace internal {
 template <typename EigenType> struct traits<Matrix<EigenType> > {
   typedef typename EigenType::Scalar scalar_type;
   typedef EigenType result_type;
+  enum {
+    RowsAtCompileTime = EigenType::RowsAtCompileTime,
+    ColsAtCompileTime = EigenType::ColsAtCompileTime
+  };
 };
 
 //! Use this to represent any constant or Scalar-dependent matrix/vector
@@ -19,8 +23,13 @@ template <typename EigenType>
 class Matrix : public MatrixBase<Matrix<EigenType> > {
 
  public:
+  // typedefs
   typedef typename traits<Matrix>::scalar_type scalar_type;
   typedef typename traits<Matrix>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<Matrix>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<Matrix>::ColsAtCompileTime
+  };
 
  private:
   struct Data {

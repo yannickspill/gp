@@ -16,28 +16,17 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   MatrixBase() {}  // only children can instantiate it
 
  public:
-  // typedefs
-  typedef typename traits<Derived>::scalar_type scalar_type;
-  typedef typename traits<Derived>::result_type result_type;
-
- public:
   // allow implicit casting to Derived
   const Derived& asDerived() const {
     return static_cast<const Derived&>(*this);
   }
 
   // rows and columns
-  unsigned rows() const {
-    return asDerived().get().rows();
-  }
-  unsigned cols() const {
-    return asDerived().get().cols();
-  }
+  unsigned rows() const { return asDerived().get().rows(); }
+  unsigned cols() const { return asDerived().get().cols(); }
 
   // trace
-  Trace<Derived> trace() const {
-    return Trace<Derived>(asDerived());
-  }
+  Trace<Derived> trace() const { return Trace<Derived>(asDerived()); }
 
   // transposition
   Transpose<Derived> transpose() const {
@@ -107,14 +96,15 @@ const MatrixSum<Lhs, Rhs> operator+(const MatrixBase<Lhs>& lhs,
 }
 //  double Matrix
 template <class MatrixExpression>
-const MatrixBuiltinSum<MatrixExpression> operator+(
-    double lhs, const MatrixBase<MatrixExpression>& rhs) {
+const MatrixBuiltinSum<MatrixExpression> operator+(double lhs, const MatrixBase
+                                                   <MatrixExpression>& rhs) {
   return MatrixBuiltinSum<MatrixExpression>(rhs.asDerived(), lhs);
 }
 //  Matrix double
 template <class MatrixExpression>
-const MatrixBuiltinSum<MatrixExpression> operator+(
-    const MatrixBase<MatrixExpression>& lhs, double rhs) {
+const MatrixBuiltinSum<MatrixExpression> operator+(const MatrixBase
+                                                   <MatrixExpression>& lhs,
+                                                   double rhs) {
   return MatrixBuiltinSum<MatrixExpression>(lhs.asDerived(), rhs);
 }
 
@@ -139,8 +129,8 @@ const BuiltinMatrixDifference<MatrixExpression> operator-(
 }
 // Matrix opposite
 template <class MatrixExpression>
-const MatrixOpposite<MatrixExpression> operator-(
-    const MatrixBase<MatrixExpression>& rhs) {
+const MatrixOpposite<MatrixExpression> operator-(const MatrixBase
+                                                 <MatrixExpression>& rhs) {
   return MatrixOpposite<MatrixExpression>(rhs.asDerived());
 }
 

@@ -25,15 +25,14 @@ struct traits<MatrixScalarSum<Mat, Scal> > {
 // will check if matrix is 1x1 at runtime
 template <typename Mat, typename Scal>
 class MatrixScalarSum : public ScalarBase<MatrixScalarSum<Mat, Scal> > {
+ public:
+  // typedefs
+  typedef typename traits<MatrixScalarSum>::scalar_type scalar_type;
+  typedef typename traits<MatrixScalarSum>::result_type result_type;
+
  private:
   Mat lhs_;
   Scal rhs_;
-
- public:
-  typedef typename traits
-      <MatrixScalarSum<Mat, Scal> >::scalar_type scalar_type;
-  typedef typename traits
-      <MatrixScalarSum<Mat, Scal> >::result_type result_type;
 
  public:
   // constructor

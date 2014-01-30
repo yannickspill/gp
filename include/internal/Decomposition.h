@@ -20,8 +20,9 @@ template <typename Derived, template <typename> class Policy = LDLTPolicy>
 class Decomposition : public Policy<Derived>,
                       public GPBase<Decomposition<Derived, Policy> > {
  public:
-  typedef typename traits<Decomposition<Derived> >::scalar_type scalar_type;
-  typedef typename traits<Decomposition<Derived> >::result_type result_type;
+  // typedefs
+  typedef typename traits<Decomposition>::scalar_type scalar_type;
+  typedef typename traits<Decomposition>::result_type result_type;
 
  private:
   Derived data_;

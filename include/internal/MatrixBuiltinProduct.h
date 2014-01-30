@@ -16,8 +16,12 @@ namespace internal {
 template <class MatrixExpression>
 struct traits<MatrixBuiltinProduct<MatrixExpression> > {
   typedef typename MatrixExpression::scalar_type scalar_type;
-  typedef decltype(
-      2. * std::declval<typename MatrixExpression::result_type>()) result_type;
+  typedef decltype(2. * std::declval
+                   <typename MatrixExpression::result_type>()) result_type;
+  enum {
+    RowsAtCompileTime = MatrixExpression::RowsAtCompileTime,
+    ColsAtCompileTime = MatrixExpression::ColsAtCompileTime
+  };
 };
 
 // expression template for product of a Matrix with anything convertible to a
@@ -26,10 +30,13 @@ template <class MatrixExpression>
 class MatrixBuiltinProduct : public MatrixBase
                              <MatrixBuiltinProduct<MatrixExpression> > {
  public:
-  typedef typename traits
-      <MatrixBuiltinProduct<MatrixExpression> >::scalar_type scalar_type;
-  typedef typename traits
-      <MatrixBuiltinProduct<MatrixExpression> >::result_type result_type;
+  // typedefs
+  typedef typename traits<MatrixBuiltinProduct>::scalar_type scalar_type;
+  typedef typename traits<MatrixBuiltinProduct>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<MatrixBuiltinProduct>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<MatrixBuiltinProduct>::ColsAtCompileTime
+  };
 
  private:
   double lhs_;

@@ -28,10 +28,9 @@ class BuiltinScalarDifference : public ScalarBase
   Rhs rhs_;
 
  public:
-  typedef typename traits
-      <BuiltinScalarDifference<Rhs> >::scalar_type scalar_type;
-  typedef typename traits
-      <BuiltinScalarDifference<Rhs> >::result_type result_type;
+  // typedefs
+  typedef typename traits<BuiltinScalarDifference>::scalar_type scalar_type;
+  typedef typename traits<BuiltinScalarDifference>::result_type result_type;
 
  public:
   // constructor

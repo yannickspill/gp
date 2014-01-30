@@ -22,15 +22,14 @@ struct traits<ScalarBuiltinQuotient<ScalarExpression> > {
 template <class ScalarExpression>
 class ScalarBuiltinQuotient : public ScalarBase
                              <ScalarBuiltinQuotient<ScalarExpression> > {
+ public:
+  // typedefs
+  typedef typename traits<ScalarBuiltinQuotient>::scalar_type scalar_type;
+  typedef typename traits<ScalarBuiltinQuotient>::result_type result_type;
+
  private:
   ScalarExpression lhs_;
   double rhs_;
-
- public:
-  typedef typename traits
-      <ScalarBuiltinQuotient<ScalarExpression> >::scalar_type scalar_type;
-  typedef typename traits
-      <ScalarBuiltinQuotient<ScalarExpression> >::result_type result_type;
 
  public:
   // constructor

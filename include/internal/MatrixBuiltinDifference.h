@@ -22,10 +22,9 @@ template <class MatrixExpression>
 class MatrixBuiltinDifference : public ScalarBase
                              <MatrixBuiltinDifference<MatrixExpression> > {
  public:
-  typedef typename traits
-      <MatrixBuiltinDifference<MatrixExpression> >::scalar_type scalar_type;
-  typedef typename traits
-      <MatrixBuiltinDifference<MatrixExpression> >::result_type result_type;
+  // typedefs
+  typedef typename traits<MatrixBuiltinDifference>::scalar_type scalar_type;
+  typedef typename traits<MatrixBuiltinDifference>::result_type result_type;
 
  private:
   MatrixExpression lhs_;

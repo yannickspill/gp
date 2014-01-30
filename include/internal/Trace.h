@@ -20,8 +20,9 @@ template <class Derived> struct traits<Trace<Derived> > {
 template <typename Derived>
 class Trace : public ScalarBase<Trace<Derived> > {
  public:
-  typedef typename traits<Trace<Derived> >::scalar_type scalar_type;
-  typedef typename traits<Trace<Derived> >::result_type result_type;
+  // typedefs
+  typedef typename traits<Trace>::scalar_type scalar_type;
+  typedef typename traits<Trace>::result_type result_type;
 
  private:
   Derived data_;

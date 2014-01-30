@@ -22,15 +22,14 @@ struct traits<ScalarBuiltinProduct<ScalarExpression> > {
 template <class ScalarExpression>
 class ScalarBuiltinProduct : public ScalarBase
                              <ScalarBuiltinProduct<ScalarExpression> > {
+ public:
+  // typedefs
+  typedef typename traits<ScalarBuiltinProduct>::scalar_type scalar_type;
+  typedef typename traits<ScalarBuiltinProduct>::result_type result_type;
+
  private:
   double lhs_;
   ScalarExpression rhs_;
-
- public:
-  typedef typename traits
-      <ScalarBuiltinProduct<ScalarExpression> >::scalar_type scalar_type;
-  typedef typename traits
-      <ScalarBuiltinProduct<ScalarExpression> >::result_type result_type;
 
  public:
   // constructor
