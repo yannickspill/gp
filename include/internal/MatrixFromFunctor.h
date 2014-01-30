@@ -48,10 +48,7 @@ class MatrixFromFunctor : public MatrixBase
 
   result_type get() const {
     auto eigenmat = mat_.get();
-    std::cout << "input matrix " << std::endl << eigenmat << std::endl;
     auto firstline = func_(eigenmat.row(0));
-    std::cout << "first line " << std::endl << firstline << std::endl;
-    std::cout << "===" << std::endl;
     result_type retval(eigenmat.rows(), firstline.cols());
     retval.row(0) = firstline;
     for (unsigned i = 1; i < eigenmat.rows(); ++i) {
