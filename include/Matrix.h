@@ -35,6 +35,11 @@
 
 // caching
 #include "internal/Cache.h"
+#include "internal/CachePlugins.h"
+
+//functor related
+#include "internal/Functor.h"
+#include "internal/MatrixFromFunctor.h"
 
 //external libs
 #include <Eigen/Dense>
@@ -47,6 +52,7 @@ using internal::Decomposition;
 using internal::LDLTPolicy;
 using internal::LogDeterminant;
 using internal::Solve;
+using internal::MatrixFromFunctor;
 
 //convenience typedefs
 typedef Matrix<Eigen::RowVectorXd> RowVectorXd;

@@ -48,11 +48,13 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return Decomposition<Derived, Policy>(asDerived());
   }
 
-  // apply func to every row of mat and return the resulting object
-  template <class FArgs, class Other>
-  static const ApplyMatrix<FArgs, Other> Apply(const std::function<FArgs>& func,
-                                               const MatrixBase<Other>& mat) {
-    return ApplyMatrix<FArgs, Other>(func, mat.asDerived());
+  //! Yield a matrix by applying a function to every row of an input matrix.
+  // will not check whether func is compatible with the rows of the matrix
+  // will only compile if the function returns a row vector
+  template <class InMat, class FExpr, class... FArgs>
+  static MatrixFromFunctor<InMat, FExpr, FArgs...> Apply(
+      const Functor<FExpr, FArgs...>& func, const InMat& mat) {
+    return MatrixFromFunctor<InMat, FExpr, FArgs...>(func, mat);
   }
 };
 
