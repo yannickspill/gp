@@ -10,6 +10,7 @@
 namespace GP {
 namespace internal {
 
+/*
 // inspired from http://stackoverflow.com/a/6894436/958110
 template <std::size_t I = 0, typename... Tp>
 typename std::enable_if<I == sizeof...(Tp)>::type  // SFINAE
@@ -24,8 +25,10 @@ typename std::enable_if
   std::get<I>(exprs).set(std::get<I>(vals));
   reset_exprs<I + 1, Tp...>(exprs, vals);
 }
+*/
 
 // same here
+// inspired from http://stackoverflow.com/a/6894436/958110
 template <std::size_t I = 0, typename... Tp>
 typename std::enable_if<I == sizeof...(Tp), unsigned>::type sum_versions(
     const std::tuple<Tp...>&) {}
@@ -38,16 +41,17 @@ typename std::enable_if
 }
 
 // convert an expression into a function
+// for now, the inputs are not reset to their old value
 template <class OutExpr, class... InExprs>
 std::function<typename OutExpr::result_type(typename InExprs::result_type...)>
 make_function(const OutExpr& out_expr, InExprs&... in_exprs) {
   return [&](const typename InExprs::result_type&... in_vals) {
-    std::tuple<InExprs...> exprs{in_exprs...};
-    std::tuple<typename InExprs::result_type...> priorvals{in_exprs.get()...};
+    //std::tuple<InExprs...> exprs{in_exprs...};
+    //std::tuple<typename InExprs::result_type...> priorvals{in_exprs.get()...};
     // see http://stackoverflow.com/a/12515637/958110
     int dummy[]{0, (in_exprs.set(in_vals), 0)...};
     typename OutExpr::result_type retval(out_expr.get());
-    reset_exprs(exprs, priorvals);
+    //reset_exprs(exprs, priorvals);
     return retval;
   };
 }

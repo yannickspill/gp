@@ -30,11 +30,10 @@ int main(int, char*[]){
     auto f3 = internal::make_function(gplvec*gpmat*gprvec, gplvec);
     if (f3(lvec) != lvec*mat*rvec) return 5;
     if (gplvec.get() != lvec) return 6;
-    // change input, check if make_function resets the vector to its original
-    // value
+    // change input
     Eigen::RowVectorXd randvec(Eigen::RowVectorXd::Random(3));
     if (f3(randvec) != randvec*mat*rvec) return 7;
-    if (gplvec.get() != lvec) return 8;
+    if (gplvec.get() != randvec) return 8;
 
     return 0;
 }

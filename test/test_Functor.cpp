@@ -30,11 +30,16 @@ int main(int, char*[]){
     auto f3 = internal::make_functor(gplvec*gpmat*gprvec, gplvec);
     if (f3(lvec) != lvec*mat*rvec) return 5;
     if (gplvec.get() != lvec) return 6;
-    // change input, check if make_functor resets the vector to its original
-    // value
+    // change input
     Eigen::RowVectorXd randvec(Eigen::RowVectorXd::Random(3));
     if (f3(randvec) != randvec*mat*rvec) return 7;
-    if (gplvec.get() != lvec) return 8;
+    if (gplvec.get() != randvec) return 8;
+    // mixing scalar and matrix
+    RowVectorXd rx(Eigen::RowVectorXd::LinSpaced(5,0,1));
+    Scalar ry(2.0);
+    auto f4 = internal::make_functor(rx*ry, rx);
+    Eigen::RowVectorXd rtest(Eigen::RowVectorXd::Random(5));
+    if (f4(rtest) != rtest*ry.get()) return 9;
     // check type traits
     static_assert(std::is_same
                   <typename decltype(f1)::scalar_type, double>::value,
