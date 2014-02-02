@@ -14,6 +14,10 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using Eigen::VectorXi;
 
+#define NEWPTR(Typename, varname, args) \
+    boost::scoped_ptr<Typename> varname(new Typename args)
+ 
+
 typedef boost::mt19937 RNGType;
 RNGType generator;
 
