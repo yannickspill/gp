@@ -4,6 +4,7 @@
 #include "internal/ScalarBase.h"
 
 #include <memory>
+#include <Eigen/Core>
 
 namespace GP {
 namespace internal {
@@ -44,6 +45,13 @@ class Scalar : public ScalarBase<Scalar> {
   void set(double value) {
     data_->value_ = value;
     (data_->version_)++;
+  }
+  template <class XprType, int BlockRows = Eigen::Dynamic,
+            int BlockCols = Eigen::Dynamic>
+  void set(const Eigen::Block<XprType, BlockRows, BlockCols>& b) {
+      CHECK(b.rows() == 1 && b.cols() == 1,
+              "input to Scalar should be castable to scalar_type");
+      set(b(0,0));
   }
 
   bool operator==(const Scalar& other) const { return data_ == other.data_; }
