@@ -34,12 +34,21 @@ int main(int, char*[]){
     Eigen::RowVectorXd randvec(Eigen::RowVectorXd::Random(3));
     if (f3(randvec) != randvec*mat*rvec) return 7;
     if (gplvec.get() != randvec) return 8;
-    // mixing scalar and matrix
-    RowVectorXd rx(Eigen::RowVectorXd::LinSpaced(5,0,1));
-    Scalar ry(2.0);
-    auto f4 = internal::make_functor(rx*ry, rx);
-    Eigen::RowVectorXd rtest(Eigen::RowVectorXd::Random(5));
-    if (f4(rtest) != rtest*ry.get()) return 9;
+    // mixing scalar and matrix : f(matrix) -> matrix
+    RowVectorXd rowvec(Eigen::RowVectorXd::LinSpaced(5,0,1));
+    Scalar scaltest(2.0);
+    auto f4 = internal::make_functor(rowvec*scaltest, rowvec);
+    Eigen::RowVectorXd rowtest(Eigen::RowVectorXd::Random(5));
+    if (f4(rowtest) != rowtest*scaltest.get()) return 9;
+    // check whether other parameters can vascaltest
+    scaltest.set(5.0);
+    if (f4(rowtest) != rowtest*scaltest.get()) return 10;
+    // mixing scalar and matrix : f(scalar) -> matrix
+    auto f5 = internal::make_functor(rowvec*scaltest, scaltest);
+    if (f5(1.0) != rowvec.get()) return 11;
+    Eigen::RowVectorXd rowtest2(Eigen::RowVectorXd::Random(5));
+    rowvec.set(rowtest2);
+    if (f5(2.0) != 2*rowtest2) return 12;
     // check type traits
     static_assert(std::is_same
                   <typename decltype(f1)::scalar_type, double>::value,
