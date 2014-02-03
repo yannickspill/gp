@@ -6,9 +6,14 @@ compiler:
 before_install:
     - ls
     - pwd
+    - sudo apt-get update
+    - apt-cache show libboost-dev
+    - apt-cache show libeigen3-dev
     - sudo apt-get install libboost-dev
     - sudo apt-get install libeigen3-dev
-script: cmake . -DCMAKE_BUILD_TYPE=Release && make && make test
+    - mkdir ../build
+    - cd ../build
+script: cmake ../gp -DCMAKE_BUILD_TYPE=Release && make && make test
 branches:
     only:
         - master
