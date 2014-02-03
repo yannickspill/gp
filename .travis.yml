@@ -4,12 +4,12 @@ compiler:
   - clang
 # Change this to your needs
 before_install:
-    - sudo add-apt-repository -y ppa:liggghts-dev/external
-    - sudo add-apt-repository -y ppa:mapnik/boost
+    - sudo add-apt-repository -y ppa:liggghts-dev/external #for eigen 3.2.0
     - sudo apt-get update
     - sudo apt-get install libeigen3-dev
-    - sudo apt-get install libboost1.49-dev
-    - sudo apt-get install gsl
+    - sudo apt-get install libboost-dev
+    - sudo apt-cache search gsl
+    - sudo apt-get install gsl-bin
     - mkdir ../build
     - cd ../build
 script: cmake ../gp -DCMAKE_BUILD_TYPE=Release && make && make test
