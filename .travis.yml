@@ -4,8 +4,8 @@ compiler:
   - clang
 # Change this to your needs
 before_install:
-    - echo "deb http://archive.ubuntu.com/ubuntu precise unstable" >> /etc/apt/sources.list
-    - echo "deb-src http://archive.ubuntu.com/ubuntu precise unstable" >> /etc/apt/sources.list
+    - sudo echo "deb http://archive.ubuntu.com/ubuntu precise unstable" >> /etc/apt/sources.list
+    - sudo echo "deb-src http://archive.ubuntu.com/ubuntu precise unstable" >> /etc/apt/sources.list
     - cat /etc/apt/sources.list 
     - sudo apt-get update
     - apt-cache show libboost-dev
