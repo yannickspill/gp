@@ -8,8 +8,6 @@ before_install:
     - sudo apt-get update
     - sudo apt-get install libeigen3-dev
     - sudo apt-get install libboost-dev
-    - sudo apt-cache search gsl
-    - sudo apt-get install gsl-bin
     - mkdir ../build
     - cd ../build
 script: cmake ../gp -DCMAKE_BUILD_TYPE=Release && make && make test
