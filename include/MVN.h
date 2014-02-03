@@ -82,5 +82,10 @@ template <class YVectorType, class MVectorType, class MatrixType> class MVN {
     return 0.5 * (P - Peps * Peps.transpose());
   }
 };
+
+template <class Y, class M, class S>
+MVN<Y, M, S> make_mvn(Y&& y, M&& m, S&& s) {
+  return MVN
+      <Y, M, S>(std::forward<Y>(y), std::forward<M>(m), std::forward<S>(s));
 }
 #endif /* MVN_H */
