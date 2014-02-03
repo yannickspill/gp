@@ -4,6 +4,8 @@
 #include "macros.h"
 #include "internal/ForwardDeclarations.h"
 
+#include <functional>
+
 namespace GP {
 namespace internal {
 
@@ -48,7 +50,6 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return Decomposition<Derived, Policy>(asDerived());
   }
 
-      const Functor<FExpr, FArgs...>& func, const InMat& mat) {
   //! Yield a matrix by applying a univariate function to every row of an input
   //matrix. Will not check whether func is compatible with the rows of the
   //matrix. Will only compile if the function returns a row vector
@@ -57,6 +58,15 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   Apply(const Functor& func, const InMat& mat) {
     return MatrixFromUnivariateFunctor<Functor, InMat>(func, mat);
   }
+
+  //! Yield a matrix by applying a bivariate function to every row of two input
+  //matrices. Will not check whether func is compatible with the rows of the
+  //matrix. Will only compile if the function returns a scalar, or 1x1 matrix.
+  template <class Functor, class InMat1, class InMat2>
+  static MatrixFromBivariateFunctor<Functor, InMat1, InMat2>
+  Apply(const Functor& func, const InMat1& mat1, const InMat2& mat2) {
+    return MatrixFromBivariateFunctor
+        <Functor, InMat1, InMat2>(func, mat1, mat2);
   }
 
   //! Yield a matrix by applying a bivariate function to every pair of rows of

@@ -40,6 +40,7 @@
 //functor related
 #include "internal/Functor.h"
 #include "internal/MatrixFromUnivariateFunctor.h"
+#include "internal/MatrixFromBivariateFunctor.h"
 #include "internal/SymmetricMatrixFromBivariateFunctor.h"
 
 //external libs
@@ -54,6 +55,7 @@ using internal::LDLTPolicy;
 using internal::LogDeterminant;
 using internal::Solve;
 using internal::MatrixFromUnivariateFunctor;
+using internal::MatrixFromBivariateFunctor;
 using internal::SymmetricMatrixFromBivariateFunctor;
 
 //convenience typedefs
