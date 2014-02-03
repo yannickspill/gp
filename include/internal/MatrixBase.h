@@ -56,6 +56,16 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
       const Functor<FExpr, FArgs...>& func, const InMat& mat) {
     return MatrixFromFunctor<InMat, FExpr, FArgs...>(func, mat);
   }
+
+  //! Yield a matrix by applying a bivariate function to every pair of rows of
+  // an input matrix.
+  // will not check whether func is compatible with the rows of the matrix
+  // will only compile if the function returns a double or a 1x1 matrix
+  template <class InMat, class FExpr, class... FArgs>
+  static SymmetricMatrixFromFunctor<InMat, FExpr, FArgs...> SymmetricApply(
+      const Functor<FExpr, FArgs...>& func, const InMat& mat) {
+    return SymmetricMatrixFromFunctor<InMat, FExpr, FArgs...>(func, mat);
+  }
 };
 
 // sums
