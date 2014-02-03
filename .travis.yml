@@ -3,6 +3,9 @@ compiler:
   - gcc
   - clang
 # Change this to your needs
+before_install:
+    - sudo apt-get install libboost
+    - sudo apt-get install libeigen3-dev
 script: cmake . -DCMAKE_BUILD_TYPE=Release && make && make test
 branches:
     only:
