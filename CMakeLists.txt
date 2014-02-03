@@ -19,8 +19,8 @@ find_package(Boost REQUIRED)
 include_directories(${BOOST_INCLUDE_DIR})
 find_package(Eigen3 3.2.0 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
-find_package(GSL REQUIRED)
-include_directories(${GSL_INCLUDE_DIRS})
+#find_package(GSL REQUIRED)
+#include_directories(${GSL_INCLUDE_DIRS})
 
 #build type, add coverage on debug mode
 if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
