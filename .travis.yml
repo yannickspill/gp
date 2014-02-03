@@ -4,9 +4,9 @@ compiler:
   - clang
 # Change this to your needs
 before_install:
+    - cat /etc/apt/apt.conf
     - cat /etc/apt/sources.list 
     - sudo apt-get update
-    - sudo apt-get upgrade
     - apt-cache show libboost-dev
     - apt-cache show libeigen3-dev
     - sudo apt-get -t unstable install libboost-dev
