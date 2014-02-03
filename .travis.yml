@@ -4,8 +4,9 @@ compiler:
   - clang
 # Change this to your needs
 before_install:
-    - sudo add-apt-repository ppa:kalakris/eigen
-    - sudo add-apt-repository ppa:mapnik/boost
+    - sudo add-apt-repository --help
+    - sudo add-apt-repository ppa:kalakris/eigen < echo '\n'
+    - sudo add-apt-repository ppa:mapnik/boost < echo '\n'
     - sudo apt-get update
     - apt-cache show libboost-dev
     - apt-cache show libeigen3-dev
