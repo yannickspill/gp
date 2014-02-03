@@ -4,9 +4,8 @@ compiler:
   - clang
 # Change this to your needs
 before_install:
-    - sudo echo "deb http://archive.ubuntu.com/ubuntu precise unstable" >> /etc/apt/sources.list
-    - sudo echo "deb-src http://archive.ubuntu.com/ubuntu precise unstable" >> /etc/apt/sources.list
-    - cat /etc/apt/sources.list 
+    - sudo add-apt-repository ppa:kalakris/eigen
+    - sudo add-apt-repository ppa:mapnik/boost
     - sudo apt-get update
     - apt-cache show libboost-dev
     - apt-cache show libeigen3-dev
