@@ -49,6 +49,8 @@ int main(int, char*[]){
     Eigen::RowVectorXd rowtest2(Eigen::RowVectorXd::Random(5));
     rowvec.set(rowtest2);
     if (f5(2.0) != 2*rowtest2) return 12;
+    // scalar input is 1x1 matrix
+    if (f5(rvec.row(0)) != rvec(0,0)*rowtest2) return 13;
     // check type traits
     static_assert(std::is_same
                   <typename decltype(f1)::scalar_type, double>::value,
