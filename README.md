@@ -1,6 +1,9 @@
 C++ Gaussian Process library
 ===
 
+[![Build
+Status](https://travis-ci.org/yannickspill/gp.png?branch=develop)](https://travis-ci.org/yannickspill/gp)
+
 Aim
 ---
 
