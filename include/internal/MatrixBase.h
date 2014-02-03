@@ -48,23 +48,25 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return Decomposition<Derived, Policy>(asDerived());
   }
 
-  //! Yield a matrix by applying a function to every row of an input matrix.
-  // will not check whether func is compatible with the rows of the matrix
-  // will only compile if the function returns a row vector
-  template <class InMat, class FExpr, class... FArgs>
-  static MatrixFromFunctor<InMat, FExpr, FArgs...> Apply(
       const Functor<FExpr, FArgs...>& func, const InMat& mat) {
-    return MatrixFromFunctor<InMat, FExpr, FArgs...>(func, mat);
+  //! Yield a matrix by applying a univariate function to every row of an input
+  //matrix. Will not check whether func is compatible with the rows of the
+  //matrix. Will only compile if the function returns a row vector
+  template <class Functor, class InMat>
+  static MatrixFromUnivariateFunctor<Functor, InMat>
+  Apply(const Functor& func, const InMat& mat) {
+    return MatrixFromUnivariateFunctor<Functor, InMat>(func, mat);
+  }
   }
 
   //! Yield a matrix by applying a bivariate function to every pair of rows of
   // an input matrix.
   // will not check whether func is compatible with the rows of the matrix
   // will only compile if the function returns a double or a 1x1 matrix
-  template <class InMat, class FExpr, class... FArgs>
-  static SymmetricMatrixFromFunctor<InMat, FExpr, FArgs...> SymmetricApply(
-      const Functor<FExpr, FArgs...>& func, const InMat& mat) {
-    return SymmetricMatrixFromFunctor<InMat, FExpr, FArgs...>(func, mat);
+  template <class Functor, class InMat>
+  static SymmetricMatrixFromBivariateFunctor<Functor, InMat>
+  SymmetricApply(const Functor& func, const InMat& mat) {
+    return SymmetricMatrixFromBivariateFunctor<Functor, InMat>(func, mat);
   }
 };
 

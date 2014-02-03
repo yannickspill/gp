@@ -65,9 +65,10 @@ template <class Object> class CachePlugins;
 
 //functor related
 template <class OutExpr, class... InExprs> class Functor;
-template <class InMat, class FExpr, class... FArgs> class MatrixFromFunctor;
-template <class InMat, class FExpr, class... FArgs>
 class SymmetricMatrixFromFunctor;
+template <class Functor, class InMat> class MatrixFromUnivariateFunctor;
+template <class Functor, class InMat>
+class SymmetricMatrixFromBivariateFunctor;
 }
 }
 #endif /*FINTERNAL_ORWARD_DECLARATIONS_H*/

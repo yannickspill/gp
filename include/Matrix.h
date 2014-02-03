@@ -39,7 +39,8 @@
 
 //functor related
 #include "internal/Functor.h"
-#include "internal/MatrixFromFunctor.h"
+#include "internal/MatrixFromUnivariateFunctor.h"
+#include "internal/SymmetricMatrixFromBivariateFunctor.h"
 
 //external libs
 #include <Eigen/Dense>
@@ -52,7 +53,8 @@ using internal::Decomposition;
 using internal::LDLTPolicy;
 using internal::LogDeterminant;
 using internal::Solve;
-using internal::MatrixFromFunctor;
+using internal::MatrixFromUnivariateFunctor;
+using internal::SymmetricMatrixFromBivariateFunctor;
 
 //convenience typedefs
 typedef Matrix<Eigen::RowVectorXd> RowVectorXd;
