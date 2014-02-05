@@ -44,6 +44,7 @@ template <class Derived> struct LDLTPolicy;
 template <class Derived, template<typename> class Policy> class Decomposition;
 template <class Derived> class LogDeterminant;
 template <class Derived, class OtherDerived> class Solve;
+template <class Derived> class DiagonalMatrixFromVector;
 
 //matrix builtin ops
 template <class Lhs> class MatrixBuiltinSum;

@@ -50,6 +50,11 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return Decomposition<Derived, Policy>(asDerived());
   }
 
+  //! build diagonal matrix from vector
+  DiagonalMatrixFromVector<Derived> asDiagonal() {
+      return DiagonalMatrixFromVector<Derived>(asDerived());
+  }
+  
   //! Yield a matrix by applying a univariate function to every row of an input
   //matrix. Will not check whether func is compatible with the rows of the
   //matrix. Will only compile if the function returns a row vector
