@@ -779,14 +779,11 @@ RECURSIVE              = YES
 # run.
 
 EXCLUDE                = \
-    @CMAKE_CURRENT_SOURCE_DIR@/include/univariate_functions.h \
-    @CMAKE_CURRENT_SOURCE_DIR@/include/bivariate_functions.h \
     @CMAKE_CURRENT_SOURCE_DIR@/include/MultivariateFNormalSufficient.h \
     @CMAKE_CURRENT_SOURCE_DIR@/src/MultivariateFNormalSufficient.cpp \
     @CMAKE_CURRENT_SOURCE_DIR@/include/BasicMVN.h \
     @CMAKE_CURRENT_SOURCE_DIR@/include/FNormal.h \
-    @CMAKE_CURRENT_SOURCE_DIR@/include/GaussianProcessInterpolation.h \
-    @CMAKE_CURRENT_SOURCE_DIR@/src/GaussianProcessInterpolation.cpp
+    @CMAKE_CURRENT_SOURCE_DIR@/README.md
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
@@ -890,7 +887,7 @@ FILTER_SOURCE_PATTERNS =
 # (index.html). This can be useful if you have a project on for instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
 
-USE_MDFILE_AS_MAINPAGE = "README.md"
+USE_MDFILE_AS_MAINPAGE = @CMAKE_CURRENT_SOURCE_DIR@/doc/main.md
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
