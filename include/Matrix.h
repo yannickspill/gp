@@ -42,6 +42,7 @@
 #include "internal/MatrixFromUnivariateFunctor.h"
 #include "internal/MatrixFromBivariateFunctor.h"
 #include "internal/SymmetricMatrixFromBivariateFunctor.h"
+#include "internal/MatrixFromScalar.h"
 
 //external libs
 #include <Eigen/Dense>

@@ -263,5 +263,12 @@ int main(int, char * []) {
           .norm() > 1e-5)
     return 49;
 
+  //broadcast a Scalar to a matrix
+  GP::Scalar tbb(0.5);
+  auto bcm = GP::MatrixXd::Broadcast(1./tbb, 5, 3);
+  if (bcm.get() != Eigen::MatrixXd::Constant(5,3,2.)) return 71;
+  auto bcv = GP::VectorXd::Broadcast(1./tbb, 5, 1);
+  if (bcv.get() != Eigen::VectorXd::Constant(5,2.)) return 72;
+
   return 0;
 }

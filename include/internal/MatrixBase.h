@@ -78,6 +78,19 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   SymmetricApply(const Functor& func, const InMat& mat) {
     return SymmetricMatrixFromBivariateFunctor<Functor, InMat>(func, mat);
   }
+
+  //! Broadcast a constant Scalar expression to a matrix/vector
+  template <class ScalarExpr>
+  static MatrixFromScalar
+      <ScalarExpr, traits<Derived>::result_type::RowsAtCompileTime,
+       traits<Derived>::result_type::ColsAtCompileTime>
+  Broadcast(const ScalarBase<ScalarExpr>& scal, unsigned nrows,
+            unsigned ncols) {
+    return MatrixFromScalar
+        <ScalarExpr, traits<Derived>::result_type::RowsAtCompileTime,
+         traits<Derived>::result_type::ColsAtCompileTime>(scal.asDerived(),
+                                                          nrows, ncols);
+  }
 };
 
 // sums
