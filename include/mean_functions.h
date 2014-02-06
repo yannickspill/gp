@@ -36,14 +36,15 @@ class PolynomialFunction {
         }
 
         template<class Vec1, class Vec2>
-        double value(Vec1&& v1, Vec2&& v2) const {
+        double operator()(Vec1&& v1, Vec2&& v2) const {
             return f_(std::forward<Vec1>(v1), std::forward<Vec2>(v2));
         }
 };
 */
 
-struct ZeroFunction {
-  template <class Vec> double value(Vec&&) const { return 0.; }
+//! returns a Functor that returns zero.
+internal::Functor<double> zero_function() {
+    return internal::make_functor(0.);
 };
 }
 #endif /* MEAN_FUNCTIONS_H */

@@ -83,6 +83,27 @@ class Functor {
   sum_versions(const std::tuple<Tp...>&) {}
 };
 
+//!special case in which Functor is a constant function
+//the function accepts any argument, and returns the value provided on
+//construction
+template<>
+class Functor<double> {
+    double val_;
+ public:
+  // typedefs
+  typedef double scalar_type;
+  typedef double result_type;
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
+  Functor(double val) : val_(val) {}
+
+  template<class... Args>
+  double operator()(Args&&...) const { return val_; }
+  unsigned get_version() const {return 0; }
+};
+
 // convert an expression into a functor, e.g. function with some traits
 // the InExprs arguments are possibly changed at each call of operator()
 // the function is however conceptually const
@@ -91,6 +112,8 @@ Functor<OutExpr,InExprs...> make_functor(const OutExpr& out_expr,
                                                       InExprs&... in_exprs) {
   return Functor<OutExpr, InExprs...>(out_expr, in_exprs...);
 }
+//
+Functor<double> make_functor(double expr) { return Functor<double>(expr); }
 }
 }
 #endif /* INTERNAL_FUNCTOR_H */
