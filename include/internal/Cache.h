@@ -20,10 +20,10 @@ namespace {
 // define parent type of object to be cached
 template <class Object>
 using CacheParent = typename std::conditional
-    <std::is_convertible<Object, MatrixBase<Object> >::value,
+    <std::is_base_of<MatrixBase<Object>, Object>::value,
      MatrixBase<Cache<Object> >,
      typename std::conditional<
-         std::is_convertible<Object, ScalarBase<Object> >::value,
+         std::is_base_of<ScalarBase<Object>, Object>::value,
          ScalarBase<Cache<Object> >,
          GPBase<Cache<Object> >
         >::type
