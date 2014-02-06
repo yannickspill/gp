@@ -14,8 +14,8 @@ template <class Functor, class InMat>
 struct traits<MatrixFromUnivariateFunctor<Functor, InMat> > {
   typedef typename Functor::scalar_type scalar_type;
   enum {
-    RowsAtCompileTime = InMat::result_type::RowsAtCompileTime,
-    ColsAtCompileTime = Functor::result_type::ColsAtCompileTime
+    RowsAtCompileTime = InMat::RowsAtCompileTime,
+    ColsAtCompileTime = Functor::ColsAtCompileTime
   };
   typedef typename Eigen::Matrix
       <scalar_type, RowsAtCompileTime, ColsAtCompileTime> result_type;

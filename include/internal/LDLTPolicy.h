@@ -20,8 +20,8 @@ template <class Derived> struct traits<LDLTPolicy<Derived> > {
 template <class Derived> class LDLTPolicy {
  public:
   // typedefs
-  typedef typename traits<Derived>::scalar_type scalar_type;
-  typedef typename traits<Derived>::result_type result_type;
+  typedef typename traits<LDLTPolicy>::scalar_type scalar_type;
+  typedef typename traits<LDLTPolicy>::result_type result_type;
 
  private:
   mutable result_type ldlt_;

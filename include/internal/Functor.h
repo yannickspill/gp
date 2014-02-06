@@ -15,6 +15,10 @@ template <class OutExpr, class... InExprs>
 struct traits<Functor<OutExpr, InExprs...> > {
   typedef typename OutExpr::scalar_type scalar_type;
   typedef typename OutExpr::result_type result_type;
+  enum {
+    RowsAtCompileTime = OutExpr::RowsAtCompileTime,
+    ColsAtCompileTime = OutExpr::ColsAtCompileTime
+  };
 };
 
 // Functor: class providing an operator(), some additional traits and a
@@ -31,6 +35,7 @@ class Functor {
   enum {
     RowsAtCompileTime = traits<Functor>::RowsAtCompileTime,
     ColsAtCompileTime = traits<Functor>::ColsAtCompileTime
+  };
 
  private:
   std::tuple<InExprs...> in_exprs_;

@@ -14,8 +14,8 @@ template <class Functor, class InMat1, class InMat2>
 struct traits<MatrixFromBivariateFunctor<Functor, InMat1, InMat2> > {
   typedef typename Functor::scalar_type scalar_type;
   enum {
-    RowsAtCompileTime = InMat1::result_type::RowsAtCompileTime,
-    ColsAtCompileTime = InMat2::result_type::RowsAtCompileTime,
+    RowsAtCompileTime = InMat1::RowsAtCompileTime,
+    ColsAtCompileTime = InMat2::RowsAtCompileTime,
   };
   typedef typename Eigen::Matrix
       <scalar_type, RowsAtCompileTime, ColsAtCompileTime> result_type;

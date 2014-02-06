@@ -75,15 +75,13 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
 
   //! Broadcast a constant Scalar expression to a matrix/vector
   template <class ScalarExpr>
-  static MatrixFromScalar
-      <ScalarExpr, traits<Derived>::result_type::RowsAtCompileTime,
-       traits<Derived>::result_type::ColsAtCompileTime>
+  static MatrixFromScalar<ScalarExpr, traits<Derived>::RowsAtCompileTime,
+                          traits<Derived>::ColsAtCompileTime>
   Broadcast(const ScalarBase<ScalarExpr>& scal, unsigned nrows,
             unsigned ncols) {
     return MatrixFromScalar
-        <ScalarExpr, traits<Derived>::result_type::RowsAtCompileTime,
-         traits<Derived>::result_type::ColsAtCompileTime>(scal.asDerived(),
-                                                          nrows, ncols);
+        <ScalarExpr, traits<Derived>::RowsAtCompileTime,
+         traits<Derived>::ColsAtCompileTime>(scal.asDerived(), nrows, ncols);
   }
 };
 

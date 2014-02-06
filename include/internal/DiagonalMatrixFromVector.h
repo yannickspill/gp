@@ -14,10 +14,10 @@ namespace internal {
 template <class VecExpr> struct traits<DiagonalMatrixFromVector<VecExpr> > {
   typedef typename VecExpr::scalar_type scalar_type;
   enum {
-    RowsAtCompileTime = VecExpr::result_type::RowsAtCompileTime,
-    ColsAtCompileTime = VecExpr::result_type::RowsAtCompileTime
+    RowsAtCompileTime = VecExpr::RowsAtCompileTime,
+    ColsAtCompileTime = VecExpr::RowsAtCompileTime
   };
-  typedef const decltype(std::declval
+  typedef decltype(std::declval
                    <typename VecExpr::result_type>().asDiagonal()) result_type;
 };
 
@@ -53,6 +53,7 @@ class DiagonalMatrixFromVector : public MatrixBase
  public:
   explicit DiagonalMatrixFromVector(const VecExpr& vec) : vec_(vec) {}
 
+  const result_type get() const { return vec_.get().asDiagonal(); }
   result_type get() { return vec_.get().asDiagonal(); }
 
   unsigned get_version() const { return vec_.get_version(); }

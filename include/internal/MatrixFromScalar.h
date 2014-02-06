@@ -44,9 +44,10 @@ class MatrixFromScalar
                             unsigned ncols)
       : scal_(scal), nrows_(nrows), ncols_(ncols) {}
 
-  result_type get() {
+  const result_type get() const {
     return result_type(nrows_, ncols_, scal_.get());
   }
+  result_type get() { return result_type(nrows_, ncols_, scal_.get()); }
 
   unsigned get_version() const {
       return scal_.get_version();

@@ -69,6 +69,18 @@ int main(){
     if FAILS(Id.trace(), 1, 1, 1, 1) return 36;
     //Transpose
     if FAILS(vx.transpose(), 1, Eigen::Dynamic, 1, 5) return 37;
+    //scalar exponential
+    if FAILS(scal.exp(), 1, 1, 1, 1) return 38;
+    //diagonal matrix from vector
+    if FAILS(vx.asDiagonal(), Eigen::Dynamic, Eigen::Dynamic, 5, 5) return 39;
+    //matrix from scalar
+    if FAILS(GP::MatrixXd::Broadcast(scal, 4, 2),
+            Eigen::Dynamic, Eigen::Dynamic, 4, 2) return 40;
+    if FAILS(GP::VectorXd::Broadcast(scal, 4, 1),
+            Eigen::Dynamic, 1, 4, 1) return 41;
+    if FAILS(GP::RowVectorXd::Broadcast(scal, 1, 4),
+            1, Eigen::Dynamic, 1, 4) return 42;
+
 
     return 0;
 }
