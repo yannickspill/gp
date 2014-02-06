@@ -1,15 +1,12 @@
 #ifndef GPI_H
 #define GPI_H
 
-#include "SymmetricMatrixFromFunction.h"
-#include "VectorFromFunction.h"
 #include "Scalar.h"
-#include "ConstEigenObject.h"
-#include "MatrixSum.h"
-#include "MatrixProduct.h"
+#include "Matrix.h"
 #include "MVN.h"
 
-#include <Eigen/Dense>
+namespace GP {
+
 //! Gaussian Process Interpolation factory
 /** This class provides methods to perform bayesian interpolation/smoothing of
  * data using a gaussian process prior on the function to be interpolated. A
@@ -24,17 +21,18 @@
  * \f[ \Longleftrightarrow
  *      \forall M>0 \quad \forall \mathbf{X} \in \mathcal{M}_{M,d}(\mathbb{K})
  *     \quad \mathbf{f}(X) \sim \mathcal{N}(\mathbf{m}(\mathbf{X}),
- *                                 \mathbf{K}(\mathbf{X},\mathbf{X}))
+ * \sigma^2\tau^2\mathbf{K}(\mathbf{X},\mathbf{X}))
  * \f]
  * \f[
        \mathbf{X}^\top \equiv
               \begin{pmatrix} \mathbf{x}_1 \cdots \mathbf{x}_M\end{pmatrix}
  *     \quad \forall i,j \in\llbracket 1,M \rrbracket
  *     \quad \mathbf{m}(\mathbf{X})_i \equiv m(\mathbf{x}_i)
- *     \quad \mathbf{K}(\mathbf{X},\mathbf{X})_{ij}
- *           \equiv k(\mathbf{x}_i,\mathbf{x}_j)
+ *     \quad \mathbf{K}(\mathbf{X},\mathbf{Y})_{ij}
+ *           \equiv k(\mathbf{x}_i,\mathbf{y}_j)
  * \f]
- * \noindent where \f$k\f$ is a covariance function
+ * \noindent where \f$k\f$ is a covariance function, and \f$\sigma,\tau\f$ are
+ * Scalars used as proportionality constants.
  *
  * The inputs are \f$ M \f$ noisy mean observations \f$ \mathbf{y} \f$ of \f$ f
  * \f$ at \f$ \mathbf{X} \f$, a Scalar parameter \f$\sigma\f$,
@@ -43,7 +41,7 @@
  * \f[ \mathbf{y} \sim \mathcal{N}\left(\mathbf{f}(\mathbf{X}),\sigma^2
  * \mathbf{S}\right) \f]
  *
- * \noindent the sample size \f$n_r\f$ for the mean and variance of the 
+ * \noindent the sample size \f$n_r\f$ for the mean and variance of the
  * observations, and a parametric family of prior mean/covariance functions
  * \f$m\f$ and \f$k\f$, these parameters can be optimized to give the most
  * probable posterior mean  and covariance functions.
@@ -70,43 +68,71 @@ class GPI {
   XType X_;
   YType y_;
   SType S_;
+  Scalar sigma_, tau_;
   unsigned nr_;
   MeanFunctionType mean_;
   CovarianceFunctionType cov_;
-  Scalar sigma_;
-  
+  internal::MatrixFromUnivariateFunctor<MeanFunctionType, XType> mx_;
+  typedef internal::SymmetricMatrixFromBivariateFunctor
+      <CovarianceFunctionType, XType> Ktype;
+  decltype(sigma_* sigma_
+           *(S_ / nr_ + tau_* tau_* MatrixXd::SymmetricApply(cov_, X_))) Omega_;
+  decltype(make_mvn(y_, mx_, Omega_)) mvn_lik_;
 
  public:
-  /** Constructor for the Gaussian process
+  ///\name Constructors for the Gaussian process
+  ///@{
+  /**Default constructor
    * \param [in] X \f$\mathbf{X}\f$ A matrix in which each row is a
    * \f$d\f$-dimensional input, corresponding to the abscissa of each of the
    * \f$M\f$ observations.
    * \param [in] y \f$\mathbf{y}\f$ vector of noisy mean observations
    * \param [in] S \f$\mathbf{S}\f$ matrix proportional to the sample variance
    * matrix of these observations
-   * \param[in] sigma \f$\sigma\f$ Scalar used as proportionality factor to
-   * \f$\mathbf{S}\f$.
    * \param [in] nr \f$n_r\f$ sample size for \f$\mathbf{y}\f$ and
    * \f$\mathbf{S}\f$
+   * \param[in] sigma \f$\sigma\f$ Scalar used as proportionality factor to
+   * \f$\mathbf{S}\f$.
+   * \param[in] tau \f$\tau\f$ Scalar used as proportionality factor to
+   * \f$\mathbf{K}\f$.
    * \param[in] m the mean function \f$m\f$
    * \param[in] k the covariance function \f$k\f$
    */
-  GPI(XType X, YType y, SType S, unsigned nr, MeanFunctionType m,
-          CovarianceFunctionType k, Scalar sigma)
-      : X_(X),
-        y_(y),
-        S_(S),
-        nr_(nr),
-        mean_(m),
-        cov_(k),
-        sigma_(sigma) {
-    // build mvn for marginal likelihood
+  GPI(const XType& X, const YType& y, const SType& S, Scalar sigma, Scalar tau,
+      unsigned nr, const MeanFunctionType& m, const CovarianceFunctionType& k)
+      : X_(X), y_(y), S_(S), nr_(nr), sigma_(sigma), tau_(tau), mean_(m),
+        cov_(k) {
+    // build m(X)
+    mx_ = VectorXd::Apply(mean_, X_);
+    // build K(X,X)
+    auto K = MatrixXd::SymmetricApply(cov_, X_);
     //  build omega
-    
-    //
-    //
-    // build mvn for posterior covariance
+    Omega_ = sigma_*sigma_*(S_/nr_ + tau_*tau_*K);
+    // build mvn for marginal likelihood
+    mvn_lik_ = make_mvn(y_, mx_, Omega_);
   }
+
+  /** Simplified constructor
+   * \param [in] X \f$\mathbf{X}\f$ A matrix in which each row is a
+   * \f$d\f$-dimensional input, corresponding to the abscissa of each of the
+   * \f$M\f$ observations.
+   * \param [in] y \f$\mathbf{y}\f$ vector of noisy mean observations
+   * \param[in] sigma \f$\sigma\f$ Scalar used as standard deviation of the
+   * noise process
+   * \param[in] m the mean function \f$m\f$
+   * \param[in] k the covariance function \f$k\f$
+   */
+  GPI(const XType& X, const YType& y, Scalar sigma, Scalar tau,
+      const MeanFunctionType& m, const CovarianceFunctionType& k)
+      : GPI(X, y, internal::Matrix
+            <Eigen::Matrix
+             <typename YType::scalar_type, YType::RowsAtCompileTime,
+              YType::RowsAtCompileTime> >(
+                Eigen::Matrix
+                <typename YType::scalar_type, YType::RowsAtCompileTime,
+                 YType::RowsAtCompileTime>::Identity(y.rows(), y.rows())),
+            sigma, tau, 1, m, k) {}
+  ///@}
 
   /** Minus log of the marginal likelihood of the mean observations given the
    * mean and covariance functions, and their Scalar parameters.
@@ -117,35 +143,74 @@ class GPI {
     \mathbf{\Omega} \equiv \frac{\sigma^2}{N} \mathbf{S}
     +\mathbf{K}(\mathbf{X},\mathbf{X})\f]
     */
-  double get() const {
+  auto minus_log_likelihood() const -> decltype(mvn_lik_.value()) {
     // return the value of the mvn
+    return mvn_lik_.value();
   }
 
-  //@{
-  /** Posterior mean and covariance functions
-   * \f[\mathbb{E}[f](\mathbf{x}^\star) = m(\mathbf{x}^\star) 
-   * + \mathbf{k}(\mathbf{X},\mathbf{x}^\star)^\top \mathbf{\Omega}^{-1}
-   * \mathbf{\epsilon}
-   * \f]
+  /** \name Posterior mean and covariance functions
+   * \f$X^\star,{X'}^\star \in \mathcal{M}_{N,d}(\mathbb{K})\f$ for any
+   * \f$N\f$ the user may want.
+   */
+
+  ///@{
+  /** Posterior mean function
+  * \f[\mathbb{E}[f](\mathbf{X}^\star) = \mathbf{m}(\mathbf{X}^\star)
+  * + \mathbf{K}(\mathbf{X},\mathbf{X}^\star)^\top \mathbf{\Omega}^{-1}
+  * \mathbf{\epsilon}
+  * \f]
+  */
+  template <class XStarType>
+  auto posterior_mean(XStarType XStar)
+      const -> decltype(VectorXd::Apply(mean_, XStar)
+                        + MatrixXd::Apply(cov_, X_, XStar).transpose()
+                          * Omega_.decomposition().solve(y_ - mx_)) {
+      //build m(x*)
+      auto mxs = VectorXd::Apply(mean_, XStar);
+      //build k(X,x*)
+      auto kxx = MatrixXd::Apply(cov_, X_, XStar);
+      // return m + k^T * Omega^{-1} * epsilon
+      return mxs + kxx.transpose() * Omega_.decomposition().solve(y_-mx_);
+  }
+
+  /** Posterior covariance function
    * \f[
-   * \mathbb{V}[f](\mathbf{x}^\star,\mathbf{x'}^\star) =
-   *    k(\mathbf{x}^\star,\mathbf{x'}^\star)
-   *     - \mathbf{k}(\mathbf{X},\mathbf{x}^\star)^\top \mathbf{\Omega}^{-1}
-   *       \mathbf{k}(\mathbf{X},\mathbf{x'}^\star)
-   * \f]
-   * \f[ \mathbf{k}(\mathbf{X},\mathbf{x}^\star)_{i} \equiv
-   *        k(\mathbf{x}_i,\mathbf{x}^\star)
+   * \mathbb{V}[f](\mathbf{X}^\star,\mathbf{X'}^\star) =
+   *    k(\mathbf{X}^\star,\mathbf{X'}^\star)
+   *     - \mathbf{K}(\mathbf{X},\mathbf{X}^\star)^\top \mathbf{\Omega}^{-1}
+   *       \mathbf{K}(\mathbf{X},\mathbf{X'}^\star)
    * \f]
    */
-  template<class XStarType>
-  double get_posterior_mean(XStarType xstar) const {//TODO 
+  template <class XStarType, class XStarPrimeType>
+  auto posterior_covariance(XStarType XStar, XStarPrimeType XStarPrime)
+      const -> decltype(MatrixXd::Apply(cov_, XStar, XStarPrime)
+                        - MatrixXd::Apply(cov_, X_, XStar).transpose()
+                          * Omega_.decomposition().solve(
+                                MatrixXd::Apply(cov_, X_, XStarPrime))) {
+      //build k(x*,x'*)
+      auto k1 = MatrixXd::Apply(cov_, XStar, XStarPrime);
+      //build k(X,x*)
+      auto k2 = MatrixXd::Apply(cov_, X_, XStar);
+      //build k(X,x'*)
+      auto k3 = MatrixXd::Apply(cov_, X_, XStarPrime);
+      //return 
+      return k1 - k2.transpose() * Omega_.decomposition().solve(k3);
   }
-
-  template<class XStarType, class XStarPrimeType>
-  double get_posterior_covariance(XStarType xstar,
-          XStarPrimeType xstarprime) const {//TODO
-  }
-  //@}
+  ///@}
 };
 
+template <class X, class Y, class S, class M, class C>
+GPI<X, Y, S, M, C> make_gpi(X&& x, Y&& y, S&& s, Scalar sigma, Scalar tau,
+                            unsigned nr, M&& m, C&& c) {
+  return GPI<X, Y, S, M, C>(std::forward<X>(x), std::forward<Y>(y),
+                            std::forward<S>(s), sigma, tau, nr,
+                            std::forward<M>(m), std::forward<C>(c));
+}
+template <class X, class Y, class S, class M, class C>
+GPI<X, Y, S, M, C> make_gpi(X&& x, Y&& y, Scalar sigma, Scalar tau, M&& m,
+                            C&& c) {
+  return GPI<X, Y, S, M, C>(std::forward<X>(x), std::forward<Y>(y), sigma, tau,
+                            std::forward<M>(m), std::forward<C>(c));
+}
+}
 #endif /* GPI_H */
