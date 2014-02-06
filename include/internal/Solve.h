@@ -24,7 +24,7 @@ struct traits<Solve<DecompType, OtherDerived> > {
       std::declval<typename DecompType::result_type>().solve(
           std::declval<typename OtherDerived::result_type>())) result_type;
   enum {
-    RowsAtCompileTime = DecompType::InputRowsAtCompileTime,
+    RowsAtCompileTime = DecompType::RowsAtCompileTime,
     ColsAtCompileTime = OtherDerived::ColsAtCompileTime
   };
 };
@@ -39,7 +39,7 @@ struct traits<Solve<Cache<DecompType>, OtherDerived> > {
   typedef typename traits
       <Solve<DecompType, OtherDerived> >::result_type result_type;
   enum {
-    RowsAtCompileTime = DecompType::InputRowsAtCompileTime,
+    RowsAtCompileTime = DecompType::RowsAtCompileTime,
     ColsAtCompileTime = OtherDerived::ColsAtCompileTime
   };
 };

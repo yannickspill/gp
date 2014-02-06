@@ -14,8 +14,8 @@ template <class Derived, template <typename> class Policy>
   typedef typename Derived::scalar_type scalar_type;
   typedef typename traits<Policy<Derived> >::result_type result_type;
   enum {
-      InputRowsAtCompileTime = Derived::RowsAtCompileTime,
-      InputColsAtCompileTime = Derived::ColsAtCompileTime
+      RowsAtCompileTime = Derived::RowsAtCompileTime,
+      ColsAtCompileTime = Derived::ColsAtCompileTime
   };
 };
 
@@ -28,8 +28,8 @@ class Decomposition : public Policy<Derived>,
   typedef typename traits<Decomposition>::scalar_type scalar_type;
   typedef typename traits<Decomposition>::result_type result_type;
   enum {
-    InputRowsAtCompileTime = traits<Decomposition>::InputRowsAtCompileTime,
-    InputColsAtCompileTime = traits<Decomposition>::InputColsAtCompileTime
+    RowsAtCompileTime = traits<Decomposition>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<Decomposition>::ColsAtCompileTime
   };
 
  private:
