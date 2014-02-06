@@ -8,6 +8,7 @@
 #include "internal/ScalarScalarProduct.h"
 #include "internal/ScalarScalarQuotient.h"
 #include "internal/ScalarOpposite.h"
+#include "internal/ScalarExponential.h"
 
 // scalar builtin ops
 #include "internal/ScalarBuiltinSum.h"

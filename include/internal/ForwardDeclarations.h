@@ -20,6 +20,7 @@ template <class Lhs, class Rhs> class ScalarScalarDifference;
 template <class Lhs, class Rhs> class ScalarScalarProduct;
 template <class Lhs, class Rhs> class ScalarScalarQuotient;
 template <class Lhs> class ScalarOpposite;
+template <class Lhs> class ScalarExponential;
 
 //scalar builtin ops
 template <class Lhs> class ScalarBuiltinSum;
