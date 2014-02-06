@@ -7,7 +7,8 @@
 
 #include <Eigen/Dense>
 
-namespace GP{
+namespace GP {
+namespace mean {
 
 /*
 //! Polynomial function
@@ -43,8 +44,9 @@ class PolynomialFunction {
 */
 
 //! returns a Functor that returns zero.
-internal::Functor<double> zero_function() {
-    return internal::make_functor(0.);
+internal::Functor<double> zero() {
+  return internal::make_functor(0.);
 };
+}
 }
 #endif /* MEAN_FUNCTIONS_H */
