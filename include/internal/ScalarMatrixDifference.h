@@ -18,6 +18,10 @@ struct traits<ScalarMatrixDifference<Scal, Mat> > {
                 "cannot mix different scalar types");
   typedef typename Scal::scalar_type scalar_type;
   typedef scalar_type result_type;
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 };
 
 template <typename Scal, typename Mat>
@@ -27,6 +31,10 @@ class ScalarMatrixDifference : public ScalarBase
   // typedefs
   typedef typename traits<ScalarMatrixDifference>::scalar_type scalar_type;
   typedef typename traits<ScalarMatrixDifference>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<ScalarMatrixDifference>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<ScalarMatrixDifference>::ColsAtCompileTime
+  };
 
  private:
   Scal lhs_;

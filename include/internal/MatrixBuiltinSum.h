@@ -14,6 +14,16 @@ template <class MatrixExpression>
 struct traits<MatrixBuiltinSum<MatrixExpression> > {
   typedef typename MatrixExpression::scalar_type scalar_type;
   typedef scalar_type result_type;
+  static_assert(MatrixExpression::RowsAtCompileTime == Eigen::Dynamic
+                || MatrixExpression::RowsAtCompileTime == 1,
+                "Input matrix must have one row!");
+  static_assert(MatrixExpression::ColsAtCompileTime == Eigen::Dynamic
+                || MatrixExpression::ColsAtCompileTime == 1,
+                "Input matrix must have one column!");
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 };
 
 // expression template for product of a Matrix with anything convertible to a
@@ -25,6 +35,10 @@ class MatrixBuiltinSum : public ScalarBase
   // typedefs
   typedef typename traits<MatrixBuiltinSum>::scalar_type scalar_type;
   typedef typename traits<MatrixBuiltinSum>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<MatrixBuiltinSum>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<MatrixBuiltinSum>::ColsAtCompileTime
+  };
 
  private:
   MatrixExpression lhs_;

@@ -17,6 +17,10 @@ template <class Lhs> struct traits<ScalarBuiltinDifference<Lhs> > {
                 "cannot mix different scalar types");
   typedef double scalar_type;
   typedef double result_type;
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 };
 
 // expression template for Scalar - Builtin
@@ -27,6 +31,10 @@ class ScalarBuiltinDifference : public ScalarBase
   // typedefs
   typedef typename traits<ScalarBuiltinDifference>::scalar_type scalar_type;
   typedef typename traits<ScalarBuiltinDifference>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<ScalarBuiltinDifference>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<ScalarBuiltinDifference>::ColsAtCompileTime
+  };
 
  private:
   Lhs lhs_;

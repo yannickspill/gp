@@ -18,6 +18,10 @@ template <class Lhs, class Rhs> struct traits<ScalarScalarProduct<Lhs, Rhs> > {
                 "cannot mix different scalar types");
   typedef typename Lhs::scalar_type scalar_type;
   typedef typename Lhs::result_type result_type;
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 };
 
 // expression template for products involving only Scalars
@@ -27,6 +31,10 @@ class ScalarScalarProduct : public ScalarBase<ScalarScalarProduct<Lhs, Rhs> > {
   // typedefs
   typedef typename traits<ScalarScalarProduct>::scalar_type scalar_type;
   typedef typename traits<ScalarScalarProduct>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<ScalarScalarProduct>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<ScalarScalarProduct>::ColsAtCompileTime
+  };
 
  private:
   Lhs lhs_;

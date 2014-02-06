@@ -13,6 +13,10 @@ namespace internal {
 template <> struct traits<Scalar> {
   typedef double scalar_type;
   typedef double result_type;  // passed as value in get()
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 };
 
 // modifiable double
@@ -21,6 +25,10 @@ class Scalar : public ScalarBase<Scalar> {
   // typedefs
   typedef typename traits<Scalar>::scalar_type scalar_type;
   typedef typename traits<Scalar>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<Scalar>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<Scalar>::ColsAtCompileTime
+  };
 
  private:
   struct Data {

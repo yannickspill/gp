@@ -15,6 +15,10 @@ namespace internal {
 template <class Derived> struct traits<LogDeterminant<Derived> > {
   typedef typename Derived::scalar_type scalar_type;
   typedef scalar_type result_type;
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 };
 
 // determinant of a matrix, specialization for the LDLT case
@@ -28,6 +32,10 @@ class LogDeterminant
   // typedefs
   typedef typename traits<LogDeterminant>::scalar_type scalar_type;
   typedef typename traits<LogDeterminant>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<LogDeterminant>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<LogDeterminant>::ColsAtCompileTime
+  };
 
  private:
   Decomposition<DerivedMat, LDLTPolicy> data_;

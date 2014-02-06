@@ -17,15 +17,21 @@ template <class Lhs, class Rhs> struct traits<MatrixDifference<Lhs, Rhs> > {
   static_assert(std::is_same
                 <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
                 "cannot mix matrices of different scalar types");
+  static_assert(Lhs::RowsAtCompileTime == Eigen::Dynamic
+                || Rhs::RowsAtCompileTime == Eigen::Dynamic
+                || Lhs::RowsAtCompileTime == Rhs::RowsAtCompileTime,
+                "Matrices must have same number of rows!");
+  static_assert(Lhs::ColsAtCompileTime == Eigen::Dynamic
+                || Rhs::ColsAtCompileTime == Eigen::Dynamic
+                || Lhs::ColsAtCompileTime == Rhs::ColsAtCompileTime,
+                "Matrices must have same number of columns!");
   typedef typename Lhs::scalar_type scalar_type;
   typedef decltype(std::declval<typename Lhs::result_type>() - std::declval
                    <typename Rhs::result_type>()) result_type;
-    enum {
+  enum {
     RowsAtCompileTime = Lhs::RowsAtCompileTime,
     ColsAtCompileTime = Lhs::ColsAtCompileTime
   };
-
-
 };
 
 template <typename Lhs, typename Rhs>

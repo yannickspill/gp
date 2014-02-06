@@ -19,6 +19,10 @@ struct traits<ScalarScalarDifference<Lhs, Rhs> > {
                 "cannot mix different scalar types");
   typedef typename Lhs::scalar_type scalar_type;
   typedef typename Lhs::result_type result_type;
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 };
 
 // expression template for products involving only Scalars
@@ -29,6 +33,10 @@ class ScalarScalarDifference : public ScalarBase
   // typedefs
   typedef typename traits<ScalarScalarDifference>::scalar_type scalar_type;
   typedef typename traits<ScalarScalarDifference>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<ScalarScalarDifference>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<ScalarScalarDifference>::ColsAtCompileTime
+  };
 
  private:
   Lhs lhs_;

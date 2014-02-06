@@ -17,6 +17,10 @@ template <class Lhs> struct traits<ScalarBuiltinSum<Lhs> > {
                 "cannot mix different scalar types");
   typedef double scalar_type;
   typedef double result_type;
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 };
 
 // expression template for Scalar + Builtin
@@ -27,6 +31,10 @@ class ScalarBuiltinSum : public ScalarBase
   // typedefs
   typedef typename traits<ScalarBuiltinSum>::scalar_type scalar_type;
   typedef typename traits<ScalarBuiltinSum>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<ScalarBuiltinSum>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<ScalarBuiltinSum>::ColsAtCompileTime
+  };
 
  private:
   Lhs lhs_;

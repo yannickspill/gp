@@ -14,22 +14,19 @@ namespace GP {
 namespace internal {
 
 // traits for Solve<Decomposition<...> >
-template <class DerivedMat, template <class> class Policy, class OtherDerived>
-struct traits<Solve<Decomposition<DerivedMat, Policy>, OtherDerived> > {
-  static_assert(std::is_same<typename DerivedMat::scalar_type,
+template <class DecompType, class OtherDerived>
+struct traits<Solve<DecompType, OtherDerived> > {
+  static_assert(std::is_same<typename DecompType::scalar_type,
                              typename OtherDerived::scalar_type>::value,
                 "cannot mix matrices of different scalar types");
-  typedef typename DerivedMat::scalar_type scalar_type;
+  typedef typename OtherDerived::scalar_type scalar_type;
   typedef decltype(
-      std::declval
-      <typename Decomposition<DerivedMat, Policy>::result_type>().solve(
+      std::declval<typename DecompType::result_type>().solve(
           std::declval<typename OtherDerived::result_type>())) result_type;
-    enum {
-    RowsAtCompileTime = DerivedMat::RowsAtCompileTime,
+  enum {
+    RowsAtCompileTime = DecompType::InputRowsAtCompileTime,
     ColsAtCompileTime = OtherDerived::ColsAtCompileTime
   };
-
-
 };
 // traits for Solve<Cache<Decomposition<...> > >
 template <class DecompType, class OtherDerived>
@@ -41,6 +38,10 @@ struct traits<Solve<Cache<DecompType>, OtherDerived> > {
       <Solve<DecompType, OtherDerived> >::scalar_type scalar_type;
   typedef typename traits
       <Solve<DecompType, OtherDerived> >::result_type result_type;
+  enum {
+    RowsAtCompileTime = DecompType::InputRowsAtCompileTime,
+    ColsAtCompileTime = OtherDerived::ColsAtCompileTime
+  };
 };
 
 //! solve AX = B for X, given the decomposition for A
@@ -50,6 +51,10 @@ class Solve : public MatrixBase<Solve<DecompType, OtherDerived> > {
   // typedefs
   typedef typename traits<Solve>::scalar_type scalar_type;
   typedef typename traits<Solve>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<Solve>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<Solve>::ColsAtCompileTime
+  };
 
  private:
   DecompType decomp_;

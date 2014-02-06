@@ -18,7 +18,7 @@ struct traits<MatrixOpposite<MatrixExpression> > {
   typedef typename MatrixExpression::scalar_type scalar_type;
   typedef decltype(
       - std::declval<typename MatrixExpression::result_type>()) result_type;
-    enum {
+  enum {
     RowsAtCompileTime = MatrixExpression::RowsAtCompileTime,
     ColsAtCompileTime = MatrixExpression::ColsAtCompileTime
   };

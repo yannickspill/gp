@@ -14,6 +14,10 @@ template <class ScalarExpression>
 struct traits<ScalarOpposite<ScalarExpression> > {
   typedef typename ScalarExpression::scalar_type scalar_type;
   typedef scalar_type result_type;
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 };
 
 // expression template for the opposite of a valrix
@@ -24,6 +28,10 @@ class ScalarOpposite : public ScalarBase
   // typedefs
   typedef typename traits<ScalarOpposite>::scalar_type scalar_type;
   typedef typename traits<ScalarOpposite>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<ScalarOpposite>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<ScalarOpposite>::ColsAtCompileTime
+  };
 
  private:
   ScalarExpression val_;

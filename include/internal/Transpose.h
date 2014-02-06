@@ -14,11 +14,14 @@ namespace GP {
 namespace internal {
 
 template <class Derived> struct traits<Transpose<Derived> > {
-  static constexpr unsigned stuff=1;
   typedef typename Derived::scalar_type scalar_type;
   typedef decltype(std::declval
                    <typename traits<Derived>::result_type>().transpose())
       result_type;
+  enum {
+    RowsAtCompileTime = Derived::ColsAtCompileTime,
+    ColsAtCompileTime = Derived::RowsAtCompileTime
+  };
 };
 
 // specialize for matrix, which needs to be constd
@@ -27,6 +30,10 @@ template <class Derived> struct traits<Transpose<Derived> > {
 template <class EigenType> struct traits<Transpose<Matrix<EigenType> > > {
   typedef typename Matrix<EigenType>::scalar_type scalar_type;
   typedef decltype(std::declval<const EigenType>().transpose()) result_type;
+  enum {
+    RowsAtCompileTime = EigenType::ColsAtCompileTime,
+    ColsAtCompileTime = EigenType::RowsAtCompileTime
+  };
 };
 
 template <typename Derived>
@@ -36,8 +43,8 @@ class Transpose : public MatrixBase<Transpose<Derived> > {
   typedef typename traits<Transpose>::scalar_type scalar_type;
   typedef typename traits<Transpose>::result_type result_type;
   enum {
-    RowsAtCompileTime=traits<Transpose>::stuff,
-    ColsAtCompileTime=1
+    RowsAtCompileTime=traits<Transpose>::RowsAtCompileTime,
+    ColsAtCompileTime=traits<Transpose>::ColsAtCompileTime,
   };
 
  private:

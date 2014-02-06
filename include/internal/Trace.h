@@ -15,6 +15,10 @@ namespace internal {
 template <class Derived> struct traits<Trace<Derived> > {
   typedef typename Derived::scalar_type scalar_type;
   typedef typename Derived::scalar_type result_type;
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 };
 
 template <typename Derived>
@@ -23,6 +27,10 @@ class Trace : public ScalarBase<Trace<Derived> > {
   // typedefs
   typedef typename traits<Trace>::scalar_type scalar_type;
   typedef typename traits<Trace>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<Trace>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<Trace>::ColsAtCompileTime
+  };
 
  private:
   Derived data_;

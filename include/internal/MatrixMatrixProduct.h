@@ -12,23 +12,33 @@
 namespace GP {
 namespace internal {
 
+namespace {
+template<class Lhs, class Rhs>
+using ProductParent = typename std::conditional<
+    Lhs::RowsAtCompileTime == 1 && Rhs::ColsAtCompileTime == 1,
+    ScalarBase<MatrixMatrixProduct<Lhs, Rhs> >,
+    MatrixBase<MatrixMatrixProduct<Lhs, Rhs> > >::type;
+}
+
 template <class Lhs, class Rhs> struct traits<MatrixMatrixProduct<Lhs, Rhs> > {
   static_assert(std::is_same
                 <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
                 "cannot mix matrices of different scalar types");
+  static_assert(Lhs::ColsAtCompileTime == Eigen::Dynamic
+                || Rhs::RowsAtCompileTime == Eigen::Dynamic
+                || Lhs::ColsAtCompileTime == Rhs::RowsAtCompileTime,
+                "Lhs and Rhs have incompatible shapes for a matrix product");
   typedef typename Lhs::scalar_type scalar_type;
   typedef decltype(std::declval<typename Lhs::result_type>() * std::declval
                    <typename Rhs::result_type>()) result_type;
   enum {
     RowsAtCompileTime = Lhs::RowsAtCompileTime,
-    ColsAtCompileTime = Lhs::ColsAtCompileTime
+    ColsAtCompileTime = Rhs::ColsAtCompileTime
   };
-
-
 };
 
 template <typename Lhs, typename Rhs>
-class MatrixMatrixProduct : public MatrixBase<MatrixMatrixProduct<Lhs, Rhs> > {
+class MatrixMatrixProduct : public ProductParent<Lhs, Rhs> {
 
  public:
   // typedefs

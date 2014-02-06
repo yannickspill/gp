@@ -13,6 +13,10 @@ template <class Derived, template <typename> class Policy>
     struct traits<Decomposition<Derived, Policy> > {
   typedef typename Derived::scalar_type scalar_type;
   typedef typename traits<Policy<Derived> >::result_type result_type;
+  enum {
+      InputRowsAtCompileTime = Derived::RowsAtCompileTime,
+      InputColsAtCompileTime = Derived::ColsAtCompileTime
+  };
 };
 
 //General class for decomposition. Uses LDLT by default.
@@ -23,6 +27,10 @@ class Decomposition : public Policy<Derived>,
   // typedefs
   typedef typename traits<Decomposition>::scalar_type scalar_type;
   typedef typename traits<Decomposition>::result_type result_type;
+  enum {
+    InputRowsAtCompileTime = traits<Decomposition>::InputRowsAtCompileTime,
+    InputColsAtCompileTime = traits<Decomposition>::InputColsAtCompileTime
+  };
 
  private:
   Derived data_;

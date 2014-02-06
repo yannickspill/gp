@@ -15,6 +15,9 @@ template <class Derived> class ScalarBase : public GPBase<Derived> {
   ScalarBase() {}  // only children can instantiate it
 
  public:
+  unsigned rows() const { return 1;}
+  unsigned cols() const { return 1;}
+
   // allow implicit casting to Derived
   const Derived& asDerived() const {
     return static_cast<const Derived&>(*this);

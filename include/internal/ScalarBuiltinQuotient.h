@@ -15,6 +15,10 @@ template <class ScalarExpression>
 struct traits<ScalarBuiltinQuotient<ScalarExpression> > {
   typedef typename ScalarExpression::scalar_type scalar_type;
   typedef typename ScalarExpression::result_type result_type;
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 };
 
 // expression template for product of a Scalar with anything convertible to a
@@ -26,6 +30,10 @@ class ScalarBuiltinQuotient : public ScalarBase
   // typedefs
   typedef typename traits<ScalarBuiltinQuotient>::scalar_type scalar_type;
   typedef typename traits<ScalarBuiltinQuotient>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<ScalarBuiltinQuotient>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<ScalarBuiltinQuotient>::ColsAtCompileTime
+  };
 
  private:
   ScalarExpression lhs_;

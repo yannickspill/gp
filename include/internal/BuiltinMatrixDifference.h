@@ -21,8 +21,8 @@ struct traits<BuiltinMatrixDifference<MatrixExpression> > {
   typedef typename tme::scalar_type scalar_type;
   typedef scalar_type result_type;
   enum {
-    RowsAtCompileTime = tme::RowsAtCompileTime,
-    ColsAtCompileTime = tme::ColsAtCompileTime
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
   };
 };
 

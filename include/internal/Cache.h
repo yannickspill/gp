@@ -19,7 +19,7 @@ namespace internal {
 namespace {
 // define parent type of object to be cached
 template <class Object>
-using Parent = typename std::conditional
+using CacheParent = typename std::conditional
     <std::is_convertible<Object, MatrixBase<Object> >::value,
      MatrixBase<Cache<Object> >,
      typename std::conditional<
@@ -63,6 +63,10 @@ typedef typename traits<Object>::scalar_type scalar_type;
 typedef typename has_eval<typename traits<Object>::result_type>::type
     result_type;
 typedef typename has_eval<typename Object::result_type>::value_type eval_called;
+enum {
+    RowsAtCompileTime = Object::RowsAtCompileTime,
+    ColsAtCompileTime = Object::ColsAtCompileTime
+  };
 };
 
 //! Cache class
@@ -77,7 +81,7 @@ typedef typename has_eval<typename Object::result_type>::value_type eval_called;
    to follow the Compound object pattern.
 */
 template <class Object>
-class Cache : public Parent<Object>, public CachePlugins<Object> {
+class Cache : public CacheParent<Object>, public CachePlugins<Object> {
  public:
   // typedefs
   typedef typename traits<Cache>::scalar_type scalar_type;
@@ -144,7 +148,7 @@ class Cache : public Parent<Object>, public CachePlugins<Object> {
   Cache(const Object& obj) : data_(std::make_shared<CacheData>(obj)) {
     LOG("Cache for object " << typeid(Object).name() << std::endl
                             << "   inheriting from "
-                            << typeid(Parent<Object>).name()
+                            << typeid(CacheParent<Object>).name()
                             << std::endl << "   object result_type "
                             << typeid(typename Object::result_type).name()
                             << std::endl << "   cache result_type "

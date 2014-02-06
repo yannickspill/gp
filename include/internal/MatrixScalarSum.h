@@ -19,6 +19,10 @@ struct traits<MatrixScalarSum<Mat, Scal> > {
                 "cannot mix different scalar types");
   typedef typename Mat::scalar_type scalar_type;
   typedef scalar_type result_type;
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 };
 
 // type(matrix + scalar) = type(scalar)
@@ -29,6 +33,10 @@ class MatrixScalarSum : public ScalarBase<MatrixScalarSum<Mat, Scal> > {
   // typedefs
   typedef typename traits<MatrixScalarSum>::scalar_type scalar_type;
   typedef typename traits<MatrixScalarSum>::result_type result_type;
+  enum {
+    RowsAtCompileTime = traits<MatrixScalarSum>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<MatrixScalarSum>::ColsAtCompileTime
+  };
 
  private:
   Mat lhs_;
