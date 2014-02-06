@@ -202,8 +202,6 @@ int main(int, char * []) {
               .sum()))
     return 59;
 
-  return 0;
-
   //rows and columns
   MatrixXd dummy(Eigen::MatrixXd::Random(szx,szy));
   if (dummy.rows() != szx) return 26;
@@ -216,7 +214,7 @@ int main(int, char * []) {
   double tmp4((msd.decomposition().logdet()
               *msd.decomposition().logdet()).get());
   double tmp6((msd.trace() + (msd*msd).trace()).get());
-  double tmp7((1.0 + 0.5*msd.decomposition().cache().logdet()).get());
+  double tmp7((1.0 + 0.5*msd.decomposition().logdet()).get());
 
   //multiple products should work too
   if ( (msd*3*msd).get() != (sd*3*sd) ) return 29;
@@ -269,6 +267,7 @@ int main(int, char * []) {
   if (bcm.get() != Eigen::MatrixXd::Constant(5,3,2.)) return 71;
   auto bcv = GP::VectorXd::Broadcast(1./tbb, 5, 1);
   if (bcv.get() != Eigen::VectorXd::Constant(5,2.)) return 72;
+  if (Eigen::MatrixXd(bcv.asDiagonal().get()) != Eigen::MatrixXd(2.*Eigen::MatrixXd::Identity(5,5))) return 73;
 
   return 0;
 }
