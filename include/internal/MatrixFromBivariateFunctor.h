@@ -21,7 +21,7 @@ struct traits<MatrixFromBivariateFunctor<Functor, InMat1, InMat2> > {
       <scalar_type, RowsAtCompileTime, ColsAtCompileTime> result_type;
 };
 
-//apply functor to every row of both matrices
+// apply functor to every row of both matrices
 template <class Functor, class InMat1, class InMat2>
 class MatrixFromBivariateFunctor
     : public MatrixBase<MatrixFromBivariateFunctor<Functor, InMat1, InMat2> > {
@@ -30,9 +30,10 @@ class MatrixFromBivariateFunctor
   typedef typename traits<MatrixFromBivariateFunctor>::scalar_type scalar_type;
   typedef typename traits<MatrixFromBivariateFunctor>::result_type result_type;
   enum {
-      RowsAtCompileTime=traits<MatrixFromBivariateFunctor>::RowsAtCompileTime,
-      ColsAtCompileTime=traits<MatrixFromBivariateFunctor>::ColsAtCompileTime,
+    RowsAtCompileTime = traits<MatrixFromBivariateFunctor>::RowsAtCompileTime,
+    ColsAtCompileTime = traits<MatrixFromBivariateFunctor>::ColsAtCompileTime,
   };
+  static_assert(Functor::nargs == 2, "Expecting bivariate functor!");
 
  private:
   Functor func_;
@@ -40,8 +41,8 @@ class MatrixFromBivariateFunctor
   InMat2 mat2_;
 
  public:
-  explicit MatrixFromBivariateFunctor(const Functor& func,
-          const InMat1& mat1, const InMat2& mat2)
+  explicit MatrixFromBivariateFunctor(const Functor& func, const InMat1& mat1,
+                                      const InMat2& mat2)
       : func_(func), mat1_(mat1), mat2_(mat2) {}
 
   result_type get() const {
@@ -49,13 +50,13 @@ class MatrixFromBivariateFunctor
     auto mat2 = mat2_.get();
     result_type retval(mat1.rows(), mat2.rows());
     for (unsigned i = 0; i < mat1.rows(); ++i)
-        for (unsigned j = 0; j < mat2.rows(); ++j)
-            retval(i,j) = func_(mat1.row(i), mat2.row(j));
+      for (unsigned j = 0; j < mat2.rows(); ++j)
+        retval(i, j) = func_(mat1.row(i), mat2.row(j));
     return retval;
   }
 
   unsigned get_version() const {
-      return func_.get_version() + mat1_.get_version() + mat2_.get_version();
+    return func_.get_version() + mat1_.get_version() + mat2_.get_version();
   }
 };
 }

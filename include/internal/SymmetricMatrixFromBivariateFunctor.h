@@ -22,21 +22,27 @@ struct traits<SymmetricMatrixFromBivariateFunctor<Functor, InMat> > {
   typedef Eigen::SelfAdjointView<matrix_type, Eigen::Upper> result_type;
 };
 
-//build matrix by applying bivariate functor to every combination of row pairs
-//of the input matrix. Only works with functors that return a numeric (e.g.
-//non-matrix) type.
+// build matrix by applying bivariate functor to every combination of row pairs
+// of the input matrix. Only works with functors that return a numeric (e.g.
+// non-matrix) type.
 template <class Functor, class InMat>
-class SymmetricMatrixFromBivariateFunctor : public MatrixBase
-                          <SymmetricMatrixFromBivariateFunctor<Functor, InMat> > {
+class SymmetricMatrixFromBivariateFunctor
+    : public MatrixBase<SymmetricMatrixFromBivariateFunctor<Functor, InMat> > {
 
  public:
-  typedef typename traits<SymmetricMatrixFromBivariateFunctor>::scalar_type scalar_type;
-  typedef typename traits<SymmetricMatrixFromBivariateFunctor>::matrix_type matrix_type;
-  typedef typename traits<SymmetricMatrixFromBivariateFunctor>::result_type result_type;
+  typedef typename traits
+      <SymmetricMatrixFromBivariateFunctor>::scalar_type scalar_type;
+  typedef typename traits
+      <SymmetricMatrixFromBivariateFunctor>::matrix_type matrix_type;
+  typedef typename traits
+      <SymmetricMatrixFromBivariateFunctor>::result_type result_type;
   enum {
-      RowsAtCompileTime=traits<SymmetricMatrixFromBivariateFunctor>::RowsAtCompileTime,
-      ColsAtCompileTime=traits<SymmetricMatrixFromBivariateFunctor>::ColsAtCompileTime,
+    RowsAtCompileTime = traits
+    <SymmetricMatrixFromBivariateFunctor>::RowsAtCompileTime,
+    ColsAtCompileTime = traits
+    <SymmetricMatrixFromBivariateFunctor>::ColsAtCompileTime,
   };
+  static_assert(Functor::nargs == 2, "Expecting bivariate functor!");
 
  private:
   Functor func_;
@@ -44,7 +50,8 @@ class SymmetricMatrixFromBivariateFunctor : public MatrixBase
   mutable std::shared_ptr<matrix_type> ret_;
 
  public:
-  explicit SymmetricMatrixFromBivariateFunctor(const Functor& func, const InMat& mat)
+  explicit SymmetricMatrixFromBivariateFunctor(const Functor& func,
+                                               const InMat& mat)
       : func_(func), mat_(mat), ret_(nullptr) {}
 
   result_type get() const {
@@ -52,18 +59,16 @@ class SymmetricMatrixFromBivariateFunctor : public MatrixBase
     ret_ = std::make_shared
         <matrix_type>(matrix_type(eigenmat.rows(), eigenmat.rows()));
     for (unsigned i = 0; i < eigenmat.rows(); ++i)
-        for (unsigned j = i; j < eigenmat.rows(); ++j)
-            ret_->operator()(i,j)
-                = scalar_type(func_(eigenmat.row(i), eigenmat.row(j)));
+      for (unsigned j = i; j < eigenmat.rows(); ++j)
+        ret_->operator()(i, j)
+            = scalar_type(func_(eigenmat.row(i), eigenmat.row(j)));
     return result_type(*ret_);
   }
 
   unsigned get_version() const {
-      return func_.get_version() + mat_.get_version();
+    return func_.get_version() + mat_.get_version();
   }
 };
-
-
 }
 }
 #endif /* INTERNAL_SYMMETRIC_MATRIX_FROM_BIVARIATE_FUNCTOR_H */

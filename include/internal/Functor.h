@@ -17,7 +17,8 @@ struct traits<Functor<OutExpr, InExprs...> > {
   typedef typename OutExpr::result_type result_type;
   enum {
     RowsAtCompileTime = OutExpr::RowsAtCompileTime,
-    ColsAtCompileTime = OutExpr::ColsAtCompileTime
+    ColsAtCompileTime = OutExpr::ColsAtCompileTime,
+    nargs = sizeof...(InExprs)
   };
   typedef Functor<OutExpr, InExprs...> type;
 };
@@ -35,7 +36,8 @@ class Functor {
   typedef typename traits<Functor>::result_type result_type;
   enum {
     RowsAtCompileTime = traits<Functor>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<Functor>::ColsAtCompileTime
+    ColsAtCompileTime = traits<Functor>::ColsAtCompileTime,
+    nargs = traits<Functor>::nargs
   };
   typedef typename traits<Functor>::type type;
 
