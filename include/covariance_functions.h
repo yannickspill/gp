@@ -6,52 +6,96 @@
 #include "Functor.h"
 #include "macros.h"
 
+#include <Eigen/Core>
 #include <Eigen/Dense>
 
 namespace GP {
+namespace covariance {
 
 //! Squared exponential covariance function
 //\f[k(\mathbf{x}, \mathbf{y}; \mathbf{M}) =
 //\exp\left( -\frac{1}{2} * (\mathbf{x}-\mathbf{y})^T * \mathbf{M} *
 //(\mathbf{x}-\mathbf{y}) \right) \f]
-template <class SymMat> class SquaredExponentialCovarianceFunction {
-
-  typedef Matrix
-      <Eigen::Matrix<typename SymMat::scalar_type,
-                     SymMat::result_type::RowsAtCompileTime, 1> > in_type;
-
-  SymMat M_;
-  in_type x_, y_;
-  decltype(make_functor((-0.5 * (x_ - y_).transpose() * M_*(x_ - y_)).exp(), x_,
-                        y_)) f_;
-
-  void mk_functor() {
-    x_ = in_type(M_.rows());
-    y_ = in_type(M_.rows());
-    auto diff = x_ - y_;
-    f_ = make_functor((-0.5 * diff.transpose() * M_ * diff).exp(), x_, y_);
-  }
-
- public:
-  SquaredExponentialCovarianceFunction(const SymMat& M) : M_(M) {mk_functor();}
-
-  template <class Vec1, class Vec2> double value(Vec1&& v1, Vec2&& v2) const {
-    return f_(std::forward<Vec1>(v1), std::forward<Vec2>(v2));
-  }
-};
-
 template <class SymMat>
-SquaredExponentialCovarianceFunction<SymMat> make_se_covariance(SymMat&& M) {
-  return SquaredExponentialCovarianceFunction<SymMat>(M);
+auto squared_exponential(const SymMat& M)
+    -> internal::Functor
+    <typename std::remove_const<decltype(
+         (-0.5 * (std::declval
+                  <GP::Matrix<Eigen::Matrix<typename SymMat::scalar_type,
+                                            SymMat::RowsAtCompileTime, 1> > >()
+                  - std::declval
+                  <GP::Matrix<Eigen::Matrix<typename SymMat::scalar_type,
+                                            SymMat::RowsAtCompileTime, 1> > >())
+                     .transpose() * M
+          *(std::declval
+            <GP::Matrix<Eigen::Matrix<typename SymMat::scalar_type,
+                                      SymMat::RowsAtCompileTime, 1> > >()
+            - std::declval
+            <GP::Matrix<Eigen::Matrix<typename SymMat::scalar_type,
+                                      SymMat::RowsAtCompileTime, 1> > >()))
+             .exp())>::type,
+     GP::Matrix<Eigen::Matrix
+                <typename SymMat::scalar_type, SymMat::RowsAtCompileTime, 1> >,
+     GP::Matrix<Eigen::Matrix<typename SymMat::scalar_type,
+                              SymMat::RowsAtCompileTime, 1> > > {
+  typedef Eigen::Matrix
+      <typename SymMat::scalar_type, SymMat::RowsAtCompileTime, 1> in_base_type;
+  typedef Matrix<in_base_type> in_type;
+  in_type x(in_base_type(M.rows()));
+  in_type y(in_base_type(M.rows()));
+  return GP::internal::make_functor(
+      (-0.5 * (x - y).transpose() * M * (x - y)).exp(), x, y);
+}
+// simplfied case in which the input is the persistence length and the dimension
+// inputs of the functor should be vectors, even in the 1D case
+//\f[k(\mathbf{x}, \mathbf{y}; \lambda) =
+//\exp\left( -\frac{1}{2} * (\mathbf{x}-\mathbf{y})^T * \mathbf{M} *
+//(\mathbf{x}-\mathbf{y}) \right) \f]
+//\f[\mathbf{M}_{ii} = \frac{1}{\lambda^2} \quad \mathbf{M}_{i\ne j}=0\f]
+template <int DimsAtCompileTime = Eigen::Dynamic>
+auto squared_exponential(Scalar len, unsigned dims)
+    -> internal::Functor
+    <typename std::remove_const<decltype((
+         -0.5
+         * (std::declval<GP::Matrix<Eigen::Matrix<typename Scalar::scalar_type,
+                                                  DimsAtCompileTime, 1> > >()
+            - std::declval
+            <GP::Matrix<Eigen::Matrix<typename Scalar::scalar_type,
+                                      DimsAtCompileTime, 1> > >()).transpose()
+         * GP::Matrix
+           <Eigen::Matrix<typename Scalar::scalar_type, DimsAtCompileTime,
+                          1> >::Broadcast(1. / (len* len), dims, 1).asDiagonal()
+         * (std::declval<GP::Matrix<Eigen::Matrix<typename Scalar::scalar_type,
+                                                  DimsAtCompileTime, 1> > >()
+            - std::declval
+            <GP::Matrix<Eigen::Matrix<typename Scalar::scalar_type,
+                                      DimsAtCompileTime, 1> > >()))
+                                             .exp())>::type,
+     GP::Matrix
+     <Eigen::Matrix<typename Scalar::scalar_type, DimsAtCompileTime, 1> >,
+     GP::Matrix
+     <Eigen::Matrix<typename Scalar::scalar_type, DimsAtCompileTime, 1> > > {
+  assert(dims>0);
+  typedef Eigen::Matrix
+      <typename Scalar::scalar_type, DimsAtCompileTime, 1> in_base_type;
+  typedef Matrix<in_base_type> in_type;
+  in_type x((in_base_type(dims)));
+  in_type y((in_base_type(dims)));
+  auto M = in_type::Broadcast(1. / (len * len), dims, 1).asDiagonal();
+  return GP::internal::make_functor(
+      (-0.5 * (x - y).transpose() * M * (x - y)).exp(), x, y);
 }
 
-template <unsigned dims = 1>
-auto make_se_covariance(Scalar lambda)
-    -> SquaredExponentialCovarianceFunction
-    <decltype(VectorXd::Broadcast(1. / (lambda* lambda), dims, 1)
-                  .asDiagonal())> {
-  auto M = VectorXd::Broadcast(1. / (lambda * lambda), dims, 1).asDiagonal();
-  return SquaredExponentialCovarianceFunction<decltype(M)>(M);
+//simplified constructor for 1-D squared exponential
+//\f[k(x, y; \lambda) =\exp\left( -\frac{(x-y)^2}{2\lambda^2} \right) \f]
+auto squared_exponential(Scalar len)
+    -> internal::Functor
+    <decltype((-0.5 * SQUARE((std::declval<Scalar>() - std::declval<Scalar>())
+                             / len)).exp()),
+     Scalar, Scalar> {
+    Scalar x(1.0),y(1.0);
+    return GP::internal::make_functor((-0.5*SQUARE((x-y)/len)).exp(), x, y);
+}
 }
 }
 #endif /* COVARIANCE_FUNCTIONS_H */
