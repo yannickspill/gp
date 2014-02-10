@@ -70,6 +70,9 @@ int main(int, char*[]){
     static_assert(std::is_same<typename decltype(f3)::result_type,
                                decltype(randvec * mat * rvec)>::value,
                   "f3 has wrong result type");
+    // most stupid functor ever
+    auto f6 = internal::make_functor(scaltest, scaltest);
+    if (f6(99.0) != 99.0) return 14;
 
     return 0;
 }
