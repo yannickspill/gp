@@ -10,9 +10,10 @@
 namespace GP {
 namespace mean {
 
-/*
+
 //! Polynomial function
 //\f[ f(\mathbf{X}; \mathbf{\beta}, b) = b + \mathbf{\beta}^\top\mathbf{X} \f]
+/*
 template<class InMat>
 class PolynomialFunction {
 
@@ -43,10 +44,14 @@ class PolynomialFunction {
 };
 */
 
-//! returns a Functor that returns zero.
+/// \defgroup MeanFunctions Mean functions
+/// @{
+
+//! Zero function
 internal::Functor<double> zero() {
   return internal::make_functor(0.);
 };
+/// @}
 }
 }
 #endif /* MEAN_FUNCTIONS_H */

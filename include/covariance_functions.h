@@ -12,10 +12,17 @@
 namespace GP {
 namespace covariance {
 
-//! Squared exponential covariance function
-//\f[k(\mathbf{x}, \mathbf{y}; \mathbf{M}) =
-//\exp\left( -\frac{1}{2} * (\mathbf{x}-\mathbf{y})^T * \mathbf{M} *
-//(\mathbf{x}-\mathbf{y}) \right) \f]
+///\defgroup CovFunctions Covariance Functions
+///@{
+
+/// \defgroup SECov Squared exponential
+///@{
+
+/**General case, takes a covariance matrix as input
+ * \f[k(\mathbf{x}, \mathbf{y}; \mathbf{M}) =
+ * \exp\left( -\frac{1}{2} (\mathbf{x}-\mathbf{y})^T \mathbf{M}
+ * (\mathbf{x}-\mathbf{y}) \right) \f]
+ */
 template <class SymMat>
 auto squared_exponential(const SymMat& M)
     -> internal::Functor
@@ -46,12 +53,12 @@ auto squared_exponential(const SymMat& M)
   return GP::internal::make_functor(
       (-0.5 * (x - y).transpose() * M * (x - y)).exp(), x, y);
 }
-// simplfied case in which the input is the persistence length and the dimension
-// inputs of the functor should be vectors, even in the 1D case
-//\f[k(\mathbf{x}, \mathbf{y}; \lambda) =
-//\exp\left( -\frac{1}{2} * (\mathbf{x}-\mathbf{y})^T * \mathbf{M} *
-//(\mathbf{x}-\mathbf{y}) \right) \f]
-//\f[\mathbf{M}_{ii} = \frac{1}{\lambda^2} \quad \mathbf{M}_{i\ne j}=0\f]
+
+/** Simplfied case in which the input is the persistence length and the
+ * dimension inputs of the functor should be vectors, even in the 1D case
+ * \f[k(\mathbf{x}, \mathbf{y}; \lambda) =
+ * \exp\left( -\frac{\|\mathbf{x}-\mathbf{y}\|^2}{2\lambda^2} \right) \f]
+ */
 template <int DimsAtCompileTime = Eigen::Dynamic>
 auto squared_exponential(Scalar len, unsigned dims)
     -> internal::Functor
@@ -86,8 +93,8 @@ auto squared_exponential(Scalar len, unsigned dims)
       (-0.5 * (x - y).transpose() * M * (x - y)).exp(), x, y);
 }
 
-//simplified constructor for 1-D squared exponential
-//\f[k(x, y; \lambda) =\exp\left( -\frac{(x-y)^2}{2\lambda^2} \right) \f]
+///simplified constructor for 1-D squared exponential
+///\f[k(x, y; \lambda) =\exp\left( -\frac{(x-y)^2}{2\lambda^2} \right) \f]
 auto squared_exponential(Scalar len)
     -> internal::Functor
     <decltype((-0.5 * SQUARE((std::declval<Scalar>() - std::declval<Scalar>())
@@ -96,6 +103,9 @@ auto squared_exponential(Scalar len)
     Scalar x(1.0),y(1.0);
     return GP::internal::make_functor((-0.5*SQUARE((x-y)/len)).exp(), x, y);
 }
+///@}
+
+///@}
 }
 }
 #endif /* COVARIANCE_FUNCTIONS_H */
