@@ -35,18 +35,42 @@ class MatrixFromUnivariateFunctor : public MatrixBase
       ColsAtCompileTime=traits<MatrixFromUnivariateFunctor>::ColsAtCompileTime,
   };
 
-  static_assert(Functor::result_type::RowsAtCompileTime == 1,
+  static_assert(Functor::RowsAtCompileTime == 1,
                 "Functor should return a row vector!");
 
  private:
   Functor func_;
   InMat mat_;
 
+  typedef typename std::conditional<ColsAtCompileTime == 1, std::true_type,
+                                    std::false_type>::type is_vector_t;
+
  public:
   explicit MatrixFromUnivariateFunctor(const Functor& func, const InMat& mat)
-      : func_(func), mat_(mat) {}
+      : func_(func), mat_(mat) {
+          std::cout << typeid(func_).name() << std::endl;
+      }
 
   result_type get() const {
+    return get(is_vector_t());
+  }
+
+  unsigned get_version() const {
+      return func_.get_version() + mat_.get_version();
+  }
+
+ private:
+  //the univariate functor returns a scalar, construct a vector
+  result_type get(std::true_type) const {
+    auto eigenmat = mat_.get();
+    result_type retval(eigenmat.rows()); //using vector constructor
+    for (unsigned i = 0; i < eigenmat.rows(); ++i)
+      retval(i) = func_(eigenmat.row(i));
+    return retval;
+  }
+
+  //the univariate functor returns a row vector, construct a matrix
+  result_type get(std::false_type) const {
     auto eigenmat = mat_.get();
     auto firstline = func_(eigenmat.row(0));
     result_type retval(eigenmat.rows(), firstline.cols());
@@ -56,9 +80,6 @@ class MatrixFromUnivariateFunctor : public MatrixBase
     return retval;
   }
 
-  unsigned get_version() const {
-      return func_.get_version() + mat_.get_version();
-  }
 };
 }
 }
