@@ -19,6 +19,7 @@ struct traits<Functor<OutExpr, InExprs...> > {
     RowsAtCompileTime = OutExpr::RowsAtCompileTime,
     ColsAtCompileTime = OutExpr::ColsAtCompileTime
   };
+  typedef Functor<OutExpr, InExprs...> type;
 };
 
 // Functor: class providing an operator(), some additional traits and a
@@ -36,6 +37,7 @@ class Functor {
     RowsAtCompileTime = traits<Functor>::RowsAtCompileTime,
     ColsAtCompileTime = traits<Functor>::ColsAtCompileTime
   };
+  typedef typename traits<Functor>::type type;
 
  private:
   std::tuple<InExprs...> in_exprs_;
@@ -70,7 +72,7 @@ class Functor {
       std::get<i>(in_exprs_).set(std::forward<InVal>(in_val));
   }
 
-  // sum the versions of all contained
+  // sum the versions of all expressions
   // inspired from http://stackoverflow.com/a/6894436
   template <std::size_t I = 0, typename... Tp>
   typename std::enable_if< I<sizeof...(Tp), unsigned>::type
@@ -108,8 +110,8 @@ class Functor<double> {
 // the InExprs arguments are possibly changed at each call of operator()
 // the function is however conceptually const
 template <class OutExpr, class... InExprs>
-Functor<OutExpr,InExprs...> make_functor(const OutExpr& out_expr,
-                                                      InExprs&... in_exprs) {
+Functor<OutExpr, InExprs...> make_functor(OutExpr out_expr,
+                                          InExprs... in_exprs) {
   return Functor<OutExpr, InExprs...>(out_expr, in_exprs...);
 }
 //
