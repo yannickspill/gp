@@ -59,18 +59,21 @@ class Functor {
  private:
 
   // forward all provided arguments to the corresponding set() methods
+  // general case
   template <typename InVal, typename... InVals>
   void set_vals(InVal&& in_val, InVals&&... in_vals) {
     constexpr unsigned i = sizeof...(InExprs) - (sizeof...(InVals) + 1);
     std::get<i>(in_exprs_).set(std::forward<InVal>(in_val));
     set_vals(in_vals...);
   }
-  //
+  // terminating case
   template <typename InVal>
   void set_vals(InVal&& in_val) {
       constexpr unsigned i = sizeof...(InExprs) - 1;
       std::get<i>(in_exprs_).set(std::forward<InVal>(in_val));
   }
+  // only called with zero-argument functor
+  void set_vals() {}
 
   // sum the versions of all expressions
   // inspired from http://stackoverflow.com/a/6894436

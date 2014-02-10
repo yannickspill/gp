@@ -73,6 +73,10 @@ int main(int, char*[]){
     // most stupid functor ever
     auto f6 = internal::make_functor(scaltest, scaltest);
     if (f6(99.0) != 99.0) return 14;
+    // beaten by this one
+    auto f7 = internal::make_functor(scaltest);
+    scaltest.set(4.5);
+    if (f7() != 4.5) return 15;
 
     return 0;
 }
