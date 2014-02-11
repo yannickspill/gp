@@ -81,13 +81,13 @@ class Functor {
   // inspired from http://stackoverflow.com/a/6894436
   template <std::size_t I = 0, typename... Tp>
   typename std::enable_if< I<sizeof...(Tp), unsigned>::type
-  sum_versions(const std::tuple<Tp...>& exprs) {
+  sum_versions(const std::tuple<Tp...>& exprs) const {
     return std::get<I>(exprs).get_version() + sum_versions<I + 1, Tp...>(exprs);
   }
   //
   template <std::size_t I = 0, typename... Tp>
   typename std::enable_if<I == sizeof...(Tp), unsigned>::type
-  sum_versions(const std::tuple<Tp...>&) {}
+  sum_versions(const std::tuple<Tp...>&) const { return 0; }
 };
 
 // convert an expression into a functor, e.g. function with some traits
