@@ -68,8 +68,8 @@ class GPI {
   XType X_;
   YType y_;
   SType S_;
-  Scalar sigma_, tau_;
   unsigned nr_;
+  Scalar sigma_, tau_;
   MeanFunctionType mean_;
   CovarianceFunctionType cov_;
   internal::MatrixFromUnivariateFunctor<MeanFunctionType, XType> mx_;
@@ -101,16 +101,21 @@ class GPI {
   GPI(const XType& X, const YType& y, const SType& S, Scalar sigma, Scalar tau,
       unsigned nr, const MeanFunctionType& m, const CovarianceFunctionType& k)
       : X_(X), y_(y), S_(S), nr_(nr), sigma_(sigma), tau_(tau), mean_(m),
-        cov_(k) {
-    // build m(X)
-    mx_ = VectorXd::Apply(mean_, X_);
-    // build K(X,X)
-    auto K = MatrixXd::SymmetricApply(cov_, X_);
-    //  build omega
-    Omega_ = sigma_*sigma_*(S_/nr_ + tau_*tau_*K);
-    // build mvn for marginal likelihood
-    mvn_lik_ = make_mvn(y_, mx_, Omega_);
-  }
+        cov_(k), mx_(VectorXd::Apply(mean_, X_)),
+        Omega_(sigma_ * sigma_
+               * (S_ / nr_ + tau_ * tau_ * MatrixXd::SymmetricApply(cov_, X_))),
+        mvn_lik_(make_mvn(y_, mx_, Omega_)) {
+            assert(X_.rows() == y_.rows());
+            assert(S_.rows() == y_.rows());
+            assert(S_.rows() == S_.cols());
+            std::cout << " === " << std::endl;
+            std::cout << MatrixXd::SymmetricApply(cov_,X_).get() << std::endl;
+            std::cout << " --- " << std::endl;
+            std::cout << (tau*MatrixXd::SymmetricApply(cov_,X_)).get() << std::endl;
+            std::cout << " === " << std::endl;
+            assert(S_.rows() == Omega_.cols());
+            assert(Omega_.rows() == Omega_.cols());
+        }
 
   /** Simplified constructor
    * \param [in] X \f$\mathbf{X}\f$ A matrix in which each row is a
@@ -165,12 +170,12 @@ class GPI {
       const -> decltype(VectorXd::Apply(mean_, XStar)
                         + MatrixXd::Apply(cov_, X_, XStar).transpose()
                           * Omega_.decomposition().solve(y_ - mx_)) {
-      //build m(x*)
-      auto mxs = VectorXd::Apply(mean_, XStar);
-      //build k(X,x*)
-      auto kxx = MatrixXd::Apply(cov_, X_, XStar);
-      // return m + k^T * Omega^{-1} * epsilon
-      return mxs + kxx.transpose() * Omega_.decomposition().solve(y_-mx_);
+    // build m(x*)
+    auto mxs = VectorXd::Apply(mean_, XStar);
+    // build k(X,x*)
+    auto kxx = MatrixXd::Apply(cov_, X_, XStar);
+    // return m + k^T * Omega^{-1} * epsilon
+    return mxs + kxx.transpose() * Omega_.decomposition().solve(y_ - mx_);
   }
 
   /** Posterior covariance function
@@ -187,30 +192,36 @@ class GPI {
                         - MatrixXd::Apply(cov_, X_, XStar).transpose()
                           * Omega_.decomposition().solve(
                                 MatrixXd::Apply(cov_, X_, XStarPrime))) {
-      //build k(x*,x'*)
-      auto k1 = MatrixXd::Apply(cov_, XStar, XStarPrime);
-      //build k(X,x*)
-      auto k2 = MatrixXd::Apply(cov_, X_, XStar);
-      //build k(X,x'*)
-      auto k3 = MatrixXd::Apply(cov_, X_, XStarPrime);
-      //return 
-      return k1 - k2.transpose() * Omega_.decomposition().solve(k3);
+    // build k(x*,x'*)
+    auto k1 = MatrixXd::Apply(cov_, XStar, XStarPrime);
+    // build k(X,x*)
+    auto k2 = MatrixXd::Apply(cov_, X_, XStar);
+    // build k(X,x'*)
+    auto k3 = MatrixXd::Apply(cov_, X_, XStarPrime);
+    // return
+    return k1 - k2.transpose() * Omega_.decomposition().solve(k3);
   }
   ///@}
 };
 
 template <class X, class Y, class S, class M, class C>
-GPI<X, Y, S, M, C> make_gpi(X&& x, Y&& y, S&& s, Scalar sigma, Scalar tau,
-                            unsigned nr, M&& m, C&& c) {
-  return GPI<X, Y, S, M, C>(std::forward<X>(x), std::forward<Y>(y),
-                            std::forward<S>(s), sigma, tau, nr,
-                            std::forward<M>(m), std::forward<C>(c));
+GPI<X, Y, S, M, C> make_gpi(const X& x, const Y& y, const S& s, Scalar sigma,
+                            Scalar tau, unsigned nr, const M& m, const C& c) {
+  return GPI<X, Y, S, M, C>(x, y, s, sigma, tau, nr, m, c);
 }
-template <class X, class Y, class S, class M, class C>
-GPI<X, Y, S, M, C> make_gpi(X&& x, Y&& y, Scalar sigma, Scalar tau, M&& m,
-                            C&& c) {
-  return GPI<X, Y, S, M, C>(std::forward<X>(x), std::forward<Y>(y), sigma, tau,
-                            std::forward<M>(m), std::forward<C>(c));
+template <class X, class Y, class M, class C>
+auto make_gpi(const X& x, const Y& y, Scalar sigma, Scalar tau, const M& m,
+              const C& c)
+    -> GPI
+    <X, Y, internal::Matrix
+     <Eigen::Matrix
+      <typename Y::scalar_type, Y::RowsAtCompileTime, Y::RowsAtCompileTime> >,
+     M, C> {
+  return GPI
+      <X, Y, internal::Matrix
+       <Eigen::Matrix
+        <typename Y::scalar_type, Y::RowsAtCompileTime, Y::RowsAtCompileTime> >,
+       M, C>(x, y, sigma, tau, m, c);
 }
 }
 #endif /* GPI_H */

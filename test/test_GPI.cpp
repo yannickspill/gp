@@ -1,6 +1,7 @@
 #include "Matrix.h"
 #include "Scalar.h"
 #include "GPI.h"
+#include "MVN.h"
 #include "mean_functions.h"
 #include "covariance_functions.h"
 
@@ -90,6 +91,7 @@ void read_input_params(char* fname, GP::VectorXd& q, GP::VectorXd& I, GP::Vector
 
 int main(int argc, char* argv[]) {
     if (argc!=3) {
+        std::cout << "error: must provide following arguments" << std::endl;
         std::cout <<  argv[0] << " params.dat data.dat " << std::endl;
         return 1;
     }
@@ -102,6 +104,16 @@ int main(int argc, char* argv[]) {
     read_input_params(argv[1], X, y, err, N, ndraws, values);
     GP::MatrixXd S(err.get().array().square().matrix().asDiagonal());
 
+    //build GPI object
+    auto mean = GP::mean::zero();
+    GP::Scalar lambda(1.0);
+    auto cov = GP::covariance::squared_exponential(lambda); //1-D covariance
+    GP::Scalar tau(1.0);
+    GP::Scalar sigma(1.0);
+    auto gpi_single = GP::make_gpi(X, y, sigma, tau, mean, cov);
+    auto gpi = GP::make_gpi(X, y, S, sigma, tau, N, mean, cov);
+    auto gpi_lik = gpi.minus_log_likelihood();
+
     //read input data and process to matrix form
     const unsigned a_col = 0;
     const unsigned b_col = 1;
@@ -111,13 +123,23 @@ int main(int argc, char* argv[]) {
     const unsigned score_col = 5;
     Eigen::MatrixXd data(read_input_data(argv[2],6));
     
-    //build GPI object
-    auto mean = GP::ZeroFunction();
-    GP::Scalar lambda(1.0);
-    auto cov = GP::make_se_covariance(lambda); //1-D covariance
-    GP::Scalar tau(1.0);
-    GP::Scalar sigma(1.0);
-    auto gpi = make_gpi(X, y, S, sigma, tau, N, mean, cov);
-
+    //perform test on data
+    for (unsigned i=0; i<data.rows(); ++i){
+        std::cout << " =============== " << i << std::endl;
+        assert(data(i,a_col)==0);
+        assert(data(i,b_col)==0);
+        sigma.set(data(i,sigma_col));
+        tau.set(data(i,tau_col));
+        lambda.set(data(i,lambda_col));
+        double expected = data(i,score_col);
+        std::cout << "get" << std::endl;
+        double observed = gpi_lik.get();
+        std::cout << "done" << std::endl;
+        if (std::abs(expected-observed) > 1e-5) {
+            std::cout << "discrepancy observed at " << i << " "
+                << observed << " " << expected << std::endl;
+            return 2;
+        }
+    }
     return 0;
 }
