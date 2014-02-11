@@ -5,7 +5,8 @@
 
 int main(){
     auto zf = GP::mean::zero();
-    GP::VectorXd vec(Eigen::VectorXd::Random(3));
-    if (zf(vec) != 0.) return 1;
+    //scalar input
+    GP::Scalar scal(3.0);
+    if (zf(2.0) != 0.) return 1;
     return 0;
 }
