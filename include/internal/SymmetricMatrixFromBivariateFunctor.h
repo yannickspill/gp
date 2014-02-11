@@ -19,7 +19,9 @@ struct traits<SymmetricMatrixFromBivariateFunctor<Functor, InMat> > {
   };
   typedef Eigen::Matrix
       <scalar_type, RowsAtCompileTime, ColsAtCompileTime> matrix_type;
-  typedef Eigen::SelfAdjointView<matrix_type, Eigen::Upper> result_type;
+  //SelfAdjointView does not support a number of operators, e.g. scalar * mat
+  //typedef Eigen::SelfAdjointView<matrix_type, Eigen::Upper> result_type;
+  typedef matrix_type result_type;
 };
 
 // build matrix by applying bivariate functor to every combination of row pairs
@@ -59,10 +61,12 @@ class SymmetricMatrixFromBivariateFunctor
     ret_ = std::make_shared
         <matrix_type>(matrix_type(eigenmat.rows(), eigenmat.rows()));
     for (unsigned i = 0; i < eigenmat.rows(); ++i)
-      for (unsigned j = i; j < eigenmat.rows(); ++j)
+      for (unsigned j = i; j < eigenmat.rows(); ++j) {
         ret_->operator()(i, j)
             = scalar_type(func_(eigenmat.row(i), eigenmat.row(j)));
-    return result_type(*ret_);
+        if (j > i) ret_->operator()(j, i) = ret_->operator()(i, j);
+      }
+    return *ret_;
   }
 
   unsigned get_version() const {
