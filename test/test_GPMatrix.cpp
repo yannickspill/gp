@@ -15,7 +15,7 @@ int main(int, char * []) {
                 "wrong scalar_type");
 
   // matrix basics
-  const unsigned int szx = 10, szy = 3;
+  const unsigned int szx = 100, szy = 30;
   Eigen::MatrixXd x(Eigen::MatrixXd::Random(szx, szy));
   MatrixXd vx(x);
   Eigen::MatrixXd y(Eigen::MatrixXd::Random(szx, szy));
@@ -106,7 +106,7 @@ int main(int, char * []) {
     return 20;
 
   // ldlt
-  Eigen::MatrixXd L(Eigen::MatrixXd::Random(5, 5));
+  Eigen::MatrixXd L(Eigen::MatrixXd::Random(szy, szy));
   L.diagonal() = L.diagonal().array().abs();
   L = L.triangularView<Eigen::Lower>();
   Eigen::MatrixXd sd(L * L.transpose());
@@ -121,13 +121,13 @@ int main(int, char * []) {
   LogDeterminant<decltype(ldlt)> det(ldlt);
   static_assert(std::is_same<decltype(det), decltype(ldlt.logdet())>::value,
                 "MatrixBase passes wrong type to LogDeterminant");
-  if (std::abs(det.get() - std::log(sd.determinant())) > 1e-7) return 21;
+  if (std::abs(det.get() - std::log(sd.determinant())) > 1e-5) return 21;
 
-  if (std::abs(ldlt.logdet().get() - std::log(sd.determinant())) > 1e-7)
+  if (std::abs(ldlt.logdet().get() - std::log(sd.determinant())) > 1e-5)
     return 22;
 
   // solve AX=B
-  Eigen::MatrixXd B(Eigen::MatrixXd::Random(5, 2));
+  Eigen::MatrixXd B(Eigen::MatrixXd::Random(szy, szx));
   MatrixXd mB(B);
   Eigen::MatrixXd X(sd.ldlt().solve(B));
   MatrixXd mX(ldlt.solve(mB).get());
@@ -224,7 +224,7 @@ int main(int, char * []) {
 
   // dangling refs causing BAD_ALLOC / segfault (all classes, alphabetical)
   scal.set(5.0);
-  Eigen::MatrixXd eId(Eigen::MatrixXd::Identity(5, 5));
+  Eigen::MatrixXd eId(Eigen::MatrixXd::Identity(szy, szy));
   MatrixXd Id(eId);
   if ((1.0 - (3.0 - (5.0 - scal))).get() != -2.) return 31;
   if ((scal / (1.0 / scal) / scal).get() != 5.0 / (1.0 / 5.0) / 5.0) return 32;
@@ -271,12 +271,12 @@ int main(int, char * []) {
 
   // broadcast a Scalar to a matrix
   GP::Scalar tbb(0.5);
-  auto bcm = GP::MatrixXd::Broadcast(1. / tbb, 5, 3);
-  if (bcm.get() != Eigen::MatrixXd::Constant(5, 3, 2.)) return 71;
-  auto bcv = GP::VectorXd::Broadcast(1. / tbb, 5, 1);
-  if (bcv.get() != Eigen::VectorXd::Constant(5, 2.)) return 72;
+  auto bcm = GP::MatrixXd::Broadcast(1. / tbb, szx, szy);
+  if (bcm.get() != Eigen::MatrixXd::Constant(szx, szy, 2.)) return 71;
+  auto bcv = GP::VectorXd::Broadcast(1. / tbb, szx, 1);
+  if (bcv.get() != Eigen::VectorXd::Constant(szx, 2.)) return 72;
   if (Eigen::MatrixXd(bcv.asDiagonal().get())
-      != Eigen::MatrixXd(2. * Eigen::MatrixXd::Identity(5, 5)))
+      != Eigen::MatrixXd(2. * Eigen::MatrixXd::Identity(szx, szx)))
     return 73;
 
   return 0;
