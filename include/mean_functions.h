@@ -48,8 +48,8 @@ class PolynomialFunction {
 /// @{
 
 //! Zero function
-internal::Functor<Scalar> zero() {
-  return internal::make_functor(Scalar(0.));
+internal::Functor<Scalar,Scalar> zero() {
+  return internal::make_functor(Scalar(0.),Scalar(0.));
 };
 /// @}
 }
