@@ -40,7 +40,12 @@ template <class YVectorType, class MVectorType, class MatrixType> class MVN {
   * */
   MVN(const YVectorType& y, const MVectorType& mu, const MatrixType& Sigma)
       : y_(y), mu_(mu), Sigma_(Sigma), eps_(y - mu),
-        ldlt_(Sigma.decomposition().cache()) {}
+        ldlt_(Sigma.decomposition().cache()) {
+            assert(y_.cols() == 1);
+            assert(y_.cols() == mu_.cols());
+            assert(y_.rows() == mu_.rows());
+            assert(eps_.rows() == Sigma_.rows());
+        }
 
   /// return -log(p)
   double get() const { return value().get(); }
