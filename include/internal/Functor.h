@@ -104,6 +104,9 @@ class Functor {
   template <std::size_t I = 0, typename... Tp>
   typename std::enable_if<I == sizeof...(Tp), unsigned>::type
   sum_versions(const std::tuple<Tp...>&) const { return 0; }
+
+ public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 // convert an expression into a functor, e.g. function with some traits
