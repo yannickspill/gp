@@ -40,9 +40,22 @@ int main(int, char*[]){
       return 2;
     //product with a scalar
     Scalar lambda(1.0);
-    auto f3 = GP::covariance::squared_exponential(lambda);
+    //auto f3 = GP::covariance::squared_exponential(lambda);
+    Scalar ax(1.0),ay(1.0);
+    //auto f3 = GP::internal::make_functor(expression, ax, ay);
+    auto f3 = GP::internal::Functor<Scalar,Scalar>(ax,ax);
+    std::cout << f3(0.) << std::endl;
     GP::VectorXd inVec2(Eigen::VectorXd::LinSpaced(11,0,1));
+    auto m3 = MatrixXd::Apply(f3,inVec2);
+    auto val = (m3*3).get();
+    std::cout << val << std::endl;
+    /*
     auto m3 = MatrixXd::SymmetricApply(f3,inVec2);
-    if ((1.*m3).get() != m3.get()) return 3;
+    std::cout << "begin test" << std::endl;
+        auto val = (lambda*m3).get();
+    std::cout << "val" << std::endl;
+    std::cout << val << std::endl;
+    */
+    //if ((1.*m3).get() != m3.get()) return 3;
     return 0;
 }

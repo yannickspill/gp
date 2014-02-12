@@ -49,8 +49,24 @@ class MatrixFromUnivariateFunctor
  public:
   explicit MatrixFromUnivariateFunctor(const Functor& func, const InMat& mat)
       : func_(func), mat_(mat) {
-    std::cout << typeid(func_).name() << std::endl;
+    std::cout << "MFUF created at " << this << std::endl;
+    std::cout << "   MFUF Functor at " << &func_ << std::endl;
+    std::cout << "   MFUF InMat at " << &mat_ << std::endl;
   }
+
+        MatrixFromUnivariateFunctor(const MatrixFromUnivariateFunctor& other)
+          : func_(other.func_), mat_(other.mat_) {
+        std::cout << "MFUF copied from " << &other << " to " << this
+                  << std::endl;
+    std::cout << "   MFUF Functor at " << &func_ << std::endl;
+    std::cout << "   MFUF InMat at " << &mat_ << std::endl;
+      }
+
+      ~MatrixFromUnivariateFunctor() {
+        std::cout << "MFUF destructor " << this << std::endl;
+      }
+
+
 
   result_type get() const { return get(is_vector_t()); }
 

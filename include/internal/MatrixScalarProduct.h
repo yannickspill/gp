@@ -40,13 +40,18 @@ class MatrixScalarProduct : public MatrixBase<MatrixScalarProduct<Mat, Scal> > {
  private:
   Mat lhs_;
   Scal rhs_;
+  mutable std::shared_ptr<result_type> ret_;
 
  public:
   // constructor
-  MatrixScalarProduct(const Mat& lhs, const Scal& rhs) : lhs_(lhs), rhs_(rhs) {}
+  MatrixScalarProduct(const Mat& lhs, const Scal& rhs)
+      : lhs_(lhs), rhs_(rhs), ret_(nullptr) {}
 
   // actual computation
-  result_type get() const { return lhs_.get() * rhs_.get(); }
+  result_type get() const {
+      ret_ = std::make_shared<result_type>(lhs_.get()*rhs_.get());
+      return *ret_;
+  }
 
   unsigned get_version() const {
     return lhs_.get_version() + rhs_.get_version();

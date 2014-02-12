@@ -45,10 +45,26 @@ class MatrixBuiltinProduct : public MatrixBase
  public:
   // constructor
   MatrixBuiltinProduct(double lhs, const MatrixExpression& rhs)
-      : lhs_(lhs), rhs_(rhs) {}
+      : lhs_(lhs), rhs_(rhs) {
+    std::cout << "MBP created at " << this << std::endl;
+    std::cout << "   MBP double at " << &lhs_ << std::endl;
+    std::cout << "   MBP matrix at " << &rhs_ << std::endl;
+      }
+
+        MatrixBuiltinProduct(const MatrixBuiltinProduct& other)
+          : lhs_(other.lhs_), rhs_(other.rhs_) {
+        std::cout << "MBP copied from " << &other << " to " << this
+                  << std::endl;
+    std::cout << "   MBP double at " << &lhs_ << std::endl;
+    std::cout << "   MBP matrix at " << &rhs_ << std::endl;
+      }
+
+      ~MatrixBuiltinProduct() {
+        std::cout << "MBP destructor " << this << std::endl;
+      }
 
   // actual computation
-  result_type get() const { return lhs_ * rhs_.get(); }
+  result_type get() const { return lhs_*rhs_.get(); }
 
   unsigned get_version() const { return rhs_.get_version(); }
 };
