@@ -19,19 +19,20 @@ int main(int, char*[]){
     //Functor taking scalar as input
     */
     std::cout << "=== BUILD FUNCTOR " << std::endl;
-    auto f2 = internal::make_functor(y,y);
+    auto f2 = internal::Functor<Scalar, Scalar>(y,y);
     std::cout << "=== BUILD INPUT VECTOR " << std::endl;
     VectorXd z(Eigen::VectorXd::LinSpaced(5,0,1));
     std::cout << "=== APPLY FUNCTOR " << std::endl;
-    auto m2 = VectorXd::Apply(f2, z);
-    //if (m2.get() != z.get()) return 2;
-    //matrix works with subsequent ops
+    auto m2 = internal::MatrixFromUnivariateFunctor<internal::Functor<Scalar,Scalar>, VectorXd>(f2,z);
+    std::cout << "=== PRODUCT " << std::endl;
+    auto prod = 3*m2;
     std::cout << "=== OBSERVED " << std::endl;
-    auto observed = (3*m2).get();
+    auto observed = prod.get();
     std::cout << "=== EXPECTED " << std::endl;
     auto expected = 3*z.get();
     std::cout << "=== TEST " << std::endl;
-    if (observed != expected) return 3;
-    //if (((3*m1).get() - 3*y.get()*inmat.get()).norm() >1e-5) return 4;
+    std::cout << expected << std::endl;
+    std::cout << "=== TEST " << std::endl;
+    std::cout << observed << std::endl;
     return 0;
 }
