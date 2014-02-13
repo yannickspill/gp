@@ -73,7 +73,7 @@ class MatrixBuiltinProduct : public MatrixBase
                   << std::endl;
     std::cout << "   MBP double at " << &lhs_ << std::endl;
     std::cout << "   MBP matrix at " << &rhs_ << std::endl;
-    std::cout << "   MBP retval at " << &data_ << std::endl;
+    std::cout << "   MBP retval at " << data_ << std::endl;
       }
 
       ~MatrixBuiltinProduct() {
@@ -82,9 +82,11 @@ class MatrixBuiltinProduct : public MatrixBase
 
   // actual computation
   const result_type& get() const {
-      data_ = std::make_shared<Data>(lhs_,rhs_.get());
-      std::cout << "MBP product at " << &(data_->val_) << std::endl;
-      std::cout << "MBP product is " << data_->val_ << std::endl;
+      auto rhs = rhs_.get();
+      data_ = std::make_shared<Data>(lhs_,rhs);
+      std::cout << "MBP local rhs at " << &(rhs) << std::endl;
+      std::cout << "MBP::data product at " << &(data_->val_) << std::endl;
+      std::cout << "MBP::data product is " << data_->val_ << std::endl;
       return data_->val_;
   }
 

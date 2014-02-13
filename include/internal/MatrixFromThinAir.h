@@ -51,7 +51,7 @@ class MatrixFromThinAir
   MatrixFromThinAir(const MatrixFromThinAir& other)
       : data_(other.data_) {
     std::cout << "MFTA copied from " << &other << " to " << this << std::endl;
-    std::cout << "   MFTA data at " << &data_ << std::endl;
+    std::cout << "   MFTA data at " << data_ << std::endl;
   }
 
   ~MatrixFromThinAir() {

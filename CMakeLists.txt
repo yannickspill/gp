@@ -27,7 +27,7 @@ if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
     add_definitions(-DLOGGING)
     #include(CodeCoverage)
     #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O1")
     #SETUP_TARGET_FOR_COVERAGE(coverage ninja coverage test )
 endif()
 
