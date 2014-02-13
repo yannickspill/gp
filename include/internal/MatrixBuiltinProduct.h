@@ -41,22 +41,39 @@ class MatrixBuiltinProduct : public MatrixBase
  private:
   double lhs_;
   MatrixExpression rhs_;
+  struct Data {
+      double lhs_;
+      typename MatrixExpression::result_type rhs_;
+      result_type val_;
+      Data(double lhs, const typename MatrixExpression::result_type& rhs) :
+          lhs_(lhs), rhs_(rhs), val_(lhs*rhs) {
+          std::cout << "MBP Data constructor, at " << this << std::endl;
+          std::cout << "   MBP lhs at " << &lhs_ << std::endl;
+          std::cout << "   MBP rhs at " << &rhs_ << std::endl;
+          std::cout << "   MBP val at " << &val_ << std::endl;
+      }
+      ~Data() {
+          std::cout << "MBP Data destructor, at " << this << std::endl;
+      }
+  };
+  mutable std::shared_ptr<Data> data_;
 
  public:
   // constructor
   MatrixBuiltinProduct(double lhs, const MatrixExpression& rhs)
-      : lhs_(lhs), rhs_(rhs) {
+      : lhs_(lhs), rhs_(rhs), data_(nullptr) {
     std::cout << "MBP created at " << this << std::endl;
     std::cout << "   MBP double at " << &lhs_ << std::endl;
     std::cout << "   MBP matrix at " << &rhs_ << std::endl;
       }
 
         MatrixBuiltinProduct(const MatrixBuiltinProduct& other)
-          : lhs_(other.lhs_), rhs_(other.rhs_) {
+          : lhs_(other.lhs_), rhs_(other.rhs_), data_(other.data_) {
         std::cout << "MBP copied from " << &other << " to " << this
                   << std::endl;
     std::cout << "   MBP double at " << &lhs_ << std::endl;
     std::cout << "   MBP matrix at " << &rhs_ << std::endl;
+    std::cout << "   MBP retval at " << &data_ << std::endl;
       }
 
       ~MatrixBuiltinProduct() {
@@ -64,7 +81,12 @@ class MatrixBuiltinProduct : public MatrixBase
       }
 
   // actual computation
-  result_type get() const { return lhs_*rhs_.get(); }
+  const result_type& get() const {
+      data_ = std::make_shared<Data>(lhs_,rhs_.get());
+      std::cout << "MBP product at " << &(data_->val_) << std::endl;
+      std::cout << "MBP product is " << data_->val_ << std::endl;
+      return data_->val_;
+  }
 
   unsigned get_version() const { return rhs_.get_version(); }
 };

@@ -42,31 +42,37 @@ class MatrixFromUnivariateFunctor
  private:
   Functor func_;
   InMat mat_;
+  struct Data {
+    result_type val_;
+    Data(const result_type& val) : val_(val) {
+      std::cout << "MFUF Data constructor, at " << this << std::endl;
+      std::cout << "   MFUF val at " << &val_ << std::endl;
+    }
+  };
+  mutable std::shared_ptr<Data> data_;
 
   typedef typename std::conditional<ColsAtCompileTime == 1, std::true_type,
                                     std::false_type>::type is_vector_t;
 
  public:
   explicit MatrixFromUnivariateFunctor(const Functor& func, const InMat& mat)
-      : func_(func), mat_(mat) {
+      : func_(func), mat_(mat), data_(nullptr) {
     std::cout << "MFUF created at " << this << std::endl;
     std::cout << "   MFUF Functor at " << &func_ << std::endl;
     std::cout << "   MFUF InMat at " << &mat_ << std::endl;
   }
 
-        MatrixFromUnivariateFunctor(const MatrixFromUnivariateFunctor& other)
-          : func_(other.func_), mat_(other.mat_) {
-        std::cout << "MFUF copied from " << &other << " to " << this
-                  << std::endl;
+  MatrixFromUnivariateFunctor(const MatrixFromUnivariateFunctor& other)
+      : func_(other.func_), mat_(other.mat_), data_(other.data_) {
+    std::cout << "MFUF copied from " << &other << " to " << this << std::endl;
     std::cout << "   MFUF Functor at " << &func_ << std::endl;
     std::cout << "   MFUF InMat at " << &mat_ << std::endl;
-      }
+    std::cout << "   MFUF data at " << &data_ << std::endl;
+  }
 
-      ~MatrixFromUnivariateFunctor() {
-        std::cout << "MFUF destructor " << this << std::endl;
-      }
-
-
+  ~MatrixFromUnivariateFunctor() {
+    std::cout << "MFUF destructor " << this << std::endl;
+  }
 
   result_type get() const { return get(is_vector_t()); }
 
@@ -81,7 +87,9 @@ class MatrixFromUnivariateFunctor
     result_type retval(eigenmat.rows());  // using vector constructor
     for (unsigned i = 0; i < eigenmat.rows(); ++i)
       retval(i) = func_(eigenmat.row(i));
-    return retval;
+    data_ = std::make_shared<Data>(retval);
+    std::cout << "MFUF retval at " << &(data_->val_) << std::endl;
+    return data_->val_;
   }
 
   // the univariate functor returns a row vector, construct a matrix
