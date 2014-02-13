@@ -34,6 +34,7 @@ endif()
 #include dirs
 include_directories(include)
 include_directories(include/internal)
+include_directories(include/test_traits)
 
 #testing
 enable_testing()
