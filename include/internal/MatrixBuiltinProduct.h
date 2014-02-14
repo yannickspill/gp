@@ -34,47 +34,18 @@ class MatrixBuiltinProduct : public MatrixBase
       typename MatrixExpression::result_type rhs_;
       result_type val_;
       Data(double lhs, const typename MatrixExpression::result_type& rhs) :
-          lhs_(lhs), rhs_(rhs), val_(lhs_*rhs_) {
-          std::cout << "MBP Data constructor, at " << this << std::endl;
-          std::cout << "   MBP lhs at " << &lhs_ << std::endl;
-          std::cout << "   MBP rhs at " << &rhs_ << std::endl;
-          std::cout << "   MBP val at " << &val_ << std::endl;
-      }
-      ~Data() {
-          std::cout << "MBP Data destructor, at " << this << std::endl;
-      }
+          lhs_(lhs), rhs_(rhs), val_(lhs_*rhs_) {}
   };
   mutable std::shared_ptr<Data> data_;
 
  public:
   // constructor
   MatrixBuiltinProduct(double lhs, const MatrixExpression& rhs)
-      : lhs_(lhs), rhs_(rhs), data_(nullptr) {
-    std::cout << "MBP created at " << this << std::endl;
-    std::cout << "   MBP double at " << &lhs_ << std::endl;
-    std::cout << "   MBP matrix at " << &rhs_ << std::endl;
-      }
-
-        MatrixBuiltinProduct(const MatrixBuiltinProduct& other)
-          : lhs_(other.lhs_), rhs_(other.rhs_), data_(other.data_) {
-        std::cout << "MBP copied from " << &other << " to " << this
-                  << std::endl;
-    std::cout << "   MBP double at " << &lhs_ << std::endl;
-    std::cout << "   MBP matrix at " << &rhs_ << std::endl;
-    std::cout << "   MBP retval at " << data_ << std::endl;
-      }
-
-      ~MatrixBuiltinProduct() {
-        std::cout << "MBP destructor " << this << std::endl;
-      }
+      : lhs_(lhs), rhs_(rhs), data_(nullptr) {}
 
   // actual computation
   const result_type& get() const {
-      auto rhs = rhs_.get();
-      data_ = std::make_shared<Data>(lhs_,rhs);
-      std::cout << "MBP local rhs at " << &(rhs) << std::endl;
-      std::cout << "MBP::data product at " << &(data_->val_) << std::endl;
-      std::cout << "MBP::data product is " << data_->val_ << std::endl;
+      data_ = std::make_shared<Data>(lhs_,rhs_.get());
       return data_->val_;
   }
 

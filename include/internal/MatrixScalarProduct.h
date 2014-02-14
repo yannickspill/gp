@@ -29,17 +29,25 @@ class MatrixScalarProduct : public MatrixBase<MatrixScalarProduct<Mat, Scal> > {
  private:
   Mat lhs_;
   Scal rhs_;
-  mutable std::shared_ptr<result_type> ret_;
+  struct Data {
+      typename Mat::result_type lhs_;
+      typename Scal::result_type rhs_;
+      result_type val_;
+      Data(const typename Mat::result_type& lhs,
+           const typename Scal::result_type& rhs)
+          : lhs_(lhs), rhs_(rhs), val_(lhs_ * rhs_) {}
+  };
+  mutable std::shared_ptr<Data> data_;
 
  public:
   // constructor
   MatrixScalarProduct(const Mat& lhs, const Scal& rhs)
-      : lhs_(lhs), rhs_(rhs), ret_(nullptr) {}
+      : lhs_(lhs), rhs_(rhs) {}
 
   // actual computation
   result_type get() const {
-      ret_ = std::make_shared<result_type>(lhs_.get()*rhs_.get());
-      return *ret_;
+      data_ = std::make_shared<Data>(lhs_.get(),rhs_.get());
+      return data_->val_;
   }
 
   unsigned get_version() const {
