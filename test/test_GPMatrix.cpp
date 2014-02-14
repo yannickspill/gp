@@ -23,7 +23,6 @@ int main(int, char * []) {
   if (vx.get() != x) return 1;
   vx.transpose();
 
-    /*
   // sum
   vx + vy;
   const Eigen::MatrixXd tmp((vx + vy).get());
@@ -49,6 +48,7 @@ int main(int, char * []) {
   // quotient
   if (std::abs((scal / scal).get() - 1.) > 1e-7) return 26;
 
+    /*
   // builtin scalar product
   if ((scal * 3.).get() != (scal.get() * 3.)) return 11;
   if ((scal * 3).get() != (scal.get() * 3.)) return 12;
@@ -138,7 +138,6 @@ int main(int, char * []) {
       > 1e-5)
     return 24;
 
-  /*
   // should be able to perform matrix ops on solve result
   // product
   if (((mB.transpose() * ldlt.solve(mB)).get()
@@ -206,6 +205,7 @@ int main(int, char * []) {
               .log()
               .sum()))
     return 59;
+  /*
 
   // rows and columns
   MatrixXd dummy(Eigen::MatrixXd::Random(szx, szy));
