@@ -9,9 +9,13 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for MatrixBuiltinSum
+// expression template for product of a Matrix with anything convertible to a
+// double
 template <class MatrixExpression>
-struct traits<MatrixBuiltinSum<MatrixExpression> > {
+class MatrixBuiltinSum : public ScalarBase
+                             <MatrixBuiltinSum<MatrixExpression> > {
+ public:
+  // typedefs
   typedef typename MatrixExpression::scalar_type scalar_type;
   typedef scalar_type result_type;
   static_assert(MatrixExpression::RowsAtCompileTime == Eigen::Dynamic
@@ -24,22 +28,6 @@ struct traits<MatrixBuiltinSum<MatrixExpression> > {
     RowsAtCompileTime = 1,
     ColsAtCompileTime = 1
   };
-};
-
-// expression template for product of a Matrix with anything convertible to a
-// double
-template <class MatrixExpression>
-class MatrixBuiltinSum : public ScalarBase
-                             <MatrixBuiltinSum<MatrixExpression> > {
- public:
-  // typedefs
-  typedef typename traits<MatrixBuiltinSum>::scalar_type scalar_type;
-  typedef typename traits<MatrixBuiltinSum>::result_type result_type;
-  enum {
-    RowsAtCompileTime = traits<MatrixBuiltinSum>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<MatrixBuiltinSum>::ColsAtCompileTime
-  };
-
  private:
   MatrixExpression lhs_;
   double rhs_;

@@ -11,18 +11,6 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for BuiltinScalarDifference
-template <class Rhs> struct traits<BuiltinScalarDifference<Rhs> > {
-  static_assert(std::is_convertible<typename Rhs::scalar_type, double>::value,
-                "cannot mix different scalar types");
-  typedef double scalar_type;
-  typedef double result_type;
-  enum {
-    RowsAtCompileTime = 1,
-    ColsAtCompileTime = 1
-  };
-};
-
 // expression template for Scalar - Builtin
 template <typename Rhs>
 class BuiltinScalarDifference : public ScalarBase
@@ -32,14 +20,14 @@ class BuiltinScalarDifference : public ScalarBase
   Rhs rhs_;
 
  public:
-  // typedefs
-  typedef typename traits<BuiltinScalarDifference>::scalar_type scalar_type;
-  typedef typename traits<BuiltinScalarDifference>::result_type result_type;
+  static_assert(std::is_convertible<typename Rhs::scalar_type, double>::value,
+                "cannot mix different scalar types");
+  typedef double scalar_type;
+  typedef double result_type;
   enum {
-    RowsAtCompileTime = traits<BuiltinScalarDifference>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<BuiltinScalarDifference>::ColsAtCompileTime
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
   };
-
  public:
   // constructor
   BuiltinScalarDifference(double lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}

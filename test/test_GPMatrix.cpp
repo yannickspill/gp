@@ -48,7 +48,6 @@ int main(int, char * []) {
   // quotient
   if (std::abs((scal / scal).get() - 1.) > 1e-7) return 26;
 
-  /*
   // builtin scalar product
   if ((scal * 3.).get() != (scal.get() * 3.)) return 11;
   if ((scal * 3).get() != (scal.get() * 3.)) return 12;
@@ -99,6 +98,7 @@ int main(int, char * []) {
       != (x.transpose() * (5 * x + y - scal.get() * x)))
     return 17;
 
+  /*
   // transpose
   if (vx.transpose().get() != x.transpose()) return 17;
   if ((vx + vx).transpose().get() != (x + x).transpose()) return 18;

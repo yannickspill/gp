@@ -11,8 +11,12 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for ScalarBuiltinSum
-template <class Lhs> struct traits<ScalarBuiltinSum<Lhs> > {
+// expression template for Scalar + Builtin
+template <typename Lhs>
+class ScalarBuiltinSum : public ScalarBase
+                                <ScalarBuiltinSum<Lhs> > {
+ public:
+  // typedefs
   static_assert(std::is_convertible<typename Lhs::scalar_type, double>::value,
                 "cannot mix different scalar types");
   typedef double scalar_type;
@@ -21,21 +25,6 @@ template <class Lhs> struct traits<ScalarBuiltinSum<Lhs> > {
     RowsAtCompileTime = 1,
     ColsAtCompileTime = 1
   };
-};
-
-// expression template for Scalar + Builtin
-template <typename Lhs>
-class ScalarBuiltinSum : public ScalarBase
-                                <ScalarBuiltinSum<Lhs> > {
- public:
-  // typedefs
-  typedef typename traits<ScalarBuiltinSum>::scalar_type scalar_type;
-  typedef typename traits<ScalarBuiltinSum>::result_type result_type;
-  enum {
-    RowsAtCompileTime = traits<ScalarBuiltinSum>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<ScalarBuiltinSum>::ColsAtCompileTime
-  };
-
  private:
   Lhs lhs_;
   double rhs_;

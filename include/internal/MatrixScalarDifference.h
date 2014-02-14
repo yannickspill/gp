@@ -11,19 +11,6 @@
 namespace GP {
 namespace internal {
 
-template <class Mat, class Scal>
-struct traits<MatrixScalarDifference<Mat, Scal> > {
-  static_assert(std::is_same
-                <typename Mat::scalar_type, typename Scal::scalar_type>::value,
-                "cannot mix different scalar types");
-  typedef typename Mat::scalar_type scalar_type;
-  typedef scalar_type result_type;
-  enum {
-    RowsAtCompileTime = 1,
-    ColsAtCompileTime = 1
-  };
-};
-
 template <typename Mat, typename Scal>
 class MatrixScalarDifference : public ScalarBase
                                <MatrixScalarDifference<Mat, Scal> > {
@@ -33,13 +20,15 @@ class MatrixScalarDifference : public ScalarBase
 
  public:
   // typedefs
-  typedef typename traits<MatrixScalarDifference>::scalar_type scalar_type;
-  typedef typename traits<MatrixScalarDifference>::result_type result_type;
+  static_assert(std::is_same
+                <typename Mat::scalar_type, typename Scal::scalar_type>::value,
+                "cannot mix different scalar types");
+  typedef typename Mat::scalar_type scalar_type;
+  typedef scalar_type result_type;
   enum {
-    RowsAtCompileTime = traits<MatrixScalarDifference>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<MatrixScalarDifference>::ColsAtCompileTime
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
   };
-
  public:
   // constructor
   MatrixScalarDifference(const Mat& lhs, const Scal& rhs)

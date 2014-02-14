@@ -9,30 +9,18 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for ScalarOpposite
-template <class ScalarExpression>
-struct traits<ScalarOpposite<ScalarExpression> > {
-  typedef typename ScalarExpression::scalar_type scalar_type;
-  typedef scalar_type result_type;
-  enum {
-    RowsAtCompileTime = 1,
-    ColsAtCompileTime = 1
-  };
-};
-
 // expression template for the opposite of a valrix
 template <class ScalarExpression>
 class ScalarOpposite : public ScalarBase
                              <ScalarOpposite<ScalarExpression> > {
  public:
   // typedefs
-  typedef typename traits<ScalarOpposite>::scalar_type scalar_type;
-  typedef typename traits<ScalarOpposite>::result_type result_type;
+  typedef typename ScalarExpression::scalar_type scalar_type;
+  typedef scalar_type result_type;
   enum {
-    RowsAtCompileTime = traits<ScalarOpposite>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<ScalarOpposite>::ColsAtCompileTime
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
   };
-
  private:
   ScalarExpression val_;
 

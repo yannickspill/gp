@@ -12,8 +12,11 @@
 namespace GP {
 namespace internal {
 
-template <class Mat, class Scal>
-struct traits<MatrixScalarQuotient<Mat, Scal> > {
+template <typename Mat, typename Scal>
+class MatrixScalarQuotient : public MatrixBase
+                             <MatrixScalarQuotient<Mat, Scal> > {
+  public:
+  // typedefs
   static_assert(std::is_same
                 <typename Mat::scalar_type, typename Scal::scalar_type>::value,
                 "cannot mix different scalar types");
@@ -23,21 +26,6 @@ struct traits<MatrixScalarQuotient<Mat, Scal> > {
     enum {
     RowsAtCompileTime = Mat::RowsAtCompileTime,
     ColsAtCompileTime = Mat::ColsAtCompileTime
-  };
-
-
-};
-
-template <typename Mat, typename Scal>
-class MatrixScalarQuotient : public MatrixBase
-                             <MatrixScalarQuotient<Mat, Scal> > {
-  public:
-  // typedefs
-  typedef typename traits<MatrixScalarQuotient>::scalar_type scalar_type;
-  typedef typename traits<MatrixScalarQuotient>::result_type result_type;
-  enum {
-    RowsAtCompileTime = traits<MatrixScalarQuotient>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<MatrixScalarQuotient>::ColsAtCompileTime
   };
 
  private:

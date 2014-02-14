@@ -10,17 +10,6 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for ScalarBuiltinProduct
-template <class ScalarExpression>
-struct traits<ScalarBuiltinProduct<ScalarExpression> > {
-  typedef typename ScalarExpression::scalar_type scalar_type;
-  typedef typename ScalarExpression::result_type result_type;
-  enum {
-    RowsAtCompileTime = 1,
-    ColsAtCompileTime = 1
-  };
-};
-
 // expression template for product of a Scalar with anything convertible to a
 // double
 template <class ScalarExpression>
@@ -28,13 +17,12 @@ class ScalarBuiltinProduct : public ScalarBase
                              <ScalarBuiltinProduct<ScalarExpression> > {
  public:
   // typedefs
-  typedef typename traits<ScalarBuiltinProduct>::scalar_type scalar_type;
-  typedef typename traits<ScalarBuiltinProduct>::result_type result_type;
+  typedef typename ScalarExpression::scalar_type scalar_type;
+  typedef typename ScalarExpression::result_type result_type;
   enum {
-    RowsAtCompileTime = traits<ScalarBuiltinProduct>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<ScalarBuiltinProduct>::ColsAtCompileTime
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
   };
-
  private:
   double lhs_;
   ScalarExpression rhs_;

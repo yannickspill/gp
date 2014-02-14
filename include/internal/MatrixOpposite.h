@@ -12,30 +12,18 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for MatrixOpposite
-template <class MatrixExpression>
-struct traits<MatrixOpposite<MatrixExpression> > {
-  typedef typename MatrixExpression::scalar_type scalar_type;
-  typedef decltype(
-      - std::declval<typename MatrixExpression::result_type>()) result_type;
-  enum {
-    RowsAtCompileTime = MatrixExpression::RowsAtCompileTime,
-    ColsAtCompileTime = MatrixExpression::ColsAtCompileTime
-  };
-
-};
-
 // expression template for the opposite of a valrix
 template <class MatrixExpression>
 class MatrixOpposite : public MatrixBase
                              <MatrixOpposite<MatrixExpression> > {
  public:
   // typedefs
-  typedef typename traits<MatrixOpposite>::scalar_type scalar_type;
-  typedef typename traits<MatrixOpposite>::result_type result_type;
+  typedef typename MatrixExpression::scalar_type scalar_type;
+  typedef decltype(
+      - std::declval<typename MatrixExpression::result_type>()) result_type;
   enum {
-    RowsAtCompileTime = traits<MatrixOpposite>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<MatrixOpposite>::ColsAtCompileTime
+    RowsAtCompileTime = MatrixExpression::RowsAtCompileTime,
+    ColsAtCompileTime = MatrixExpression::ColsAtCompileTime
   };
 
  private:

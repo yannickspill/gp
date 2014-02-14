@@ -11,8 +11,11 @@
 namespace GP {
 namespace internal {
 
-template <class Scal, class Mat>
-struct traits<ScalarMatrixDifference<Scal, Mat> > {
+template <typename Scal, typename Mat>
+class ScalarMatrixDifference : public ScalarBase
+                               <ScalarMatrixDifference<Scal, Mat> > {
+  public:
+  // typedefs
   static_assert(std::is_same
                 <typename Scal::scalar_type, typename Mat::scalar_type>::value,
                 "cannot mix different scalar types");
@@ -22,20 +25,6 @@ struct traits<ScalarMatrixDifference<Scal, Mat> > {
     RowsAtCompileTime = 1,
     ColsAtCompileTime = 1
   };
-};
-
-template <typename Scal, typename Mat>
-class ScalarMatrixDifference : public ScalarBase
-                               <ScalarMatrixDifference<Scal, Mat> > {
-  public:
-  // typedefs
-  typedef typename traits<ScalarMatrixDifference>::scalar_type scalar_type;
-  typedef typename traits<ScalarMatrixDifference>::result_type result_type;
-  enum {
-    RowsAtCompileTime = traits<ScalarMatrixDifference>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<ScalarMatrixDifference>::ColsAtCompileTime
-  };
-
  private:
   Scal lhs_;
   Mat rhs_;
@@ -49,7 +38,7 @@ class ScalarMatrixDifference : public ScalarBase
   result_type get() const {
     typename Mat::result_type mat(rhs_.get());
     assert(mat.rows() == mat.cols() && mat.rows() == 1
-           && "Matrix + Scalar only works on a 1x1 matrix!");
+           && "Matrix - Scalar only works on a 1x1 matrix!");
     return lhs_.get() - mat(0, 0);
   }
 

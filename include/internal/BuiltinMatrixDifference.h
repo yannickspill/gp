@@ -11,21 +11,6 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for BuiltinMatrixDifference
-template <class MatrixExpression>
-struct traits<BuiltinMatrixDifference<MatrixExpression> > {
- private:
-  typedef traits<MatrixExpression> tme;
-
- public:
-  typedef typename tme::scalar_type scalar_type;
-  typedef scalar_type result_type;
-  enum {
-    RowsAtCompileTime = 1,
-    ColsAtCompileTime = 1
-  };
-};
-
 // expression template for product of a Matrix with anything convertible to a
 // double
 template <class MatrixExpression>
@@ -33,13 +18,12 @@ class BuiltinMatrixDifference : public ScalarBase
                                 <BuiltinMatrixDifference<MatrixExpression> > {
  public:
   // typedefs
-  typedef typename traits<BuiltinMatrixDifference>::scalar_type scalar_type;
-  typedef typename traits<BuiltinMatrixDifference>::result_type result_type;
+  typedef typename MatrixExpression::scalar_type scalar_type;
+  typedef scalar_type result_type;
   enum {
-    RowsAtCompileTime = traits<BuiltinMatrixDifference>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<BuiltinMatrixDifference>::ColsAtCompileTime
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
   };
-
  private:
   double lhs_;
   MatrixExpression rhs_;

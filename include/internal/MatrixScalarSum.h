@@ -12,8 +12,12 @@
 namespace GP {
 namespace internal {
 
-template <class Mat, class Scal>
-struct traits<MatrixScalarSum<Mat, Scal> > {
+// type(matrix + scalar) = type(scalar)
+// will check if matrix is 1x1 at runtime
+template <typename Mat, typename Scal>
+class MatrixScalarSum : public ScalarBase<MatrixScalarSum<Mat, Scal> > {
+ public:
+  // typedefs
   static_assert(std::is_same
                 <typename Mat::scalar_type, typename Scal::scalar_type>::value,
                 "cannot mix different scalar types");
@@ -23,21 +27,6 @@ struct traits<MatrixScalarSum<Mat, Scal> > {
     RowsAtCompileTime = 1,
     ColsAtCompileTime = 1
   };
-};
-
-// type(matrix + scalar) = type(scalar)
-// will check if matrix is 1x1 at runtime
-template <typename Mat, typename Scal>
-class MatrixScalarSum : public ScalarBase<MatrixScalarSum<Mat, Scal> > {
- public:
-  // typedefs
-  typedef typename traits<MatrixScalarSum>::scalar_type scalar_type;
-  typedef typename traits<MatrixScalarSum>::result_type result_type;
-  enum {
-    RowsAtCompileTime = traits<MatrixScalarSum>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<MatrixScalarSum>::ColsAtCompileTime
-  };
-
  private:
   Mat lhs_;
   Scal rhs_;
