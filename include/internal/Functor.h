@@ -10,19 +10,6 @@
 namespace GP {
 namespace internal {
 
-// traits
-template <class OutExpr, class... InExprs>
-struct traits<Functor<OutExpr, InExprs...> > {
-  typedef typename OutExpr::scalar_type scalar_type;
-  typedef typename OutExpr::result_type result_type;
-  enum {
-    RowsAtCompileTime = OutExpr::RowsAtCompileTime,
-    ColsAtCompileTime = OutExpr::ColsAtCompileTime,
-    nargs = sizeof...(InExprs)
-  };
-  typedef Functor<OutExpr, InExprs...> type;
-};
-
 // Functor: class providing an operator(), some additional traits and a
 // get_version() call.
 // the InExprs arguments are possibly changed at each call of operator()
@@ -32,15 +19,14 @@ class Functor {
 
  public:
   // typedefs
-  typedef typename traits<Functor>::scalar_type scalar_type;
-  typedef typename traits<Functor>::result_type result_type;
+  typedef typename OutExpr::scalar_type scalar_type;
+  typedef typename OutExpr::result_type result_type;
   enum {
-    RowsAtCompileTime = traits<Functor>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<Functor>::ColsAtCompileTime,
-    nargs = traits<Functor>::nargs
+    RowsAtCompileTime = OutExpr::RowsAtCompileTime,
+    ColsAtCompileTime = OutExpr::ColsAtCompileTime,
+    nargs = sizeof...(InExprs)
   };
-  typedef typename traits<Functor>::type type;
-
+  typedef Functor<OutExpr, InExprs...> type;
  private:
   std::tuple<InExprs...> in_exprs_;
   OutExpr out_expr_;

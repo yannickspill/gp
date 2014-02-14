@@ -12,8 +12,6 @@
 namespace GP {
 namespace internal {
 
-template <class Lhs, class Rhs> struct traits<MatrixSum<Lhs, Rhs> > {};
-
 template <typename Lhs, typename Rhs>
 class MatrixSum : public MatrixBase<MatrixSum<Lhs, Rhs> > {
  public:
