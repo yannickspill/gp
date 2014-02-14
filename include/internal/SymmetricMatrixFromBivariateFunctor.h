@@ -19,8 +19,8 @@ struct traits<SymmetricMatrixFromBivariateFunctor<Functor, InMat> > {
   };
   typedef Eigen::Matrix
       <scalar_type, RowsAtCompileTime, ColsAtCompileTime> matrix_type;
-  //SelfAdjointView does not support a number of operators, e.g. scalar * mat
-  //typedef Eigen::SelfAdjointView<matrix_type, Eigen::Upper> result_type;
+  // SelfAdjointView does not support a number of operators, e.g. scalar * mat
+  // typedef Eigen::SelfAdjointView<matrix_type, Eigen::Upper> result_type;
   typedef matrix_type result_type;
 };
 
@@ -49,24 +49,33 @@ class SymmetricMatrixFromBivariateFunctor
  private:
   Functor func_;
   InMat mat_;
-  mutable std::shared_ptr<matrix_type> ret_;
+  struct Data {
+    typename InMat::result_type mat_;
+    result_type val_;
+    Data(const Functor& func, const typename InMat::result_type mat)
+        : mat_(mat), val_(fill_val(func)) {}
+
+   private:
+    result_type fill_val(const Functor& func) const {
+      matrix_type retval(mat_.rows(), mat_.rows());
+      for (unsigned i = 0; i < mat_.rows(); ++i)
+        for (unsigned j = i; j < mat_.rows(); ++j) {
+          retval(i, j) = scalar_type(func(mat_.row(i), mat_.row(j)));
+          if (j > i) retval(j, i) = retval(i, j);
+        }
+      return retval;
+    }
+  };
+  mutable std::shared_ptr<Data> data_;
 
  public:
   explicit SymmetricMatrixFromBivariateFunctor(const Functor& func,
                                                const InMat& mat)
-      : func_(func), mat_(mat), ret_(nullptr) {}
+      : func_(func), mat_(mat) {}
 
   result_type get() const {
-    auto eigenmat = mat_.get();
-    ret_ = std::make_shared
-        <matrix_type>(matrix_type(eigenmat.rows(), eigenmat.rows()));
-    for (unsigned i = 0; i < eigenmat.rows(); ++i)
-      for (unsigned j = i; j < eigenmat.rows(); ++j) {
-        ret_->operator()(i, j)
-            = scalar_type(func_(eigenmat.row(i), eigenmat.row(j)));
-        if (j > i) ret_->operator()(j, i) = ret_->operator()(i, j);
-      }
-    return *ret_;
+    data_ = std::make_shared<Data>(func_, mat_.get());
+    return data_->val_;
   }
 
   unsigned get_version() const {

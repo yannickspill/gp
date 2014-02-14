@@ -39,6 +39,24 @@ class MatrixFromBivariateFunctor
   Functor func_;
   InMat1 mat1_;
   InMat2 mat2_;
+  struct Data {
+    typename InMat1::result_type mat1_;
+    typename InMat2::result_type mat2_;
+    result_type val_;
+    Data(const Functor& func, const typename InMat1::result_type mat1,
+         const typename InMat2::result_type mat2)
+        : mat1_(mat1), mat2_(mat2), val_(fill_val(func)) {}
+
+   private:
+    result_type fill_val(const Functor& func) const {
+      result_type retval(mat1_.rows(), mat2_.rows());
+      for (unsigned i = 0; i < mat1_.rows(); ++i)
+        for (unsigned j = 0; j < mat2_.rows(); ++j)
+          retval(i, j) = func(mat1_.row(i), mat2_.row(j));
+      return retval;
+    }
+  };
+  mutable std::shared_ptr<Data> data_;
 
  public:
   explicit MatrixFromBivariateFunctor(const Functor& func, const InMat1& mat1,
@@ -46,13 +64,8 @@ class MatrixFromBivariateFunctor
       : func_(func), mat1_(mat1), mat2_(mat2) {}
 
   result_type get() const {
-    auto mat1 = mat1_.get();
-    auto mat2 = mat2_.get();
-    result_type retval(mat1.rows(), mat2.rows());
-    for (unsigned i = 0; i < mat1.rows(); ++i)
-      for (unsigned j = 0; j < mat2.rows(); ++j)
-        retval(i, j) = func_(mat1.row(i), mat2.row(j));
-    return retval;
+    data_ = std::make_shared<Data>(func_, mat1_.get(), mat2_.get());
+    return data_->val_;
   }
 
   unsigned get_version() const {
