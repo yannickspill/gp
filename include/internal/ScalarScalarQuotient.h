@@ -11,8 +11,11 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for ScalarScalarQuotient
-template <class Lhs, class Rhs> struct traits<ScalarScalarQuotient<Lhs, Rhs> > {
+// expression template for products involving only Scalars
+template <typename Lhs, typename Rhs>
+class ScalarScalarQuotient : public ScalarBase<ScalarScalarQuotient<Lhs, Rhs> > {
+ public:
+  // typedefs
   static_assert(std::is_same
                 <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
                 "cannot mix different scalar types");
@@ -22,20 +25,6 @@ template <class Lhs, class Rhs> struct traits<ScalarScalarQuotient<Lhs, Rhs> > {
     RowsAtCompileTime = 1,
     ColsAtCompileTime = 1
   };
-};
-
-// expression template for products involving only Scalars
-template <typename Lhs, typename Rhs>
-class ScalarScalarQuotient : public ScalarBase<ScalarScalarQuotient<Lhs, Rhs> > {
- public:
-  // typedefs
-  typedef typename traits<ScalarScalarQuotient>::scalar_type scalar_type;
-  typedef typename traits<ScalarScalarQuotient>::result_type result_type;
-  enum {
-    RowsAtCompileTime = traits<ScalarScalarQuotient>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<ScalarScalarQuotient>::ColsAtCompileTime
-  };
-
  private:
   Lhs lhs_;
   Rhs rhs_;

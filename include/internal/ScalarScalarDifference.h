@@ -11,9 +11,12 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for ScalarScalarDifference
-template <class Lhs, class Rhs>
-struct traits<ScalarScalarDifference<Lhs, Rhs> > {
+// expression template for products involving only Scalars
+template <typename Lhs, typename Rhs>
+class ScalarScalarDifference : public ScalarBase
+                               <ScalarScalarDifference<Lhs, Rhs> > {
+ public:
+  // typedefs
   static_assert(std::is_same
                 <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
                 "cannot mix different scalar types");
@@ -23,21 +26,6 @@ struct traits<ScalarScalarDifference<Lhs, Rhs> > {
     RowsAtCompileTime = 1,
     ColsAtCompileTime = 1
   };
-};
-
-// expression template for products involving only Scalars
-template <typename Lhs, typename Rhs>
-class ScalarScalarDifference : public ScalarBase
-                               <ScalarScalarDifference<Lhs, Rhs> > {
- public:
-  // typedefs
-  typedef typename traits<ScalarScalarDifference>::scalar_type scalar_type;
-  typedef typename traits<ScalarScalarDifference>::result_type result_type;
-  enum {
-    RowsAtCompileTime = traits<ScalarScalarDifference>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<ScalarScalarDifference>::ColsAtCompileTime
-  };
-
  private:
   Lhs lhs_;
   Rhs rhs_;

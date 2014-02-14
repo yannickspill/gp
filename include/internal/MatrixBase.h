@@ -33,6 +33,7 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return Transpose<Derived>(asDerived());
   }
 
+  /*
   // decompose matrix, use Cholesky LDLT decomposition by default
   template <template <class> class Policy = LDLTPolicy>
   Decomposition<Derived, Policy> decomposition() const {
@@ -83,6 +84,7 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
         <ScalarExpr, traits<Derived>::RowsAtCompileTime,
          traits<Derived>::ColsAtCompileTime>(scal.asDerived(), nrows, ncols);
   }
+  */
 };
 
 // sums
@@ -92,6 +94,7 @@ const MatrixSum<Lhs, Rhs> operator+(const MatrixBase<Lhs>& lhs,
                                     const MatrixBase<Rhs>& rhs) {
   return MatrixSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
+/*
 //  double Matrix
 template <class MatrixExpression>
 const MatrixBuiltinSum<MatrixExpression> operator+(double lhs, const MatrixBase
@@ -105,6 +108,7 @@ const MatrixBuiltinSum<MatrixExpression> operator+(const MatrixBase
                                                    double rhs) {
   return MatrixBuiltinSum<MatrixExpression>(lhs.asDerived(), rhs);
 }
+*/
 
 // differences
 //  Matrix Matrix
@@ -113,6 +117,7 @@ const MatrixDifference<Lhs, Rhs> operator-(const MatrixBase<Lhs>& lhs,
                                            const MatrixBase<Rhs>& rhs) {
   return MatrixDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
+/*
 //  double Matrix
 template <class MatrixExpression>
 const MatrixBuiltinDifference<MatrixExpression> operator-(
@@ -132,6 +137,8 @@ const MatrixOpposite<MatrixExpression> operator-(const MatrixBase
   return MatrixOpposite<MatrixExpression>(rhs.asDerived());
 }
 
+*/
+
 // products
 //    Matrix Matrix
 template <class Lhs, class Rhs>
@@ -139,6 +146,7 @@ const MatrixMatrixProduct<Lhs, Rhs> operator*(const MatrixBase<Lhs>& lhs,
                                               const MatrixBase<Rhs>& rhs) {
   return MatrixMatrixProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
+/*
 //   double Matrix
 template <class MatrixExpression>
 const MatrixBuiltinProduct<MatrixExpression> operator*(
@@ -159,6 +167,7 @@ const MatrixBuiltinQuotient<Lhs> operator/(const MatrixBase<Lhs>& lhs,
                                            double rhs) {
   return MatrixBuiltinQuotient<Lhs>(lhs.asDerived(), rhs);
 }
+*/
 }
 }
 #endif /* INTERNAL_MATRIX_BASE_H */

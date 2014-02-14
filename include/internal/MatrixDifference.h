@@ -12,8 +12,10 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for MatrixDifference
-template <class Lhs, class Rhs> struct traits<MatrixDifference<Lhs, Rhs> > {
+template <typename Lhs, typename Rhs>
+class MatrixDifference : public MatrixBase<MatrixDifference<Lhs, Rhs> > {
+ public:
+  // typedefs
   static_assert(std::is_same
                 <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
                 "cannot mix matrices of different scalar types");
@@ -32,19 +34,6 @@ template <class Lhs, class Rhs> struct traits<MatrixDifference<Lhs, Rhs> > {
     RowsAtCompileTime = Lhs::RowsAtCompileTime,
     ColsAtCompileTime = Lhs::ColsAtCompileTime
   };
-};
-
-template <typename Lhs, typename Rhs>
-class MatrixDifference : public MatrixBase<MatrixDifference<Lhs, Rhs> > {
- public:
-  // typedefs
-  typedef typename traits<MatrixDifference>::scalar_type scalar_type;
-  typedef typename traits<MatrixDifference>::result_type result_type;
-  enum {
-    RowsAtCompileTime = traits<MatrixDifference>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<MatrixDifference>::ColsAtCompileTime
-  };
-
  private:
   Lhs lhs_;
   Rhs rhs_;
