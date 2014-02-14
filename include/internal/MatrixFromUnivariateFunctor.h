@@ -12,13 +12,6 @@ namespace internal {
 
 template <class Functor, class InMat>
 struct traits<MatrixFromUnivariateFunctor<Functor, InMat> > {
-  typedef typename Functor::scalar_type scalar_type;
-  enum {
-    RowsAtCompileTime = InMat::RowsAtCompileTime,
-    ColsAtCompileTime = Functor::ColsAtCompileTime
-  };
-  typedef typename Eigen::Matrix
-      <scalar_type, RowsAtCompileTime, ColsAtCompileTime> result_type;
 };
 
 // apply functor to every row of matrix, yiedling a column vector or possibly a
@@ -28,13 +21,13 @@ class MatrixFromUnivariateFunctor
     : public MatrixBase<MatrixFromUnivariateFunctor<Functor, InMat> > {
 
  public:
-  typedef typename traits<MatrixFromUnivariateFunctor>::scalar_type scalar_type;
-  typedef typename traits<MatrixFromUnivariateFunctor>::result_type result_type;
+  typedef typename Functor::scalar_type scalar_type;
   enum {
-    RowsAtCompileTime = traits<MatrixFromUnivariateFunctor>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<MatrixFromUnivariateFunctor>::ColsAtCompileTime,
+    RowsAtCompileTime = InMat::RowsAtCompileTime,
+    ColsAtCompileTime = Functor::ColsAtCompileTime
   };
-
+  typedef typename Eigen::Matrix
+      <scalar_type, RowsAtCompileTime, ColsAtCompileTime> result_type;
   static_assert(Functor::RowsAtCompileTime == 1,
                 "Functor should return a row vector!");
   static_assert(Functor::nargs == 1, "Expecting univariate functor!");

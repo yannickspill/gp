@@ -10,8 +10,16 @@
 namespace GP {
 namespace internal {
 
+// build matrix by applying bivariate functor to every combination of row pairs
+// of the input matrix. Only works with functors that return a numeric (e.g.
+// non-matrix) type.
 template <class Functor, class InMat>
-struct traits<SymmetricMatrixFromBivariateFunctor<Functor, InMat> > {
+class SymmetricMatrixFromBivariateFunctor
+    : public MatrixBase<SymmetricMatrixFromBivariateFunctor<Functor, InMat> > {
+
+ public:
+  static_assert(Functor::nargs == 2, "Expecting bivariate functor!");
+
   typedef typename Functor::scalar_type scalar_type;
   enum {
     RowsAtCompileTime = InMat::RowsAtCompileTime,
@@ -22,29 +30,6 @@ struct traits<SymmetricMatrixFromBivariateFunctor<Functor, InMat> > {
   // SelfAdjointView does not support a number of operators, e.g. scalar * mat
   // typedef Eigen::SelfAdjointView<matrix_type, Eigen::Upper> result_type;
   typedef matrix_type result_type;
-};
-
-// build matrix by applying bivariate functor to every combination of row pairs
-// of the input matrix. Only works with functors that return a numeric (e.g.
-// non-matrix) type.
-template <class Functor, class InMat>
-class SymmetricMatrixFromBivariateFunctor
-    : public MatrixBase<SymmetricMatrixFromBivariateFunctor<Functor, InMat> > {
-
- public:
-  typedef typename traits
-      <SymmetricMatrixFromBivariateFunctor>::scalar_type scalar_type;
-  typedef typename traits
-      <SymmetricMatrixFromBivariateFunctor>::matrix_type matrix_type;
-  typedef typename traits
-      <SymmetricMatrixFromBivariateFunctor>::result_type result_type;
-  enum {
-    RowsAtCompileTime = traits
-    <SymmetricMatrixFromBivariateFunctor>::RowsAtCompileTime,
-    ColsAtCompileTime = traits
-    <SymmetricMatrixFromBivariateFunctor>::ColsAtCompileTime,
-  };
-  static_assert(Functor::nargs == 2, "Expecting bivariate functor!");
 
  private:
   Functor func_;

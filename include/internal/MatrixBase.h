@@ -45,7 +45,6 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
       return DiagonalMatrixFromVector<Derived>(asDerived());
   }
   
-  /*
   //! Yield a matrix by applying a univariate function to every row of an input
   //matrix. Will not check whether func is compatible with the rows of the
   //matrix. Will only compile if the function returns a row vector
@@ -74,7 +73,6 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   SymmetricApply(const Functor& func, const InMat& mat) {
     return SymmetricMatrixFromBivariateFunctor<Functor, InMat>(func, mat);
   }
-  */
 
   //! Broadcast a constant Scalar expression to a matrix/vector
   //\see declaration in

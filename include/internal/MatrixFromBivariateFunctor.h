@@ -10,8 +10,12 @@
 namespace GP {
 namespace internal {
 
+// apply functor to every row of both matrices
 template <class Functor, class InMat1, class InMat2>
-struct traits<MatrixFromBivariateFunctor<Functor, InMat1, InMat2> > {
+class MatrixFromBivariateFunctor
+    : public MatrixBase<MatrixFromBivariateFunctor<Functor, InMat1, InMat2> > {
+
+ public:
   typedef typename Functor::scalar_type scalar_type;
   enum {
     RowsAtCompileTime = InMat1::RowsAtCompileTime,
@@ -19,20 +23,6 @@ struct traits<MatrixFromBivariateFunctor<Functor, InMat1, InMat2> > {
   };
   typedef typename Eigen::Matrix
       <scalar_type, RowsAtCompileTime, ColsAtCompileTime> result_type;
-};
-
-// apply functor to every row of both matrices
-template <class Functor, class InMat1, class InMat2>
-class MatrixFromBivariateFunctor
-    : public MatrixBase<MatrixFromBivariateFunctor<Functor, InMat1, InMat2> > {
-
- public:
-  typedef typename traits<MatrixFromBivariateFunctor>::scalar_type scalar_type;
-  typedef typename traits<MatrixFromBivariateFunctor>::result_type result_type;
-  enum {
-    RowsAtCompileTime = traits<MatrixFromBivariateFunctor>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<MatrixFromBivariateFunctor>::ColsAtCompileTime,
-  };
   static_assert(Functor::nargs == 2, "Expecting bivariate functor!");
 
  private:

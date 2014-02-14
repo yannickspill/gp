@@ -9,29 +9,17 @@
 namespace GP {
 namespace internal {
 
-// specialize traits for ScalarExponential
+// expression template for the exponential of a scalar
 template <class ScalarExpression>
-struct traits<ScalarExponential<ScalarExpression> > {
+class ScalarExponential : public ScalarBase
+                             <ScalarExponential<ScalarExpression> > {
+ public:
   typedef typename ScalarExpression::scalar_type scalar_type;
   typedef scalar_type result_type;
   enum {
     RowsAtCompileTime = 1,
     ColsAtCompileTime = 1
   };
-};
-
-// expression template for the exponential of a scalar
-template <class ScalarExpression>
-class ScalarExponential : public ScalarBase
-                             <ScalarExponential<ScalarExpression> > {
- public:
-  typedef typename traits<ScalarExponential>::scalar_type scalar_type;
-  typedef typename traits<ScalarExponential>::result_type result_type;
-  enum {
-    RowsAtCompileTime = traits<ScalarExponential>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<ScalarExponential>::ColsAtCompileTime
-  };
-
  private:
   ScalarExpression val_;
 
