@@ -73,8 +73,6 @@ class SymmetricMatrixFromBivariateFunctor;
 template <class Functor, class InMat1, class InMat2>
 class MatrixFromBivariateFunctor;
 template<class ScalarExpr, int CRows, int CCols> class MatrixFromScalar;
-
-class MatrixFromThinAir;
 }
 }
 #endif /*FINTERNAL_ORWARD_DECLARATIONS_H*/
