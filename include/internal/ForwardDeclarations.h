@@ -72,7 +72,7 @@ template <class Functor, class InMat>
 class SymmetricMatrixFromBivariateFunctor;
 template <class Functor, class InMat1, class InMat2>
 class MatrixFromBivariateFunctor;
-template<class ScalarExpr, int CRows, int CCols> class MatrixFromScalar;
+template<class ScalarExpr, class Derived> class MatrixFromScalar;
 }
 }
 #endif /*FINTERNAL_ORWARD_DECLARATIONS_H*/

@@ -10,30 +10,21 @@
 namespace GP {
 namespace internal {
 
-template <class ScalarExpr, int CRows, int CCols>
-struct traits<MatrixFromScalar<ScalarExpr, CRows, CCols> > {
-  typedef typename ScalarExpr::scalar_type scalar_type;
-  enum {
-    RowsAtCompileTime = CRows,
-    ColsAtCompileTime = CCols
-  };
-  typedef typename Eigen::Matrix
-      <scalar_type, CRows, CCols>::ConstantReturnType result_type;
-};
-
-//Build a matrix by putting ScalarExpr in every coefficient
-template <class ScalarExpr, int CRows, int CCols>
-class MatrixFromScalar
-    : public MatrixBase
-      <MatrixFromScalar<ScalarExpr, CRows, CCols> > {
+//!Build a matrix by putting ScalarExpr in every coefficient
+//\note the derived class is only used for its nested Rows and ColsAtCompileTime
+template <class ScalarExpr, class Derived>
+class MatrixFromScalar : public MatrixBase
+                         <MatrixFromScalar<ScalarExpr, Derived> > {
 
  public:
-  typedef typename traits<MatrixFromScalar>::scalar_type scalar_type;
-  typedef typename traits<MatrixFromScalar>::result_type result_type;
+  typedef typename ScalarExpr::scalar_type scalar_type;
   enum {
-      RowsAtCompileTime=traits<MatrixFromScalar>::RowsAtCompileTime,
-      ColsAtCompileTime=traits<MatrixFromScalar>::ColsAtCompileTime,
+    RowsAtCompileTime = Derived::RowsAtCompileTime,
+    ColsAtCompileTime = Derived::ColsAtCompileTime
   };
+  typedef typename Eigen::Matrix
+      <scalar_type, RowsAtCompileTime, ColsAtCompileTime>::ConstantReturnType
+          result_type;
 
  private:
   ScalarExpr scal_;
@@ -49,9 +40,7 @@ class MatrixFromScalar
   }
   result_type get() { return result_type(nrows_, ncols_, scal_.get()); }
 
-  unsigned get_version() const {
-      return scal_.get_version();
-  }
+  unsigned get_version() const { return scal_.get_version(); }
 };
 }
 }

@@ -3,6 +3,7 @@
 
 #include "macros.h"
 #include "internal/ForwardDeclarations.h"
+#include "Matrix.h"
 
 #include <functional>
 
@@ -39,12 +40,12 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
     return Decomposition<Derived, Policy>(asDerived());
   }
 
-  /*
   //! build diagonal matrix from vector
   DiagonalMatrixFromVector<Derived> asDiagonal() {
       return DiagonalMatrixFromVector<Derived>(asDerived());
   }
   
+  /*
   //! Yield a matrix by applying a univariate function to every row of an input
   //matrix. Will not check whether func is compatible with the rows of the
   //matrix. Will only compile if the function returns a row vector
@@ -73,18 +74,17 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   SymmetricApply(const Functor& func, const InMat& mat) {
     return SymmetricMatrixFromBivariateFunctor<Functor, InMat>(func, mat);
   }
+  */
 
   //! Broadcast a constant Scalar expression to a matrix/vector
+  //\see declaration in
   template <class ScalarExpr>
-  static MatrixFromScalar<ScalarExpr, traits<Derived>::RowsAtCompileTime,
-                          traits<Derived>::ColsAtCompileTime>
+  static MatrixFromScalar<ScalarExpr, Derived>
   Broadcast(const ScalarBase<ScalarExpr>& scal, unsigned nrows,
             unsigned ncols) {
     return MatrixFromScalar
-        <ScalarExpr, traits<Derived>::RowsAtCompileTime,
-         traits<Derived>::ColsAtCompileTime>(scal.asDerived(), nrows, ncols);
+        <ScalarExpr, Derived>(scal.asDerived(), nrows, ncols);
   }
-  */
 };
 
 // sums

@@ -48,7 +48,6 @@ int main(int, char * []) {
   // quotient
   if (std::abs((scal / scal).get() - 1.) > 1e-7) return 26;
 
-    /*
   // builtin scalar product
   if ((scal * 3.).get() != (scal.get() * 3.)) return 11;
   if ((scal * 3).get() != (scal.get() * 3.)) return 12;
@@ -106,7 +105,6 @@ int main(int, char * []) {
   if ((vx - scal * vx).transpose().get() != (x - scal.get() * x).transpose())
     return 20;
 
-  */
   // ldlt
   Eigen::MatrixXd L(Eigen::MatrixXd::Random(szy, szy));
   L.diagonal() = L.diagonal().array().abs();
@@ -205,7 +203,6 @@ int main(int, char * []) {
               .log()
               .sum()))
     return 59;
-  /*
 
   // rows and columns
   MatrixXd dummy(Eigen::MatrixXd::Random(szx, szy));
@@ -282,6 +279,5 @@ int main(int, char * []) {
       != Eigen::MatrixXd(2. * Eigen::MatrixXd::Identity(szx, szx)))
     return 73;
 
-  */
   return 0;
 }
