@@ -123,6 +123,7 @@ int main(int argc, char* argv[]) {
     const unsigned score_col = 5;
     Eigen::MatrixXd data(read_input_data(argv[2],6));
     
+    /*
     //perform test on data
     for (unsigned i=0; i<data.rows(); ++i){
         std::cout << " =============== " << i << std::endl;
@@ -141,5 +142,6 @@ int main(int argc, char* argv[]) {
             return 2;
         }
     }
+    */
     return 0;
 }
