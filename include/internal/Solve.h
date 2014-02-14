@@ -13,22 +13,6 @@
 namespace GP {
 namespace internal {
 
-// traits for Solve<Cache<Decomposition<...> > >
-template <class DecompType, class OtherDerived>
-struct traits<Solve<Cache<DecompType>, OtherDerived> > {
-  static_assert(std::is_same<typename DecompType::scalar_type,
-                             typename OtherDerived::scalar_type>::value,
-                "cannot mix matrices of different scalar types");
-  typedef typename traits
-      <Solve<DecompType, OtherDerived> >::scalar_type scalar_type;
-  typedef typename traits
-      <Solve<DecompType, OtherDerived> >::result_type result_type;
-  enum {
-    RowsAtCompileTime = DecompType::RowsAtCompileTime,
-    ColsAtCompileTime = OtherDerived::ColsAtCompileTime
-  };
-};
-
 //! solve AX = B for X, given the decomposition for A
 template <class DecompType, class OtherDerived>
 class Solve : public MatrixBase<Solve<DecompType, OtherDerived> > {

@@ -57,18 +57,6 @@ template <typename T>
 struct has_eval : decltype(has_eval_impl<T>(nullptr)) {};
 }
 
-// traits class. See below for remarks on result_type
-template <class Object> struct traits<Cache<Object> > {
-typedef typename traits<Object>::scalar_type scalar_type;
-typedef typename has_eval<typename traits<Object>::result_type>::type
-    result_type;
-typedef typename has_eval<typename Object::result_type>::value_type eval_called;
-enum {
-    RowsAtCompileTime = Object::RowsAtCompileTime,
-    ColsAtCompileTime = Object::ColsAtCompileTime
-  };
-};
-
 //! Cache class
 /* Template it on a GPBase object to cache its get() return value.
    \note The result_type can be different from Object::result_type
@@ -84,13 +72,14 @@ template <class Object>
 class Cache : public CacheParent<Object>, public CachePlugins<Object> {
  public:
   // typedefs
-  typedef typename traits<Cache>::scalar_type scalar_type;
-  typedef typename traits<Cache>::result_type result_type;
-  enum {
-    RowsAtCompileTime = traits<Cache>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<Cache>::ColsAtCompileTime
+typedef typename Object::scalar_type scalar_type;
+typedef typename has_eval<typename Object::result_type>::type
+    result_type;
+typedef typename has_eval<typename Object::result_type>::value_type eval_called;
+enum {
+    RowsAtCompileTime = Object::RowsAtCompileTime,
+    ColsAtCompileTime = Object::ColsAtCompileTime
   };
-  typedef typename traits<Cache>::eval_called eval_called;
 
  private:
   class CacheData {

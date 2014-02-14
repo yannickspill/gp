@@ -10,7 +10,7 @@
 namespace GP {
 namespace internal {
 
-// Functor: class providing an operator(), some additional traits and a
+// Functor: class providing an operator(), some additional typedefs and a
 // get_version() call.
 // the InExprs arguments are possibly changed at each call of operator()
 // although the function is const
@@ -95,7 +95,7 @@ class Functor {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
-// convert an expression into a functor, e.g. function with some traits
+// convert an expression into a functor, e.g. function with some typedefs
 // the InExprs arguments are possibly changed at each call of operator()
 // the function is however conceptually const
 template <class OutExpr, class... InExprs>

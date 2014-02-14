@@ -3,8 +3,6 @@
 
 namespace GP {
 namespace internal {
-// declare traits class
-template <class Derived> struct traits;
 
 // base class
 template <class Derived> class GPBase;
