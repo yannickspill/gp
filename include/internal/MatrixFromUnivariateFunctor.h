@@ -10,10 +10,6 @@
 namespace GP {
 namespace internal {
 
-template <class Functor, class InMat>
-struct traits<MatrixFromUnivariateFunctor<Functor, InMat> > {
-};
-
 // apply functor to every row of matrix, yiedling a column vector or possibly a
 // matrix, depending on the output of the functor
 template <class Functor, class InMat>
