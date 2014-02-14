@@ -46,7 +46,7 @@ class MatrixBuiltinProduct : public MatrixBase
       typename MatrixExpression::result_type rhs_;
       result_type val_;
       Data(double lhs, const typename MatrixExpression::result_type& rhs) :
-          lhs_(lhs), rhs_(rhs), val_(lhs*rhs) {
+          lhs_(lhs), rhs_(rhs), val_(lhs_*rhs_) {
           std::cout << "MBP Data constructor, at " << this << std::endl;
           std::cout << "   MBP lhs at " << &lhs_ << std::endl;
           std::cout << "   MBP rhs at " << &rhs_ << std::endl;
