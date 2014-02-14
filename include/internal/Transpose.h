@@ -13,43 +13,19 @@
 namespace GP {
 namespace internal {
 
-template <class Derived> struct traits<Transpose<Derived> > {
+template <typename Derived>
+class Transpose : public MatrixBase<Transpose<Derived> > {
+ private:
+  Derived data_;
+
+ public:
+  // typedefs
   typedef typename Derived::scalar_type scalar_type;
-  typedef decltype(std::declval
-                   <typename traits<Derived>::result_type>().transpose())
-      result_type;
+  typedef decltype(data_.get().transpose()) result_type;
   enum {
     RowsAtCompileTime = Derived::ColsAtCompileTime,
     ColsAtCompileTime = Derived::RowsAtCompileTime
   };
-};
-
-// specialize for matrix, which needs to be constd
-// TODO: avoid this, and write const and non-const versions of operators
-// and get() everywhere
-template <class EigenType> struct traits<Transpose<Matrix<EigenType> > > {
-  typedef typename Matrix<EigenType>::scalar_type scalar_type;
-  typedef decltype(std::declval<const EigenType>().transpose()) result_type;
-  enum {
-    RowsAtCompileTime = EigenType::ColsAtCompileTime,
-    ColsAtCompileTime = EigenType::RowsAtCompileTime
-  };
-};
-
-template <typename Derived>
-class Transpose : public MatrixBase<Transpose<Derived> > {
- public:
-  // typedefs
-  typedef typename traits<Transpose>::scalar_type scalar_type;
-  typedef typename traits<Transpose>::result_type result_type;
-  enum {
-    RowsAtCompileTime=traits<Transpose>::RowsAtCompileTime,
-    ColsAtCompileTime=traits<Transpose>::ColsAtCompileTime,
-  };
-
- private:
-  Derived data_;
-
  public:
   // constructor
   Transpose(const Derived& data) : data_(data) {}

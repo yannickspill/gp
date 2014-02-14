@@ -9,29 +9,18 @@
 namespace GP {
 namespace internal {
 
-template <class Derived, template <typename> class Policy>
-    struct traits<Decomposition<Derived, Policy> > {
-  typedef typename Derived::scalar_type scalar_type;
-  typedef typename traits<Policy<Derived> >::result_type result_type;
-  enum {
-      RowsAtCompileTime = Derived::RowsAtCompileTime,
-      ColsAtCompileTime = Derived::ColsAtCompileTime
-  };
-};
-
 //General class for decomposition. Uses LDLT by default.
 template <typename Derived, template <typename> class Policy = LDLTPolicy>
 class Decomposition : public Policy<Derived>,
                       public GPBase<Decomposition<Derived, Policy> > {
  public:
   // typedefs
-  typedef typename traits<Decomposition>::scalar_type scalar_type;
-  typedef typename traits<Decomposition>::result_type result_type;
+  typedef typename Derived::scalar_type scalar_type;
+  typedef typename Policy<Derived>::result_type result_type;
   enum {
-    RowsAtCompileTime = traits<Decomposition>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<Decomposition>::ColsAtCompileTime
+      RowsAtCompileTime = Derived::RowsAtCompileTime,
+      ColsAtCompileTime = Derived::ColsAtCompileTime
   };
-
  private:
   Derived data_;
 

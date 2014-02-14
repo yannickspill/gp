@@ -11,16 +11,6 @@
 namespace GP {
 namespace internal {
 
-// traits are general because a determinant will always be a double
-template <class Derived> struct traits<LogDeterminant<Derived> > {
-  typedef typename Derived::scalar_type scalar_type;
-  typedef scalar_type result_type;
-  enum {
-    RowsAtCompileTime = 1,
-    ColsAtCompileTime = 1
-  };
-};
-
 // determinant of a matrix, specialization for the LDLT case
 template <class DerivedMat>
 class LogDeterminant
@@ -30,13 +20,12 @@ class LogDeterminant
                                    <Decomposition<DerivedMat, LDLTPolicy> > > {
  public:
   // typedefs
-  typedef typename traits<LogDeterminant>::scalar_type scalar_type;
-  typedef typename traits<LogDeterminant>::result_type result_type;
+  typedef typename DerivedMat::scalar_type scalar_type;
+  typedef scalar_type result_type;
   enum {
-    RowsAtCompileTime = traits<LogDeterminant>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<LogDeterminant>::ColsAtCompileTime
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
   };
-
  private:
   Decomposition<DerivedMat, LDLTPolicy> data_;
 
@@ -63,8 +52,12 @@ class LogDeterminant
                          <LogDeterminant
                           <Cache<Decomposition<DerivedMat, LDLTPolicy> > > > {
  public:
-  typedef typename traits<LogDeterminant>::scalar_type scalar_type;
-  typedef typename traits<LogDeterminant>::result_type result_type;
+  typedef typename DerivedMat::scalar_type scalar_type;
+  typedef scalar_type result_type;
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
 
  private:
   Cache<Decomposition<DerivedMat, LDLTPolicy> > data_;

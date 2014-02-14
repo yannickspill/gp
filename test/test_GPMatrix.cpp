@@ -23,6 +23,7 @@ int main(int, char * []) {
   if (vx.get() != x) return 1;
   vx.transpose();
 
+    /*
   // sum
   vx + vy;
   const Eigen::MatrixXd tmp((vx + vy).get());
@@ -98,7 +99,6 @@ int main(int, char * []) {
       != (x.transpose() * (5 * x + y - scal.get() * x)))
     return 17;
 
-  /*
   // transpose
   if (vx.transpose().get() != x.transpose()) return 17;
   if ((vx + vx).transpose().get() != (x + x).transpose()) return 18;
@@ -106,6 +106,7 @@ int main(int, char * []) {
   if ((vx - scal * vx).transpose().get() != (x - scal.get() * x).transpose())
     return 20;
 
+  */
   // ldlt
   Eigen::MatrixXd L(Eigen::MatrixXd::Random(szy, szy));
   L.diagonal() = L.diagonal().array().abs();
@@ -137,6 +138,7 @@ int main(int, char * []) {
       > 1e-5)
     return 24;
 
+  /*
   // should be able to perform matrix ops on solve result
   // product
   if (((mB.transpose() * ldlt.solve(mB)).get()

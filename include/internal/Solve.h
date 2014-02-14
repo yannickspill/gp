@@ -13,21 +13,6 @@
 namespace GP {
 namespace internal {
 
-// traits for Solve<Decomposition<...> >
-template <class DecompType, class OtherDerived>
-struct traits<Solve<DecompType, OtherDerived> > {
-  static_assert(std::is_same<typename DecompType::scalar_type,
-                             typename OtherDerived::scalar_type>::value,
-                "cannot mix matrices of different scalar types");
-  typedef typename OtherDerived::scalar_type scalar_type;
-  typedef decltype(
-      std::declval<typename DecompType::result_type>().solve(
-          std::declval<typename OtherDerived::result_type>())) result_type;
-  enum {
-    RowsAtCompileTime = DecompType::RowsAtCompileTime,
-    ColsAtCompileTime = OtherDerived::ColsAtCompileTime
-  };
-};
 // traits for Solve<Cache<Decomposition<...> > >
 template <class DecompType, class OtherDerived>
 struct traits<Solve<Cache<DecompType>, OtherDerived> > {
@@ -49,13 +34,17 @@ template <class DecompType, class OtherDerived>
 class Solve : public MatrixBase<Solve<DecompType, OtherDerived> > {
  public:
   // typedefs
-  typedef typename traits<Solve>::scalar_type scalar_type;
-  typedef typename traits<Solve>::result_type result_type;
+  static_assert(std::is_same<typename DecompType::scalar_type,
+                             typename OtherDerived::scalar_type>::value,
+                "cannot mix matrices of different scalar types");
+  typedef typename OtherDerived::scalar_type scalar_type;
+  typedef decltype(
+      std::declval<typename DecompType::result_type>().solve(
+          std::declval<typename OtherDerived::result_type>())) result_type;
   enum {
-    RowsAtCompileTime = traits<Solve>::RowsAtCompileTime,
-    ColsAtCompileTime = traits<Solve>::ColsAtCompileTime
+    RowsAtCompileTime = DecompType::RowsAtCompileTime,
+    ColsAtCompileTime = OtherDerived::ColsAtCompileTime
   };
-
  private:
   DecompType decomp_;
   OtherDerived mat_;
