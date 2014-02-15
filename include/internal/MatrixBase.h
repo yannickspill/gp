@@ -32,8 +32,8 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   }
 
   // transposition
-  Transpose<Derived> transpose() const {
-    return Transpose<Derived>(asDerived());
+  UnaryOp<op::Transpose, Derived> transpose() const {
+    return UnaryOp<op::Transpose, Derived>(asDerived());
   }
 
   // decompose matrix, use Cholesky LDLT decomposition by default

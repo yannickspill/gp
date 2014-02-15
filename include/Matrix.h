@@ -14,7 +14,6 @@
 #include "internal/MatrixSum.h"
 #include "internal/MatrixDifference.h"
 #include "internal/MatrixMatrixProduct.h"
-#include "internal/Transpose.h"
 #include "internal/LDLTPolicy.h"
 #include "internal/Decomposition.h"
 #include "internal/LogDeterminant.h"
@@ -52,14 +51,6 @@
 namespace GP {
 // promote some internal things to GP namespace
 using internal::Matrix;
-using internal::Transpose;
-using internal::Decomposition;
-using internal::LDLTPolicy;
-using internal::LogDeterminant;
-using internal::Solve;
-using internal::MatrixFromUnivariateFunctor;
-using internal::MatrixFromBivariateFunctor;
-using internal::SymmetricMatrixFromBivariateFunctor;
 
 //convenience typedefs
 typedef Matrix<Eigen::RowVectorXd> RowVectorXd;
