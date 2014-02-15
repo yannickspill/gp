@@ -43,8 +43,8 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   }
 
   //! build diagonal matrix from vector
-  DiagonalMatrixFromVector<Derived> asDiagonal() {
-      return DiagonalMatrixFromVector<Derived>(asDerived());
+  UnaryOp<op::DiagonalMatrixFromVector, Derived> asDiagonal() {
+      return UnaryOp<op::DiagonalMatrixFromVector, Derived>(asDerived());
   }
   
   //! Yield a matrix by applying a univariate function to every row of an input

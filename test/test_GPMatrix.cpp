@@ -276,6 +276,7 @@ int main(int, char * []) {
           .norm() > 1e-5)
     return 49;
 
+  */
   // broadcast a Scalar to a matrix
   GP::Scalar tbb(0.5);
   auto bcm = GP::MatrixXd::Broadcast(1. / tbb, szx, szy);
@@ -286,6 +287,5 @@ int main(int, char * []) {
       != Eigen::MatrixXd(2. * Eigen::MatrixXd::Identity(szx, szx)))
     return 73;
 
-  */
   return 0;
 }

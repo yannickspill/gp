@@ -7,6 +7,7 @@ namespace op{
 template<class Derived> class Opposite;
 template <class Derived> class Trace;
 template <class Derived> class Transpose;
+template <class Derived> class DiagonalMatrixFromVector;
 }
 
 template<template<class> class UnaryOperator, class Operand> class UnaryOp;
@@ -46,7 +47,6 @@ template <class Derived> struct LDLTPolicy;
 template <class Derived, template<typename> class Policy> class Decomposition;
 template <class Derived> class LogDeterminant;
 template <class Derived, class OtherDerived> class Solve;
-template <class Derived> class DiagonalMatrixFromVector;
 
 //matrix builtin ops
 template <class Lhs> class MatrixBuiltinSum;

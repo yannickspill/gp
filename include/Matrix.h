@@ -18,7 +18,6 @@
 #include "internal/Decomposition.h"
 #include "internal/LogDeterminant.h"
 #include "internal/Solve.h"
-#include "internal/DiagonalMatrixFromVector.h"
 
 // matrix builtin ops
 #include "internal/MatrixBuiltinSum.h"

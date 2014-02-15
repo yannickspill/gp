@@ -10,7 +10,7 @@ namespace internal {
 namespace op {
 
 namespace {
-//define scalar and input types
+// define scalar and input types
 template <class GPDerived> struct Basics {
   // scalar_type
   typedef typename GPDerived::scalar_type scalar_type;
@@ -48,14 +48,20 @@ template <class GPDerived> struct ParentGetter {
 // resulting object
 template <class GPDerived>
 struct UnaryCoeffWiseOperation : AttribsFromInput<GPDerived>,
-                                 ParentGetter<GPDerived> {
-};
+                                 ParentGetter<GPDerived> {};
 
-// operations that take an object and reduce it to a scalar
+// Matrix -> Scalar
 template <class GPDerived>
 struct UnaryReductionOperation : AttribsFromInput<GPDerived> {
   // Parent class is always ScalarBase
   template <class OtherDerived> using Parent = ScalarBase<OtherDerived>;
+};
+
+// Matrix -> Matrix with possible change in shape
+template <class GPDerived>
+struct MatrixOperation : AttribsFromInput<GPDerived> {
+  // Parent class is always MatrixBase
+  template <class OtherDerived> using Parent = MatrixBase<OtherDerived>;
 };
 }
 
@@ -69,8 +75,7 @@ struct Opposite : UnaryCoeffWiseOperation<GPDerived> {
 };
 
 // trace
-template <class Derived>
-struct Trace : UnaryReductionOperation<Derived> {
+template <class Derived> struct Trace : UnaryReductionOperation<Derived> {
   typedef decltype(std::declval
                    <typename Trace::input_type>().trace()) result_type;
   static result_type apply(const typename Trace::input_type& m) {
@@ -79,21 +84,36 @@ struct Trace : UnaryReductionOperation<Derived> {
 };
 
 // transpose
-template <class Derived>
-struct Transpose : Basics<Derived> {
+template <class Derived> struct Transpose : MatrixOperation<Derived> {
   // rows and columns
   enum {
     ColsAtCompileTime = Derived::RowsAtCompileTime,
     RowsAtCompileTime = Derived::ColsAtCompileTime
   };
-  // Parent class is always ScalarBase
-  template <class OtherDerived> using Parent = MatrixBase<OtherDerived>;
   //
   typedef const decltype(std::declval
                          <const typename Transpose::input_type>().transpose())
       result_type;
   static result_type apply(const typename Transpose::input_type& m) {
     return m.transpose();
+  }
+};
+
+// DiagonalMatrixFromVector
+template <class Derived>
+struct DiagonalMatrixFromVector : MatrixOperation<Derived> {
+  // rows and columns
+  enum {
+    RowsAtCompileTime = Derived::RowsAtCompileTime,
+    ColsAtCompileTime = Derived::RowsAtCompileTime
+  };
+  //
+  typedef const decltype(std::declval
+                         <const typename DiagonalMatrixFromVector::input_type>()
+                             .asDiagonal()) result_type;
+  static result_type apply(const typename DiagonalMatrixFromVector::input_type
+                           & m) {
+    return m.asDiagonal();
   }
 };
 }
