@@ -3,10 +3,14 @@
 
 namespace GP {
 namespace internal {
+namespace op{
+template<class Derived> class UnaryCoeffwiseOperation;
+template<class Derived> class UnaryReductionOperation;
+template<class Derived> class Opposite;
+template <class Derived> class Trace;
+}
 
 template<template<class> class UnaryOperator, class Operand> class UnaryOp;
-template<class GPDerived> class UnaryCoeffwiseOperation;
-template<class GPDerived> class Opposite;
 
 // base class
 template <class Derived> class GPBase;
@@ -39,7 +43,6 @@ template <class EigenType> class Matrix;
 template <class Lhs, class Rhs> class MatrixSum;
 template <class Lhs, class Rhs> class MatrixDifference;
 template <class Lhs, class Rhs> class MatrixMatrixProduct;
-template <class Derived> class Trace;
 template <class Derived> class Transpose;
 template <class Derived> struct LDLTPolicy;
 template <class Derived, template<typename> class Policy> class Decomposition;

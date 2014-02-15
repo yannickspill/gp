@@ -14,7 +14,6 @@
 #include "internal/MatrixSum.h"
 #include "internal/MatrixDifference.h"
 #include "internal/MatrixMatrixProduct.h"
-#include "internal/Trace.h"
 #include "internal/Transpose.h"
 #include "internal/LDLTPolicy.h"
 #include "internal/Decomposition.h"

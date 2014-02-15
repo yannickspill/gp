@@ -27,7 +27,9 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   unsigned cols() const { return asDerived().get().cols(); }
 
   // trace
-  Trace<Derived> trace() const { return Trace<Derived>(asDerived()); }
+  UnaryOp<op::Trace, Derived> trace() const {
+    return UnaryOp<op::Trace, Derived>(asDerived());
+  }
 
   // transposition
   Transpose<Derived> transpose() const {
@@ -127,9 +129,9 @@ const BuiltinMatrixDifference<MatrixExpression> operator-(
 }
 // Matrix opposite
 template <class MatrixExpression>
-const UnaryOp<Opposite, MatrixExpression> operator-(const MatrixBase
+const UnaryOp<op::Opposite, MatrixExpression> operator-(const MatrixBase
                                                  <MatrixExpression>& rhs) {
-  return UnaryOp<Opposite, MatrixExpression>(rhs.asDerived());
+  return UnaryOp<op::Opposite, MatrixExpression>(rhs.asDerived());
 }
 
 // products

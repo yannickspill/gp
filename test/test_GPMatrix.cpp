@@ -22,7 +22,6 @@ int main(int, char * []) {
   MatrixXd vy(y);
   Scalar scal(3.2);
 
-  /*
   // matrix basics
   if (vx.get() != x) return 1;
   vx.transpose();
@@ -40,6 +39,7 @@ int main(int, char * []) {
   // difference
   if ((vx - vy).get() != x - y) return 6;
 
+  /*
   // scalar basics
   if (scal.get() != 3.2) return 7;
   // sum
@@ -208,6 +208,7 @@ int main(int, char * []) {
               .log()
               .sum()))
     return 59;
+  */
 
   // rows and columns
   MatrixXd dummy(Eigen::MatrixXd::Random(szx, szy));
@@ -217,6 +218,7 @@ int main(int, char * []) {
   // trace
   if (dummy.trace().get() != dummy.get().trace()) return 28;
 
+  /*
   // ops on determinants and traces should be possible
   double tmp4(
       (msd.decomposition().logdet() * msd.decomposition().logdet()).get());
