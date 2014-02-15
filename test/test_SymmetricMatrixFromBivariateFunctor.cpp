@@ -21,12 +21,6 @@ int main(int, char * []) {
   if (Eigen::MatrixXd(m1.get())
       != Eigen::MatrixXd(expected.selfadjointView<Eigen::Upper>()))
     return 1;
-  std::cout << Eigen::MatrixXd(m1.get()) << std::endl;
-  std::cout << " --- " << std::endl;
-  std::cout << Eigen::MatrixXd((x * m1).get()) << std::endl;
-  std::cout << " --- " << std::endl;
-  std::cout << x.get() * Eigen::MatrixXd(expected.selfadjointView<Eigen::Upper>()) << std::endl;
-  std::cout << " --- " << std::endl;
   if (Eigen::MatrixXd((x * m1).get())
       != x.get() * Eigen::MatrixXd(expected.selfadjointView<Eigen::Upper>()))
     return 2;
