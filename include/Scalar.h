@@ -10,7 +10,6 @@
 #include "internal/ScalarScalarDifference.h"
 #include "internal/ScalarScalarProduct.h"
 #include "internal/ScalarScalarQuotient.h"
-#include "internal/ScalarExponential.h"
 
 // scalar builtin ops
 #include "internal/ScalarBuiltinSum.h"

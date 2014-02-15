@@ -4,6 +4,7 @@
 #include "ForwardDeclarations.h"
 
 #include <utility>
+#include <math.h>
 
 namespace GP {
 namespace internal {
@@ -52,7 +53,7 @@ struct UnaryCoeffWiseOperation : AttribsFromInput<GPDerived>,
 
 // Matrix -> Scalar
 template <class GPDerived>
-struct UnaryReductionOperation : AttribsFromInput<GPDerived> {
+struct ScalarOperation : AttribsFromInput<GPDerived> {
   // Parent class is always ScalarBase
   template <class OtherDerived> using Parent = ScalarBase<OtherDerived>;
 };
@@ -75,7 +76,7 @@ struct Opposite : UnaryCoeffWiseOperation<GPDerived> {
 };
 
 // trace
-template <class Derived> struct Trace : UnaryReductionOperation<Derived> {
+template <class Derived> struct Trace : ScalarOperation<Derived> {
   typedef decltype(std::declval
                    <typename Trace::input_type>().trace()) result_type;
   static result_type apply(const typename Trace::input_type& m) {
@@ -115,6 +116,15 @@ struct DiagonalMatrixFromVector : MatrixOperation<Derived> {
                            & m) {
     return m.asDiagonal();
   }
+};
+
+// Scalar exp()
+template<class Derived>
+struct ScalarExponential : ScalarOperation<Derived> {
+    typedef typename ScalarExponential::input_type result_type;
+    static result_type apply(const typename ScalarExponential::input_type& in) {
+        return exp(in);
+    }
 };
 }
 }

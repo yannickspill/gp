@@ -4,10 +4,11 @@
 namespace GP {
 namespace internal {
 namespace op{
-template<class Derived> class Opposite;
+template <class Derived> class Opposite;
 template <class Derived> class Trace;
 template <class Derived> class Transpose;
 template <class Derived> class DiagonalMatrixFromVector;
+template <class Derived> class ScalarExponential;
 }
 
 template<template<class> class UnaryOperator, class Operand> class UnaryOp;
@@ -25,7 +26,6 @@ template <class Lhs, class Rhs> class ScalarScalarSum;
 template <class Lhs, class Rhs> class ScalarScalarDifference;
 template <class Lhs, class Rhs> class ScalarScalarProduct;
 template <class Lhs, class Rhs> class ScalarScalarQuotient;
-template <class Lhs> class ScalarExponential;
 
 //scalar builtin ops
 template <class Lhs> class ScalarBuiltinSum;

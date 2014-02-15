@@ -23,8 +23,8 @@ template <class Derived> class ScalarBase : public GPBase<Derived> {
     return static_cast<const Derived&>(*this);
   }
 
-  ScalarExponential<Derived> exp() const {
-      return ScalarExponential<Derived>(asDerived());
+  UnaryOp<op::ScalarExponential, Derived> exp() const {
+      return UnaryOp<op::ScalarExponential, Derived>(asDerived());
   }
 };
 
