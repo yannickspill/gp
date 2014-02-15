@@ -2,6 +2,7 @@
 #define UNARY_OPERATIONS_H
 
 #include "ForwardDeclarations.h"
+#include "OperationsBase.h"
 
 #include <utility>
 #include <math.h>
@@ -10,65 +11,9 @@ namespace GP {
 namespace internal {
 namespace op {
 
-namespace {
-// define scalar and input types
-template <class GPDerived> struct Basics {
-  // scalar_type
-  typedef typename GPDerived::scalar_type scalar_type;
-  // input_type
-  typedef typename GPDerived::result_type input_type;
-};
-// common typedefs for unary operations
-template <class GPDerived> struct AttribsFromInput : Basics<GPDerived> {
-  // rows and columns
-  enum {
-    RowsAtCompileTime = GPDerived::RowsAtCompileTime,
-    ColsAtCompileTime = GPDerived::ColsAtCompileTime
-  };
-};
-
-// ParentGetter::Parent is the type of the parent of GPDerived
-template <class GPDerived> struct ParentGetter {
-  template <class OtherDerived>
-  using Parent = typename std::conditional<
-      // if
-      std::is_base_of<MatrixBase<GPDerived>, GPDerived>::value,
-      // then
-      MatrixBase<OtherDerived>,
-      // else
-      typename std::conditional<
-          // if
-          std::is_base_of<ScalarBase<GPDerived>, GPDerived>::value,
-          // then
-          ScalarBase<OtherDerived>,
-          // else
-          GPBase<OtherDerived> >::type>::type;
-};
-
-// define basic typedefs for operations that don't change the shape of the
-// resulting object
-template <class GPDerived>
-struct UnaryCoeffWiseOperation : AttribsFromInput<GPDerived>,
-                                 ParentGetter<GPDerived> {};
-
-// Matrix -> Scalar
-template <class GPDerived>
-struct ScalarOperation : AttribsFromInput<GPDerived> {
-  // Parent class is always ScalarBase
-  template <class OtherDerived> using Parent = ScalarBase<OtherDerived>;
-};
-
-// Matrix -> Matrix with possible change in shape
-template <class GPDerived>
-struct MatrixOperation : AttribsFromInput<GPDerived> {
-  // Parent class is always MatrixBase
-  template <class OtherDerived> using Parent = MatrixBase<OtherDerived>;
-};
-}
-
 // opposite
 template <class GPDerived>
-struct Opposite : UnaryCoeffWiseOperation<GPDerived> {
+struct Opposite : base::UnaryCoeffWiseOperation<GPDerived> {
   typedef decltype(-std::declval<typename Opposite::input_type>()) result_type;
   static result_type apply(const typename Opposite::input_type& b) {
     return -b;
@@ -76,7 +21,7 @@ struct Opposite : UnaryCoeffWiseOperation<GPDerived> {
 };
 
 // trace
-template <class Derived> struct Trace : ScalarOperation<Derived> {
+template <class Derived> struct Trace : base::ScalarOperation<Derived> {
   typedef decltype(std::declval
                    <typename Trace::input_type>().trace()) result_type;
   static result_type apply(const typename Trace::input_type& m) {
@@ -85,7 +30,7 @@ template <class Derived> struct Trace : ScalarOperation<Derived> {
 };
 
 // transpose
-template <class Derived> struct Transpose : MatrixOperation<Derived> {
+template <class Derived> struct Transpose : base::MatrixOperation<Derived> {
   // rows and columns
   enum {
     ColsAtCompileTime = Derived::RowsAtCompileTime,
@@ -102,7 +47,7 @@ template <class Derived> struct Transpose : MatrixOperation<Derived> {
 
 // DiagonalMatrixFromVector
 template <class Derived>
-struct DiagonalMatrixFromVector : MatrixOperation<Derived> {
+struct DiagonalMatrixFromVector : base::MatrixOperation<Derived> {
   // rows and columns
   enum {
     RowsAtCompileTime = Derived::RowsAtCompileTime,
@@ -119,14 +64,14 @@ struct DiagonalMatrixFromVector : MatrixOperation<Derived> {
 };
 
 // Scalar exp()
-template<class Derived>
-struct ScalarExponential : ScalarOperation<Derived> {
-    typedef typename ScalarExponential::input_type result_type;
-    static result_type apply(const typename ScalarExponential::input_type& in) {
-        return exp(in);
-    }
+template <class Derived>
+struct ScalarExponential : base::ScalarOperation<Derived> {
+  typedef typename ScalarExponential::input_type result_type;
+  static result_type apply(const typename ScalarExponential::input_type& in) {
+    return exp(in);
+  }
 };
-}
-}
-}
+}  // op
+}  // internal
+}  // GP
 #endif /* UNARY_OPERATIONS_H */
