@@ -14,12 +14,16 @@ int main(int, char * []) {
   static_assert(std::is_same<MatrixXd::scalar_type, double>::value,
                 "wrong scalar_type");
 
-  // matrix basics
+  //declarations
   const unsigned int szx = 100, szy = 30;
   Eigen::MatrixXd x(Eigen::MatrixXd::Random(szx, szy));
   MatrixXd vx(x);
   Eigen::MatrixXd y(Eigen::MatrixXd::Random(szx, szy));
   MatrixXd vy(y);
+  Scalar scal(3.2);
+
+  /*
+  // matrix basics
   if (vx.get() != x) return 1;
   vx.transpose();
 
@@ -37,7 +41,6 @@ int main(int, char * []) {
   if ((vx - vy).get() != x - y) return 6;
 
   // scalar basics
-  Scalar scal(3.2);
   if (scal.get() != 3.2) return 7;
   // sum
   if (std::abs((scal + scal).get() - 6.4) > 1e-7) return 8;
@@ -88,11 +91,13 @@ int main(int, char * []) {
   if ((vx * 5.).get() != (5. * x)) return 16;
   // matrix builtin quotient
   if ((vx / 5.).get() != (x / 5.)) return 28;
+  */
 
   // matrix and scalar opposites
   if ((-vx).get() != -x) return 69;
   if ((-scal).get() != -(scal.get())) return 70;
 
+  /*
   // lots of products sums and divisions
   if ((vx.transpose() * (5 * vx + vy - scal * vx)).get()
       != (x.transpose() * (5 * x + y - scal.get() * x)))
@@ -279,5 +284,6 @@ int main(int, char * []) {
       != Eigen::MatrixXd(2. * Eigen::MatrixXd::Identity(szx, szx)))
     return 73;
 
+  */
   return 0;
 }

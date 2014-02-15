@@ -66,9 +66,9 @@ const BuiltinScalarDifference<Rhs> operator-(double lhs,
 }
 // Scalar opposite
 template <class ScalarExpression>
-const ScalarOpposite<ScalarExpression> operator-(
+const UnaryOp<Opposite, ScalarExpression> operator-(
     const ScalarBase<ScalarExpression>& rhs) {
-  return ScalarOpposite<ScalarExpression>(rhs.asDerived());
+  return UnaryOp<Opposite, ScalarExpression> (rhs.asDerived());
 }
 
 // products

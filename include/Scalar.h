@@ -1,13 +1,15 @@
 #ifndef SCALAR_H
 #define SCALAR_H
 
+#include "UnaryOp.h"
+#include "UnaryOperations.h"
+
 // scalar ops
 #include "internal/Scalar.h"
 #include "internal/ScalarScalarSum.h"
 #include "internal/ScalarScalarDifference.h"
 #include "internal/ScalarScalarProduct.h"
 #include "internal/ScalarScalarQuotient.h"
-#include "internal/ScalarOpposite.h"
 #include "internal/ScalarExponential.h"
 
 // scalar builtin ops

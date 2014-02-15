@@ -1,6 +1,9 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include "UnaryOp.h"
+#include "UnaryOperations.h"
+
 //base classes
 #include "internal/ForwardDeclarations.h"
 #include "internal/GPBase.h"
@@ -11,7 +14,6 @@
 #include "internal/MatrixSum.h"
 #include "internal/MatrixDifference.h"
 #include "internal/MatrixMatrixProduct.h"
-#include "internal/MatrixOpposite.h"
 #include "internal/Trace.h"
 #include "internal/Transpose.h"
 #include "internal/LDLTPolicy.h"
