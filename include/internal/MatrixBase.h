@@ -88,23 +88,19 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
 };
 
 // sums
-//  Matrix Matrix
-template <class Lhs, class Rhs>
-const BinaryOp<op::Sum, Lhs, Rhs> operator+(const MatrixBase<Lhs>& lhs,
-                                    const MatrixBase<Rhs>& rhs) {
-  return BinaryOp<op::Sum, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
-}
 //  double Matrix
 template <class MatrixExpression>
-const BinaryOp<op::Sum, double, MatrixExpression> operator+(
-    double lhs, const MatrixBase<MatrixExpression>& rhs) {
-  return BinaryOp<op::Sum, double, MatrixExpression>(lhs, rhs.asDerived());
+const BinaryOp<op::Sum, ConstScalar, ScalarFromMatrix<MatrixExpression> >
+operator+(double lhs, const MatrixBase<MatrixExpression>& rhs) {
+  return BinaryOp<op::Sum, ConstScalar, ScalarFromMatrix<MatrixExpression> >(
+      lhs, rhs.asDerived());
 }
 //  Matrix double
 template <class MatrixExpression>
-const BinaryOp<op::Sum, MatrixExpression, double> operator+(
-    const MatrixBase<MatrixExpression>& lhs, double rhs) {
-  return BinaryOp<op::Sum, MatrixExpression, double>(lhs.asDerived(), rhs);
+const BinaryOp<op::Sum, ScalarFromMatrix<MatrixExpression>, ConstScalar>
+operator+(const MatrixBase<MatrixExpression>& lhs, double rhs) {
+  return BinaryOp<op::Sum, ScalarFromMatrix<MatrixExpression>, ConstScalar>(
+      lhs.asDerived(), rhs);
 }
 
 // differences

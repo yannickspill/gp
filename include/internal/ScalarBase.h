@@ -29,6 +29,18 @@ template <class Derived> class ScalarBase : public GPBase<Derived> {
 };
 
 // sums
+//  double Scalar
+template <class ScalarExpression>
+const BinaryOp<op::Sum, ConstScalar, ScalarExpression> operator+(
+    double lhs, const ScalarBase<ScalarExpression>& rhs) {
+  return BinaryOp<op::Sum, ConstScalar, ScalarExpression>(lhs, rhs.asDerived());
+}
+//  Scalar double
+template <class ScalarExpression>
+const BinaryOp<op::Sum, ScalarExpression, ConstScalar> operator+(
+    const ScalarBase<ScalarExpression>& lhs, double rhs) {
+  return BinaryOp<op::Sum, ScalarExpression, ConstScalar>(lhs.asDerived(), rhs);
+}
 // differences
 //    Scalar - Scalar
 template <class Lhs, class Rhs>

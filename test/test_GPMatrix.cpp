@@ -21,10 +21,31 @@ int main(int, char * []) {
   Eigen::MatrixXd y(Eigen::MatrixXd::Random(szx, szy));
   MatrixXd vy(y);
   Scalar scal(3.2);
+  MatrixXd dummy(Eigen::MatrixXd::Random(szx, szy));
+  MatrixXd small(Eigen::Matrix<double, 1, 1>::Constant(3.));
 
   // matrix basics
   if (vx.get() != x) return 1;
   vx.transpose();
+
+  // test ConstScalar get and get_version
+  internal::ConstScalar cs(3.);
+  if (cs.get() != 3.) return 74;
+  if (cs.get_version() != 0) return 75;
+  //implicit conversion
+  internal::ConstScalar cs2 = 2.;
+  if (cs2.get() != 2.) return 76;
+  if (cs2.get_version() != 0) return 77;
+
+  // test ScalarFromMatrix get and get_version
+  internal::ScalarFromMatrix<decltype(small)> sfm(small);
+  if (sfm.get() != 3.) return 78;
+  if (sfm.get_version() != 0) return 79;
+  small.set(Eigen::Matrix<double, 1, 1>::Constant(2.));
+  //implicit conversion
+  internal::ScalarFromMatrix<decltype(small)> sfm2 = small;
+  if (sfm2.get() != 2.) return 80;
+  if (sfm2.get_version() != small.get_version()) return 81;
 
   // sum
   vx + vy;
@@ -72,7 +93,6 @@ int main(int, char * []) {
   // matrix scalar quotient
   if ((vx / scal).get() != (x / scal.get())) return 27;
   // matrix scalar sum (1D)
-  MatrixXd small(Eigen::Matrix<double, 1, 1>::Constant(2.));
   if ((small + scal).get() != (scal.get() + small.get()(0, 0))) return 60;
   // matrix scalar difference (1D)
   if ((small - scal).get() != (-scal.get() + small.get()(0, 0))) return 60;
@@ -96,11 +116,11 @@ int main(int, char * []) {
   if ((-vx).get() != -x) return 69;
   if ((-scal).get() != -(scal.get())) return 70;
 
-  /*
   // lots of products sums and divisions
   if ((vx.transpose() * (5 * vx + vy - scal * vx)).get()
       != (x.transpose() * (5 * x + y - scal.get() * x)))
     return 17;
+  /*
 
   // transpose
   if (vx.transpose().get() != x.transpose()) return 17;
@@ -207,17 +227,14 @@ int main(int, char * []) {
               .log()
               .sum()))
     return 59;
-  */
 
   // rows and columns
-  MatrixXd dummy(Eigen::MatrixXd::Random(szx, szy));
   if (dummy.rows() != szx) return 26;
   if (dummy.cols() != szy) return 27;
 
   // trace
   if (dummy.trace().get() != dummy.get().trace()) return 28;
 
-  /*
   // ops on determinants and traces should be possible
   double tmp4(
       (msd.decomposition().logdet() * msd.decomposition().logdet()).get());
@@ -275,7 +292,6 @@ int main(int, char * []) {
           .norm() > 1e-5)
     return 49;
 
-  */
   // broadcast a Scalar to a matrix
   GP::Scalar tbb(0.5);
   auto bcm = GP::MatrixXd::Broadcast(1. / tbb, szx, szy);
@@ -285,6 +301,7 @@ int main(int, char * []) {
   if (Eigen::MatrixXd(bcv.asDiagonal().get())
       != Eigen::MatrixXd(2. * Eigen::MatrixXd::Identity(szx, szx)))
     return 73;
+  */
 
   return 0;
 }

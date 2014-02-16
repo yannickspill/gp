@@ -36,17 +36,23 @@ const BinaryOp<op::Sum, Lhs, Rhs> operator+(const GPBase<Lhs>& lhs,
                                     const GPBase<Rhs>& rhs) {
   return BinaryOp<op::Sum, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
-//  double GP
-template <class GPExpression>
-const BinaryOp<op::Sum, double, GPExpression> operator+(
-    double lhs, const GPBase<GPExpression>& rhs) {
-  return BinaryOp<op::Sum, double, GPExpression>(lhs, rhs.asDerived());
+//  Scalar Matrix
+template <class Scal, class Mat>
+const BinaryOp<op::Sum, Scal, ScalarFromMatrix<Mat> > operator+(const ScalarBase
+                                                                <Scal>& lhs,
+                                                                const MatrixBase
+                                                                <Mat>& rhs) {
+  return BinaryOp
+      <op::Sum, Scal, ScalarFromMatrix<Mat> >(lhs.asDerived(), rhs.asDerived());
 }
-//  GP double
-template <class GPExpression>
-const BinaryOp<op::Sum, GPExpression, double> operator+(
-    const GPBase<GPExpression>& lhs, double rhs) {
-  return BinaryOp<op::Sum, GPExpression, double>(lhs.asDerived(), rhs);
+//  Matrix Scalar
+template <class Mat, class Scal>
+const BinaryOp<op::Sum, ScalarFromMatrix<Mat>, Scal> operator+(const MatrixBase
+                                                               <Mat>& lhs,
+                                                               const ScalarBase
+                                                               <Scal>& rhs) {
+  return BinaryOp
+      <op::Sum, ScalarFromMatrix<Mat>, Scal>(lhs.asDerived(), rhs.asDerived());
 }
 
 //differences

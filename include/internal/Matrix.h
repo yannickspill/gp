@@ -26,33 +26,14 @@ class Matrix : public MatrixBase<Matrix<EigenType> > {
   struct Data {
     result_type value_;
     unsigned version_;
-    Data(const result_type& v) : value_(v), version_(0) {
-        std::cout << "Matrix::Data created at " << this << std::endl;
-    }
-    ~Data() {
-        std::cout << "Matrix::Data destroyed " << this << std::endl;
-    }
+    Data(const result_type& v) : value_(v), version_(0) {}
   };
   std::shared_ptr<Data> data_;
 
  public:
   //! Construct directly from underlying data type
   explicit Matrix(const result_type& data)
-      : data_(std::make_shared<Data>(data)) {
-        std::cout << "Matrix created at " << this << std::endl;
-        std::cout << "   Matrix data is " << data_ << std::endl;
-      }
-
-  
-        Matrix(const Matrix& other) : data_(other.data_) {
-        std::cout << "Matrix copied from " << &other << " to " << this
-                  << std::endl;
-        std::cout << "   Matrix data is " << data_ << std::endl;
-      }
-
-      ~Matrix() {
-        std::cout << "Matrix destructor " << this << std::endl;
-      }
+      : data_(std::make_shared<Data>(data)) {}
 
   //! Explicit cast from any GP matrix expression
   template <class GPExpression>

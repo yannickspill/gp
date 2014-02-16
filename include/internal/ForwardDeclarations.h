@@ -23,6 +23,8 @@ template <class Lhs, class Rhs> class MatrixScalarProduct;
 // scalar class
 template <class Derived> class ScalarBase;
 class Scalar;
+class ConstScalar;
+template<class Derived> class ScalarFromMatrix;
 
 //scalar scalar ops
 template <class Lhs, class Rhs> class ScalarScalarDifference;

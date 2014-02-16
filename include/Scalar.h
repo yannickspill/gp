@@ -7,8 +7,11 @@
 #include "BinaryOp.h"
 #include "BinaryOperations.h"
 
+#include "ScalarFromMatrix.h"
+
 // scalar ops
 #include "internal/Scalar.h"
+#include "internal/ConstScalar.h"
 #include "internal/ScalarScalarDifference.h"
 #include "internal/ScalarScalarProduct.h"
 #include "internal/ScalarScalarQuotient.h"

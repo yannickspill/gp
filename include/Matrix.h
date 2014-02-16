@@ -6,10 +6,13 @@
 #include "BinaryOp.h"
 #include "BinaryOperations.h"
 
+#include "ScalarFromMatrix.h"
+
 //base classes
 #include "internal/ForwardDeclarations.h"
 #include "internal/GPBase.h"
 #include "internal/MatrixBase.h"
+#include "internal/ConstScalar.h"
 
 // matrix matrix ops
 #include "internal/Matrix.h"

@@ -24,25 +24,12 @@ class Scalar : public ScalarBase<Scalar> {
   struct Data {
     double value_;
     unsigned version_;
-    Data(double v) : value_(v), version_(0) {
-      std::cout << "Scalar::Data created at " << this << std::endl;
-    }
-    ~Data() { std::cout << "Scalar::Data destroyed " << this << std::endl; }
+    Data(double v) : value_(v), version_(0) {}
   };
   std::shared_ptr<Data> data_;
 
  public:
-  explicit Scalar(double value) : data_(std::make_shared<Data>(value)) {
-    std::cout << "Scalar created at " << this << std::endl;
-    std::cout << "   Scalar data is " << data_ << std::endl;
-  }
-
-  Scalar(const Scalar& other) : data_(other.data_) {
-    std::cout << "Scalar copied from " << &other << " to " << this << std::endl;
-    std::cout << "   Scalar data is " << data_ << std::endl;
-  }
-
-  ~Scalar() { std::cout << "Scalar destructor " << this << std::endl; }
+  explicit Scalar(double value) : data_(std::make_shared<Data>(value)) {}
 
   //! Explicit cast from any GP scalar expression
   template <class GPExpression>
