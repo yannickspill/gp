@@ -87,21 +87,23 @@ const ScalarBuiltinProduct<ScalarExpression> operator*(const ScalarBase
 // quotients
 //    Scalar Scalar
 template <class Lhs, class Rhs>
-const ScalarScalarQuotient<Lhs, Rhs> operator/(const ScalarBase<Lhs>& lhs,
+const BinaryOp<op::Quotient, Lhs, Rhs> operator/(const ScalarBase<Lhs>& lhs,
                                                const ScalarBase<Rhs>& rhs) {
-  return ScalarScalarQuotient<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+  return BinaryOp<op::Quotient, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 //    Scalar double
 template <class ScalarExpression>
-const ScalarBuiltinQuotient<ScalarExpression> operator/(
+const BinaryOp<op::Quotient, ScalarExpression, ConstScalar> operator/(
     const ScalarBase<ScalarExpression>& lhs, double rhs) {
-  return ScalarBuiltinQuotient<ScalarExpression>(lhs.asDerived(), rhs);
+  return BinaryOp
+      <op::Quotient, ScalarExpression, ConstScalar>(lhs.asDerived(), rhs);
 }
 //    double Scalar
 template <class ScalarExpression>
-const BuiltinScalarQuotient<ScalarExpression> operator/(
+const BinaryOp<op::Quotient, ConstScalar, ScalarExpression> operator/(
     double lhs, const ScalarBase<ScalarExpression>& rhs) {
-  return BuiltinScalarQuotient<ScalarExpression>(lhs, rhs.asDerived());
+  return BinaryOp
+      <op::Quotient, ConstScalar, ScalarExpression>(lhs, rhs.asDerived());
 }
 }
 }

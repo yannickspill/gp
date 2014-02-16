@@ -144,11 +144,12 @@ const MatrixBuiltinProduct<MatrixExpression> operator*(const MatrixBase
   return MatrixBuiltinProduct<MatrixExpression>(rhs, lhs.asDerived());
 }
 
-//    Matrix / builtin
+//    Matrix / double
 template <class Lhs>
-const MatrixBuiltinQuotient<Lhs> operator/(const MatrixBase<Lhs>& lhs,
-                                           double rhs) {
-  return MatrixBuiltinQuotient<Lhs>(lhs.asDerived(), rhs);
+const BinaryOp<op::Quotient, Lhs, ConstScalar> operator/(const MatrixBase
+                                                         <Lhs>& lhs,
+                                                         double rhs) {
+  return BinaryOp<op::Quotient, Lhs, ConstScalar>(lhs.asDerived(), rhs);
 }
 }
 }

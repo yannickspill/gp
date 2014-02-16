@@ -32,6 +32,17 @@ struct Difference : base::BinaryCoeffWiseOperation<Lhs, Rhs> {
     return lhs - rhs;
   }
 };
+
+// Quotient
+template <class Lhs, class Rhs>
+struct Quotient : base::BinaryCoeffWiseOperation<Lhs, Rhs> {
+  typedef decltype(std::declval<typename Quotient::lhs_type>() / std::declval
+                   <typename Quotient::rhs_type>()) result_type;
+  static result_type apply(const typename Quotient::lhs_type& lhs,
+                           const typename Quotient::rhs_type& rhs) {
+    return lhs / rhs;
+  }
+};
 }  // op
 }  // internal
 }  // GP

@@ -94,9 +94,9 @@ const MatrixScalarProduct<Mat, Scal> operator*(const MatrixBase<Mat>& lhs,
 //quotients
 // Matrix / Scalar
 template <class Mat, class Scal>
-const MatrixScalarQuotient<Mat, Scal> operator/(const MatrixBase<Mat>& lhs,
-                                               const ScalarBase<Scal>& rhs) {
-  return MatrixScalarQuotient<Mat, Scal>(lhs.asDerived(), rhs.asDerived());
+const BinaryOp<op::Quotient, Mat, Scal> operator/(const MatrixBase<Mat>& lhs,
+                                                  const ScalarBase<Scal>& rhs) {
+  return BinaryOp<op::Quotient, Mat, Scal>(lhs.asDerived(), rhs.asDerived());
 }
 }
 }
