@@ -40,7 +40,6 @@ int main(int, char * []) {
   // difference
   if ((vx - vy).get() != x - y) return 6;
 
-  /*
   // scalar basics
   if (scal.get() != 3.2) return 7;
   // sum
@@ -52,6 +51,7 @@ int main(int, char * []) {
   // quotient
   if (std::abs((scal / scal).get() - 1.) > 1e-7) return 26;
 
+  /*
   // builtin scalar product
   if ((scal * 3.).get() != (scal.get() * 3.)) return 11;
   if ((scal * 3).get() != (scal.get() * 3.)) return 12;

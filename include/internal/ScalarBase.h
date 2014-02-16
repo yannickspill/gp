@@ -31,9 +31,9 @@ template <class Derived> class ScalarBase : public GPBase<Derived> {
 // sums
 //    Scalar + Scalar
 template <class Lhs, class Rhs>
-const ScalarScalarSum<Lhs, Rhs> operator+(const ScalarBase<Lhs>& lhs,
+const BinaryOp<op::Sum, Lhs, Rhs> operator+(const ScalarBase<Lhs>& lhs,
                                     const ScalarBase<Rhs>& rhs) {
-  return ScalarScalarSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+  return BinaryOp<op::Sum, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 //    Scalar + Builtin
 template <class Lhs>

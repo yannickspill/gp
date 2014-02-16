@@ -25,7 +25,6 @@ template <class Derived> class ScalarBase;
 class Scalar;
 
 //scalar scalar ops
-template <class Lhs, class Rhs> class ScalarScalarSum;
 template <class Lhs, class Rhs> class ScalarScalarDifference;
 template <class Lhs, class Rhs> class ScalarScalarProduct;
 template <class Lhs, class Rhs> class ScalarScalarQuotient;

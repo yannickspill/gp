@@ -6,7 +6,6 @@
 
 // scalar ops
 #include "internal/Scalar.h"
-#include "internal/ScalarScalarSum.h"
 #include "internal/ScalarScalarDifference.h"
 #include "internal/ScalarScalarProduct.h"
 #include "internal/ScalarScalarQuotient.h"
