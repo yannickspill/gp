@@ -12,7 +12,6 @@
 // scalar ops
 #include "internal/Scalar.h"
 #include "internal/ConstScalar.h"
-#include "internal/ScalarScalarProduct.h"
 
 // scalar builtin ops
 #include "internal/ScalarBuiltinProduct.h"

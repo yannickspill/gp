@@ -11,6 +11,8 @@ template <class Derived> class DiagonalMatrixFromVector;
 template <class Derived> class ScalarExponential;
 template <class Lhs, class Rhs> class Sum;
 template <class Lhs, class Rhs> class Difference;
+template <class Lhs, class Rhs> class Product;
+template <class Lhs, class Rhs> class Quotient;
 }
 
 template <template <class> class UnaryOperator, class Operand> class UnaryOp;

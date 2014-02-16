@@ -87,7 +87,7 @@ template <class GPDerived> struct SetParent {
           GPBase<OtherDerived> >::type>::type;
 };
 
-// SetParent for binary operators
+// SetCommonParent: SetParent for binary operators
 template <class Lhs, class Rhs> struct SetCommonParent {
   template <class Derived>
   using Parent = typename std::conditional<

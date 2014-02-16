@@ -33,9 +33,18 @@ struct Difference : base::BinaryCoeffWiseOperation<Lhs, Rhs> {
   }
 };
 
-//Product
+// Product
 template <class Lhs, class Rhs>
-struct Product : base::SetScalarAndInputs<Lhs, Rhs> {
+struct Product : base::SetScalarAndInputs<Lhs, Rhs>,
+                 base::SetCommonParent<Lhs, Rhs> {
+  static_assert(Lhs::ColsAtCompileTime == Eigen::Dynamic
+                || Rhs::RowsAtCompileTime == Eigen::Dynamic
+                || Lhs::ColsAtCompileTime == Rhs::RowsAtCompileTime,
+                "Lhs and Rhs have incompatible shapes for a matrix product");
+  enum {
+    RowsAtCompileTime = Lhs::RowsAtCompileTime,
+    ColsAtCompileTime = Rhs::ColsAtCompileTime
+  };
   typedef decltype(std::declval<typename Product::lhs_type>() * std::declval
                    <typename Product::rhs_type>()) result_type;
   static result_type apply(const typename Product::lhs_type& lhs,

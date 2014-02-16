@@ -67,9 +67,9 @@ const UnaryOp<op::Opposite, ScalarExpression> operator-(
 // products
 //    Scalar Scalar
 template <class Lhs, class Rhs>
-const ScalarScalarProduct<Lhs, Rhs> operator*(const ScalarBase<Lhs>& lhs,
+const BinaryOp<op::Product, Lhs, Rhs> operator*(const ScalarBase<Lhs>& lhs,
                                               const ScalarBase<Rhs>& rhs) {
-  return ScalarScalarProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+  return BinaryOp<op::Product, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 //    double Scalar
 template <class ScalarExpression>
