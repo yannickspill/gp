@@ -77,6 +77,13 @@ const BinaryOp<op::Difference, ScalarFromMatrix<Mat>, Scal> operator-(
                                                                rhs.asDerived());
 }
 
+// GP opposite
+template <class Derived>
+const UnaryOp<op::Opposite, Derived> operator-(
+    const GPBase<Derived>& val) {
+  return UnaryOp<op::Opposite, Derived> (val.asDerived());
+}
+
 //products
 //  Scalar * Matrix
 template <class Scal, class Mat>

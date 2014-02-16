@@ -121,13 +121,6 @@ operator-(const MatrixBase<MatrixExpression>& lhs, double rhs) {
           lhs.asDerived(), rhs);
 }
 
-// Matrix opposite
-template <class MatrixExpression>
-const UnaryOp<op::Opposite, MatrixExpression> operator-(const MatrixBase
-                                                 <MatrixExpression>& rhs) {
-  return UnaryOp<op::Opposite, MatrixExpression>(rhs.asDerived());
-}
-
 // products
 //  Matrix Matrix
 template <class Lhs, class Rhs>

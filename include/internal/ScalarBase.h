@@ -57,13 +57,6 @@ const BinaryOp<op::Difference, ScalarExpression, ConstScalar> operator-(
       <op::Difference, ScalarExpression, ConstScalar>(lhs.asDerived(), rhs);
 }
 
-// Scalar opposite
-template <class ScalarExpression>
-const UnaryOp<op::Opposite, ScalarExpression> operator-(
-    const ScalarBase<ScalarExpression>& rhs) {
-  return UnaryOp<op::Opposite, ScalarExpression> (rhs.asDerived());
-}
-
 // products
 //  Scalar * Scalar
 template <class Lhs, class Rhs>
