@@ -131,9 +131,9 @@ const UnaryOp<op::Opposite, MatrixExpression> operator-(const MatrixBase
 // products
 //    Matrix Matrix
 template <class Lhs, class Rhs>
-const MatrixMatrixProduct<Lhs, Rhs> operator*(const MatrixBase<Lhs>& lhs,
+const BinaryOp<op::Product, Lhs, Rhs> operator*(const MatrixBase<Lhs>& lhs,
                                               const MatrixBase<Rhs>& rhs) {
-  return MatrixMatrixProduct<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+  return BinaryOp<op::Product, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 //   double Matrix
 template <class MatrixExpression>

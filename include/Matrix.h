@@ -16,7 +16,6 @@
 
 // matrix matrix ops
 #include "internal/Matrix.h"
-#include "internal/MatrixMatrixProduct.h"
 #include "internal/LDLTPolicy.h"
 #include "internal/Decomposition.h"
 #include "internal/LogDeterminant.h"

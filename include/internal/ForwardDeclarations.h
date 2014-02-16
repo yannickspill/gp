@@ -31,7 +31,6 @@ template<class Derived> class ScalarFromMatrix;
 
 //scalar scalar ops
 template <class Lhs, class Rhs> class ScalarScalarDifference;
-template <class Lhs, class Rhs> class ScalarScalarProduct;
 template <class Lhs, class Rhs> class ScalarScalarQuotient;
 
 //scalar builtin ops
@@ -47,7 +46,6 @@ template <class EigenType> class Matrix;
 
 // matrix operations
 template <class Lhs, class Rhs> class MatrixDifference;
-template <class Lhs, class Rhs> class MatrixMatrixProduct;
 template <class Derived> struct LDLTPolicy;
 template <class Derived, template<typename> class Policy> class Decomposition;
 template <class Derived> class LogDeterminant;
