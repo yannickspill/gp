@@ -65,25 +65,27 @@ const UnaryOp<op::Opposite, ScalarExpression> operator-(
 }
 
 // products
-//    Scalar Scalar
+//  Scalar * Scalar
 template <class Lhs, class Rhs>
 const BinaryOp<op::Product, Lhs, Rhs> operator*(const ScalarBase<Lhs>& lhs,
-                                              const ScalarBase<Rhs>& rhs) {
+                                                const ScalarBase<Rhs>& rhs) {
   return BinaryOp<op::Product, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
-//    double Scalar
-template <class ScalarExpression>
-const ScalarBuiltinProduct<ScalarExpression> operator*(
-    double lhs, const ScalarBase<ScalarExpression>& rhs) {
-  return ScalarBuiltinProduct<ScalarExpression>(lhs, rhs.asDerived());
+//  Scalar * double
+template <class Lhs>
+const BinaryOp<op::Product, Lhs, ConstScalar> operator*(const ScalarBase
+                                                        <Lhs>& lhs,
+                                                        double rhs) {
+  return BinaryOp<op::Product, Lhs, ConstScalar>(lhs.asDerived(), rhs);
 }
-//    Scalar double
-template <class ScalarExpression>
-const ScalarBuiltinProduct<ScalarExpression> operator*(const ScalarBase
-                                                       <ScalarExpression>& lhs,
-                                                       double rhs) {
-  return ScalarBuiltinProduct<ScalarExpression>(rhs, lhs.asDerived());
+//  double * Scalar
+template <class Rhs>
+const BinaryOp<op::Product, ConstScalar, Rhs> operator*(double lhs,
+                                                        const ScalarBase
+                                                        <Rhs>& rhs) {
+  return BinaryOp<op::Product, ConstScalar, Rhs>(lhs, rhs.asDerived());
 }
+
 // quotients
 //    Scalar Scalar
 template <class Lhs, class Rhs>

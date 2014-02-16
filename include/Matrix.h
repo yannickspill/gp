@@ -21,12 +21,6 @@
 #include "internal/LogDeterminant.h"
 #include "internal/Solve.h"
 
-// matrix builtin ops
-#include "internal/MatrixBuiltinProduct.h"
-
-// matrix scalar ops
-#include "internal/MatrixScalarProduct.h"
-
 // caching
 #include "internal/Cache.h"
 #include "internal/CachePlugins.h"

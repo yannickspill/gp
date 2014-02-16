@@ -129,24 +129,28 @@ const UnaryOp<op::Opposite, MatrixExpression> operator-(const MatrixBase
 }
 
 // products
-//    Matrix Matrix
+//  Matrix Matrix
 template <class Lhs, class Rhs>
-const BinaryOp<op::Product, Lhs, Rhs> operator*(const MatrixBase<Lhs>& lhs,
-                                              const MatrixBase<Rhs>& rhs) {
-  return BinaryOp<op::Product, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+const BinaryOp<op::MatrixProduct, Lhs, Rhs> operator*(const MatrixBase
+                                                      <Lhs>& lhs,
+                                                      const MatrixBase
+                                                      <Rhs>& rhs) {
+  return BinaryOp
+      <op::MatrixProduct, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
-//   double Matrix
-template <class MatrixExpression>
-const MatrixBuiltinProduct<MatrixExpression> operator*(
-    double lhs, const MatrixBase<MatrixExpression>& rhs) {
-  return MatrixBuiltinProduct<MatrixExpression>(lhs, rhs.asDerived());
+//  double Matrix
+template <class Rhs>
+const BinaryOp<op::Product, ConstScalar, Rhs> operator*(double lhs,
+                                                        const MatrixBase
+                                                        <Rhs>& rhs) {
+  return BinaryOp<op::Product, ConstScalar, Rhs>(lhs, rhs.asDerived());
 }
-//   Matrix double
-template <class MatrixExpression>
-const MatrixBuiltinProduct<MatrixExpression> operator*(const MatrixBase
-                                                       <MatrixExpression>& lhs,
-                                                       double rhs) {
-  return MatrixBuiltinProduct<MatrixExpression>(rhs, lhs.asDerived());
+//  Matrix double
+template <class Lhs>
+const BinaryOp<op::Product, Lhs, ConstScalar> operator*(const MatrixBase
+                                                        <Lhs>& lhs,
+                                                        double rhs) {
+  return BinaryOp<op::Product, Lhs, ConstScalar>(lhs.asDerived(), rhs);
 }
 
 //    Matrix / double

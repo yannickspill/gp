@@ -80,15 +80,15 @@ const BinaryOp<op::Difference, ScalarFromMatrix<Mat>, Scal> operator-(
 //products
 //  Scalar * Matrix
 template <class Scal, class Mat>
-const MatrixScalarProduct<Mat, Scal> operator*(const ScalarBase<Scal>& lhs,
+const BinaryOp<op::Product, Scal, Mat> operator*(const ScalarBase<Scal>& lhs,
                                                const MatrixBase<Mat>& rhs) {
-  return MatrixScalarProduct<Mat, Scal>(rhs.asDerived(), lhs.asDerived());
+  return BinaryOp<op::Product, Scal, Mat>(lhs.asDerived(), rhs.asDerived());
 }
 //  Matrix * Scalar
 template <class Mat, class Scal>
-const MatrixScalarProduct<Mat, Scal> operator*(const MatrixBase<Mat>& lhs,
+const BinaryOp<op::Product, Mat, Scal> operator*(const MatrixBase<Mat>& lhs,
                                                const ScalarBase<Scal>& rhs) {
-  return MatrixScalarProduct<Mat, Scal>(lhs.asDerived(), rhs.asDerived());
+  return BinaryOp<op::Product, Mat, Scal>(lhs.asDerived(), rhs.asDerived());
 }
 
 //quotients

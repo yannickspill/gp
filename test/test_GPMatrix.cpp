@@ -120,7 +120,6 @@ int main(int, char * []) {
   if ((vx.transpose() * (5 * vx + vy - scal * vx)).get()
       != (x.transpose() * (5 * x + y - scal.get() * x)))
     return 17;
-  /*
 
   // transpose
   if (vx.transpose().get() != x.transpose()) return 17;
@@ -141,8 +140,9 @@ int main(int, char * []) {
   (msd * msd).decomposition();
   (msd * msd).decomposition().get();
 
+  /*
   // determinant
-  LogDeterminant<decltype(ldlt)> det(ldlt);
+  internal::LogDeterminant<decltype(ldlt)> det(ldlt);
   static_assert(std::is_same<decltype(det), decltype(ldlt.logdet())>::value,
                 "MatrixBase passes wrong type to LogDeterminant");
   if (std::abs(det.get() - std::log(sd.determinant())) > 1e-5) return 21;

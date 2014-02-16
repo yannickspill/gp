@@ -21,24 +21,12 @@ class BinaryOp;
 
 // base class
 template <class Derived> class GPBase;
-template <class Lhs, class Rhs> class MatrixScalarProduct;
 
 // scalar class
 template <class Derived> class ScalarBase;
 class Scalar;
 class ConstScalar;
 template<class Derived> class ScalarFromMatrix;
-
-//scalar scalar ops
-template <class Lhs, class Rhs> class ScalarScalarDifference;
-template <class Lhs, class Rhs> class ScalarScalarQuotient;
-
-//scalar builtin ops
-template <class Lhs> class ScalarBuiltinDifference;
-template <class Rhs> class BuiltinScalarDifference;
-template <class Rhs> class ScalarBuiltinProduct;
-template <class Lhs> class ScalarBuiltinQuotient;
-template <class Rhs> class BuiltinScalarQuotient;
 
 // declare basic matrix classes
 template <class Derived> class MatrixBase;
@@ -50,18 +38,6 @@ template <class Derived> struct LDLTPolicy;
 template <class Derived, template<typename> class Policy> class Decomposition;
 template <class Derived> class LogDeterminant;
 template <class Derived, class OtherDerived> class Solve;
-
-//matrix builtin ops
-template <class Lhs> class MatrixBuiltinDifference;
-template <class Lhs> class BuiltinMatrixDifference;
-template <class Lhs> class MatrixBuiltinProduct;
-template <class Lhs> class MatrixBuiltinQuotient;
-
-//matrix scalar ops
-template <class Lhs, class Rhs> class MatrixScalarDifference;
-template <class Lhs, class Rhs> class ScalarMatrixDifference;
-template <class Lhs, class Rhs> class MatrixScalarProduct;
-template <class Lhs, class Rhs> class MatrixScalarQuotient;
 
 //cache
 template <class Object> class Cache;

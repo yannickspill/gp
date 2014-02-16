@@ -13,9 +13,6 @@
 #include "internal/Scalar.h"
 #include "internal/ConstScalar.h"
 
-// scalar builtin ops
-#include "internal/ScalarBuiltinProduct.h"
-
 namespace GP {
 // promote Scalar to GP namespace
 using internal::Scalar;
