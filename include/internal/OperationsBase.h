@@ -108,11 +108,18 @@ struct ScalarOperation : SetShapeFromInput<GPDerived> {
 };
 
 // Matrix -> Matrix with possible change in shape
+// unary case
 template <class GPDerived>
 struct MatrixOperation : SetScalarAndInput<GPDerived> {
-  // Parent class is always MatrixBase
   template <class OtherDerived> using Parent = MatrixBase<OtherDerived>;
 };
+//binary case
+/* not needed for now
+template <class Lhs, class Rhs>
+struct MatrixOperation : SetScalarAndInputs<Lhs, Rhs> {
+  template <class OtherDerived> using Parent = MatrixBase<OtherDerived>;
+};
+*/
 
 // define basic typedefs for unary operations that don't change the shape of the
 // resulting object

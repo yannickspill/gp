@@ -33,6 +33,17 @@ struct Difference : base::BinaryCoeffWiseOperation<Lhs, Rhs> {
   }
 };
 
+//Product
+template <class Lhs, class Rhs>
+struct Product : base::SetScalarAndInputs<Lhs, Rhs> {
+  typedef decltype(std::declval<typename Product::lhs_type>() * std::declval
+                   <typename Product::rhs_type>()) result_type;
+  static result_type apply(const typename Product::lhs_type& lhs,
+                           const typename Product::rhs_type& rhs) {
+    return lhs * rhs;
+  }
+};
+
 // Quotient
 template <class Lhs, class Rhs>
 struct Quotient : base::BinaryCoeffWiseOperation<Lhs, Rhs> {

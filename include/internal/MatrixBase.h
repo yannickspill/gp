@@ -106,16 +106,21 @@ operator+(const MatrixBase<MatrixExpression>& lhs, double rhs) {
 // differences
 //  double Matrix
 template <class MatrixExpression>
-const MatrixBuiltinDifference<MatrixExpression> operator-(
-    const MatrixBase<MatrixExpression>& lhs, double rhs) {
-  return MatrixBuiltinDifference<MatrixExpression>(lhs.asDerived(), rhs);
+const BinaryOp<op::Difference, ConstScalar, ScalarFromMatrix<MatrixExpression> >
+operator-(double lhs, const MatrixBase<MatrixExpression>& rhs) {
+  return BinaryOp
+      <op::Difference, ConstScalar, ScalarFromMatrix<MatrixExpression> >(
+          lhs, rhs.asDerived());
 }
 //  Matrix double
 template <class MatrixExpression>
-const BuiltinMatrixDifference<MatrixExpression> operator-(
-    double lhs, const MatrixBase<MatrixExpression>& rhs) {
-  return BuiltinMatrixDifference<MatrixExpression>(lhs, rhs.asDerived());
+const BinaryOp<op::Difference, ScalarFromMatrix<MatrixExpression>, ConstScalar>
+operator-(const MatrixBase<MatrixExpression>& lhs, double rhs) {
+  return BinaryOp
+      <op::Difference, ScalarFromMatrix<MatrixExpression>, ConstScalar>(
+          lhs.asDerived(), rhs);
 }
+
 // Matrix opposite
 template <class MatrixExpression>
 const UnaryOp<op::Opposite, MatrixExpression> operator-(const MatrixBase

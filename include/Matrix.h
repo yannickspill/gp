@@ -16,7 +16,6 @@
 
 // matrix matrix ops
 #include "internal/Matrix.h"
-#include "internal/MatrixDifference.h"
 #include "internal/MatrixMatrixProduct.h"
 #include "internal/LDLTPolicy.h"
 #include "internal/Decomposition.h"
@@ -24,16 +23,10 @@
 #include "internal/Solve.h"
 
 // matrix builtin ops
-#include "internal/MatrixBuiltinDifference.h"
-#include "internal/BuiltinMatrixDifference.h"
 #include "internal/MatrixBuiltinProduct.h"
-#include "internal/MatrixBuiltinQuotient.h"
 
 // matrix scalar ops
 #include "internal/MatrixScalarProduct.h"
-#include "internal/MatrixScalarQuotient.h"
-#include "internal/MatrixScalarDifference.h"
-#include "internal/ScalarMatrixDifference.h"
 
 // caching
 #include "internal/Cache.h"
