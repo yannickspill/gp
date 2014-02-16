@@ -96,16 +96,15 @@ const BinaryOp<op::Sum, Lhs, Rhs> operator+(const MatrixBase<Lhs>& lhs,
 }
 //  double Matrix
 template <class MatrixExpression>
-const MatrixBuiltinSum<MatrixExpression> operator+(double lhs, const MatrixBase
-                                                   <MatrixExpression>& rhs) {
-  return MatrixBuiltinSum<MatrixExpression>(rhs.asDerived(), lhs);
+const BinaryOp<op::Sum, double, MatrixExpression> operator+(
+    double lhs, const MatrixBase<MatrixExpression>& rhs) {
+  return BinaryOp<op::Sum, double, MatrixExpression>(lhs, rhs.asDerived());
 }
 //  Matrix double
 template <class MatrixExpression>
-const MatrixBuiltinSum<MatrixExpression> operator+(const MatrixBase
-                                                   <MatrixExpression>& lhs,
-                                                   double rhs) {
-  return MatrixBuiltinSum<MatrixExpression>(lhs.asDerived(), rhs);
+const BinaryOp<op::Sum, MatrixExpression, double> operator+(
+    const MatrixBase<MatrixExpression>& lhs, double rhs) {
+  return BinaryOp<op::Sum, MatrixExpression, double>(lhs.asDerived(), rhs);
 }
 
 // differences

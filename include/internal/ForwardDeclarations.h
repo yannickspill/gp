@@ -50,7 +50,6 @@ template <class Derived> class LogDeterminant;
 template <class Derived, class OtherDerived> class Solve;
 
 //matrix builtin ops
-template <class Lhs> class MatrixBuiltinSum;
 template <class Lhs> class MatrixBuiltinDifference;
 template <class Lhs> class BuiltinMatrixDifference;
 template <class Lhs> class MatrixBuiltinProduct;

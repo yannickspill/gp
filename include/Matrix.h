@@ -21,7 +21,6 @@
 #include "internal/Solve.h"
 
 // matrix builtin ops
-#include "internal/MatrixBuiltinSum.h"
 #include "internal/MatrixBuiltinDifference.h"
 #include "internal/BuiltinMatrixDifference.h"
 #include "internal/MatrixBuiltinProduct.h"
