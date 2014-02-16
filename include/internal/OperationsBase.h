@@ -3,21 +3,52 @@
 
 #include "ForwardDeclarations.h"
 
+#include <Eigen/Core>
+
 namespace GP {
 namespace internal {
 namespace op {
 namespace base {
 
-// define scalar and input types
-template <class GPDerived> struct Basics {
+// check whether scalar types are compatible
+template <class Lhs, class Rhs> struct CheckScalarTypesAreCompatible {
+  static_assert(std::is_same
+                <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
+                "cannot mix matrices of different scalar types");
+};
+
+// define scalar and input types (unary case)
+template <class GPDerived> struct SetScalarAndInput {
   // scalar_type
   typedef typename GPDerived::scalar_type scalar_type;
   // input_type
   typedef typename GPDerived::result_type input_type;
 };
 
-// common typedefs for all operations
-template <class GPDerived> struct AttribsFromInput : Basics<GPDerived> {
+// define scalar and input types (binary case)
+template <class Lhs, class Rhs>
+struct SetScalarAndInputs : CheckScalarTypesAreCompatible<Lhs, Rhs> {
+  // scalar_type
+  typedef typename Lhs::scalar_type scalar_type;
+  // input_types
+  typedef typename Lhs::result_type lhs_type;
+  typedef typename Rhs::result_type rhs_type;
+};
+
+// check whether objects have same shape
+template <class Lhs, class Rhs> struct CheckHaveSameShape {
+  static_assert(Lhs::RowsAtCompileTime == Eigen::Dynamic
+                || Rhs::RowsAtCompileTime == Eigen::Dynamic
+                || Lhs::RowsAtCompileTime == Rhs::RowsAtCompileTime,
+                "Matrices must have same number of rows!");
+  static_assert(Lhs::ColsAtCompileTime == Eigen::Dynamic
+                || Rhs::ColsAtCompileTime == Eigen::Dynamic
+                || Lhs::ColsAtCompileTime == Rhs::ColsAtCompileTime,
+                "Matrices must have same number of columns!");
+};
+
+// resulting shape is preserved (unary case)
+template <class GPDerived> struct SetShapeFromInput : SetScalarAndInput<GPDerived> {
   // rows and columns
   enum {
     RowsAtCompileTime = GPDerived::RowsAtCompileTime,
@@ -25,8 +56,20 @@ template <class GPDerived> struct AttribsFromInput : Basics<GPDerived> {
   };
 };
 
-// ParentGetter::Parent is the type of the parent of GPDerived
-template <class GPDerived> struct ParentGetter {
+// resulting shape is preserved (binary case)
+template <class Lhs, class Rhs>
+struct SetShapeFromInputs : CheckScalarTypesAreCompatible<Lhs, Rhs>,
+                            CheckHaveSameShape<Lhs, Rhs>,
+                            SetScalarAndInputs<Lhs, Rhs> {
+  // rows and columns
+  enum {
+    RowsAtCompileTime = Lhs::RowsAtCompileTime,
+    ColsAtCompileTime = Rhs::ColsAtCompileTime
+  };
+};
+
+// SetParent::Parent is the type of the parent of GPDerived
+template <class GPDerived> struct SetParent {
   template <class OtherDerived>
   using Parent = typename std::conditional<
       // if
@@ -43,63 +86,44 @@ template <class GPDerived> struct ParentGetter {
           GPBase<OtherDerived> >::type>::type;
 };
 
-// ParentGetter for binary operators
-template <class Lhs, class Rhs> struct ParentGetter {
+// SetParent for binary operators
+template <class Lhs, class Rhs> struct SetCommonParent {
   template <class Derived>
   using Parent = typename std::conditional<
       // if
-      std::is_same<ParentGetter<Lhs>, ParentGetter<Rhs> >::value,
+      std::is_same<typename SetParent<Lhs>::template Parent<Derived>,
+                   typename SetParent<Rhs>::template Parent<Derived> >::value,
       // then
-      ParentGetter<Lhs>::template Parent<Derived>,
+      typename SetParent<Lhs>::template Parent<Derived>,
       // else
       GPBase<Derived> >::type;
 };
 
 // Matrix -> Scalar
 template <class GPDerived>
-struct ScalarOperation : AttribsFromInput<GPDerived> {
+struct ScalarOperation : SetShapeFromInput<GPDerived> {
   // Parent class is always ScalarBase
   template <class OtherDerived> using Parent = ScalarBase<OtherDerived>;
 };
 
 // Matrix -> Matrix with possible change in shape
 template <class GPDerived>
-struct MatrixOperation : AttribsFromInput<GPDerived> {
+struct MatrixOperation : SetScalarAndInput<GPDerived> {
   // Parent class is always MatrixBase
   template <class OtherDerived> using Parent = MatrixBase<OtherDerived>;
-};
-
-// check whether scalar types are compatible
-template <class Lhs, class Rhs> struct ScalarTypesAreCompatible {
-  static_assert(std::is_same
-                <typename Lhs::scalar_type, typename Rhs::scalar_type>::value,
-                "cannot mix matrices of different scalar types");
-};
-
-// check whether matrices have same shape
-template <class Lhs, class Rhs> struct MatricesHaveSameShape {
-  static_assert(Lhs::RowsAtCompileTime == Eigen::Dynamic
-                || Rhs::RowsAtCompileTime == Eigen::Dynamic
-                || Lhs::RowsAtCompileTime == Rhs::RowsAtCompileTime,
-                "Matrices must have same number of rows!");
-  static_assert(Lhs::ColsAtCompileTime == Eigen::Dynamic
-                || Rhs::ColsAtCompileTime == Eigen::Dynamic
-                || Lhs::ColsAtCompileTime == Rhs::ColsAtCompileTime,
-                "Matrices must have same number of columns!");
 };
 
 // define basic typedefs for unary operations that don't change the shape of the
 // resulting object
 template <class GPDerived>
-struct UnaryCoeffWiseOperation : AttribsFromInput<GPDerived>,
-                                 ParentGetter<GPDerived> {};
+struct UnaryCoeffWiseOperation : SetShapeFromInput<GPDerived>,
+                                 SetParent<GPDerived> {};
 
 // define basic typedefs for binary operations that don't change the shape of
 // the resulting object
 template <class Lhs, class Rhs>
-struct BinaryCoeffWiseOperation : ScalarTypesAreCompatible<Lhs, Rhs>,
-                                  AttribsFromInput<Lhs>,
-                                  ParentGetter<Lhs, Rhs> {};
+struct BinaryCoeffWiseOperation : SetShapeFromInputs<Lhs, Rhs>,
+                                  SetCommonParent<Lhs, Rhs> {};
 
 }  // base
 }  // op

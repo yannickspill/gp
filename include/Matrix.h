@@ -3,6 +3,8 @@
 
 #include "UnaryOp.h"
 #include "UnaryOperations.h"
+#include "BinaryOp.h"
+#include "BinaryOperations.h"
 
 //base classes
 #include "internal/ForwardDeclarations.h"
@@ -11,7 +13,6 @@
 
 // matrix matrix ops
 #include "internal/Matrix.h"
-#include "internal/MatrixSum.h"
 #include "internal/MatrixDifference.h"
 #include "internal/MatrixMatrixProduct.h"
 #include "internal/LDLTPolicy.h"

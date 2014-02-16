@@ -32,7 +32,8 @@ int main(int, char * []) {
   MatrixXd vsum(vy + vx);
   if (vsum.get() != x + y) return 2;
   if ((vx + vy).get() != x + y) return 3;
-  internal::MatrixSum<MatrixXd, MatrixXd> s(vx, vy);  // type is defined
+  internal::BinaryOp
+      <internal::op::Sum, MatrixXd, MatrixXd> s(vx, vy);  // type is defined
   if (s.get() != vsum.get()) return 4;                // works as expected
   // product
   if ((vx.transpose() * vy).get() != x.transpose() * y) return 5;

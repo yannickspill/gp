@@ -90,9 +90,9 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
 // sums
 //  Matrix Matrix
 template <class Lhs, class Rhs>
-const MatrixSum<Lhs, Rhs> operator+(const MatrixBase<Lhs>& lhs,
+const BinaryOp<op::Sum, Lhs, Rhs> operator+(const MatrixBase<Lhs>& lhs,
                                     const MatrixBase<Rhs>& rhs) {
-  return MatrixSum<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+  return BinaryOp<op::Sum, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 //  double Matrix
 template <class MatrixExpression>

@@ -9,9 +9,12 @@ template <class Derived> class Trace;
 template <class Derived> class Transpose;
 template <class Derived> class DiagonalMatrixFromVector;
 template <class Derived> class ScalarExponential;
+template <class Lhs, class Rhs> class Sum;
 }
 
-template<template<class> class UnaryOperator, class Operand> class UnaryOp;
+template <template <class> class UnaryOperator, class Operand> class UnaryOp;
+template <template <class, class> class BinaryOperator, class Lhs, class Rhs>
+class BinaryOp;
 
 // base class
 template <class Derived> class GPBase;
@@ -40,7 +43,6 @@ template <class Derived> class MatrixBase;
 template <class EigenType> class Matrix;
 
 // matrix operations
-template <class Lhs, class Rhs> class MatrixSum;
 template <class Lhs, class Rhs> class MatrixDifference;
 template <class Lhs, class Rhs> class MatrixMatrixProduct;
 template <class Derived> struct LDLTPolicy;
