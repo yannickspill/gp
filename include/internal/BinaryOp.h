@@ -8,7 +8,7 @@ namespace GP {
 namespace internal {
 
 //! expression for binary operations
-template <template <class, class> class BinaryOperator, class Lhs, class Rhs>
+template <template <class,class> class BinaryOperator, class Lhs, class Rhs>
 class BinaryOp : public BinaryOperator<Lhs, Rhs>::template Parent
                  <BinaryOp<BinaryOperator, Lhs, Rhs> > {
 
@@ -40,27 +40,12 @@ class BinaryOp : public BinaryOperator<Lhs, Rhs>::template Parent
  public:
   BinaryOp(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
   const result_type& get() const {
-    data_ = std::make_shared<Data>(get(lhs_), get(rhs_));
+    data_ = std::make_shared<Data>(lhs_.get(), rhs_.get());
     return data_->out_val_;
   }
-  unsigned get_version() const { return get_version(lhs_) + get_version(rhs_); }
-
- private:
-  // get for GPBase
-  template <class Derived>
-  auto get(const GPBase
-           <Derived>& base) const -> decltype(base.asDerived().get()) {
-    return base.asDerived().get();
+  unsigned get_version() const {
+    return lhs_.get_version() + rhs_.get_version();
   }
-  // get for integral type
-  double get(double val) const { return val; }
-  // get_version for GPBase
-  template <class Derived>
-  unsigned get_version(const GPBase<Derived>& base) const {
-    return base.asDerived().get_version();
-  }
-  // get_version for integral type
-  double get_version(double) const { return 0; }
 };
 }
 }

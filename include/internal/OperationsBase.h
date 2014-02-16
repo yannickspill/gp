@@ -47,9 +47,6 @@ template <class Lhs, class Rhs> struct CheckHaveSameShape {
                 "Objects must have same number of columns!");
 };
 
-// check whether objects have same shape
-template <class GPDerived> struct CheckIsDegenerate {};
-
 // resulting shape is preserved (unary case)
 template <class GPDerived>
 struct SetShapeFromInput : SetScalarAndInput<GPDerived> {
@@ -128,33 +125,6 @@ struct UnaryCoeffWiseOperation : SetShapeFromInput<GPDerived>,
 template <class Lhs, class Rhs>
 struct BinaryCoeffWiseOperation : SetShapeFromInputs<Lhs, Rhs>,
                                   SetCommonParent<Lhs, Rhs> {};
-// specialization for double
-// will always be 1x1 matrix or Scalar, and inherit from ScalarBase
-template <class Lhs>
-struct BinaryCoeffWiseOperation<Lhs, double> : SetShapeFromInput<Lhs> {
-  // compatibility
-  static_assert(std::is_same<typename Lhs::scalar_type, double>::value,
-                "scalar type must be double");
-  // scalar_type
-  typedef double scalar_type;
-  // lhs and rhs types
-  typedef double lhs_type;
-  typedef double rhs_type;
-  // check is 1x1
-  static_assert(Lhs::RowsAtCompileTime == 1 && Lhs::ColsAtCompileTime == 1,
-                "Object must be 1x1!");
-  // sizes
-  enum {
-    RowsAtCompileTime = 1,
-    ColsAtCompileTime = 1
-  };
-  // parent is ScalarBase
-  template <class OtherDerived> using Parent = ScalarBase<OtherDerived>;
-};
-// no need to redefine the other case, as symmetry is preserved up to here
-template <class Rhs>
-struct BinaryCoeffWiseOperation<double, Rhs> : BinaryCoeffWiseOperation
-                                               <Rhs, double> {};
 }  // base
 }  // op
 }  // internal
