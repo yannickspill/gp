@@ -29,7 +29,6 @@
 // matrix scalar ops
 #include "internal/MatrixScalarProduct.h"
 #include "internal/MatrixScalarQuotient.h"
-#include "internal/MatrixScalarSum.h"
 #include "internal/MatrixScalarDifference.h"
 #include "internal/ScalarMatrixDifference.h"
 

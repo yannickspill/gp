@@ -51,7 +51,6 @@ int main(int, char * []) {
   // quotient
   if (std::abs((scal / scal).get() - 1.) > 1e-7) return 26;
 
-  /*
   // builtin scalar product
   if ((scal * 3.).get() != (scal.get() * 3.)) return 11;
   if ((scal * 3).get() != (scal.get() * 3.)) return 12;
@@ -92,7 +91,6 @@ int main(int, char * []) {
   if ((vx * 5.).get() != (5. * x)) return 16;
   // matrix builtin quotient
   if ((vx / 5.).get() != (x / 5.)) return 28;
-  */
 
   // matrix and scalar opposites
   if ((-vx).get() != -x) return 69;

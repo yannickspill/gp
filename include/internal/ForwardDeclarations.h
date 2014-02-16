@@ -30,7 +30,6 @@ template <class Lhs, class Rhs> class ScalarScalarProduct;
 template <class Lhs, class Rhs> class ScalarScalarQuotient;
 
 //scalar builtin ops
-template <class Lhs> class ScalarBuiltinSum;
 template <class Lhs> class ScalarBuiltinDifference;
 template <class Rhs> class BuiltinScalarDifference;
 template <class Rhs> class ScalarBuiltinProduct;
@@ -56,7 +55,6 @@ template <class Lhs> class MatrixBuiltinProduct;
 template <class Lhs> class MatrixBuiltinQuotient;
 
 //matrix scalar ops
-template <class Lhs, class Rhs> class MatrixScalarSum;
 template <class Lhs, class Rhs> class MatrixScalarDifference;
 template <class Lhs, class Rhs> class ScalarMatrixDifference;
 template <class Lhs, class Rhs> class MatrixScalarProduct;

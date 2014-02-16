@@ -4,6 +4,9 @@
 #include "UnaryOp.h"
 #include "UnaryOperations.h"
 
+#include "BinaryOp.h"
+#include "BinaryOperations.h"
+
 // scalar ops
 #include "internal/Scalar.h"
 #include "internal/ScalarScalarDifference.h"
@@ -11,7 +14,6 @@
 #include "internal/ScalarScalarQuotient.h"
 
 // scalar builtin ops
-#include "internal/ScalarBuiltinSum.h"
 #include "internal/ScalarBuiltinDifference.h"
 #include "internal/BuiltinScalarDifference.h"
 #include "internal/ScalarBuiltinProduct.h"
