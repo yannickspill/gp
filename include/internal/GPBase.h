@@ -56,17 +56,25 @@ const BinaryOp<op::Sum, ScalarFromMatrix<Mat>, Scal> operator+(const MatrixBase
 }
 
 //differences
-//  Scalar - Matrix (only matrix is 1x1)
-template <class Scal, class Mat>
-const ScalarMatrixDifference<Scal, Mat> operator-(const ScalarBase<Scal>& lhs,
-                                           const MatrixBase<Mat>& rhs) {
-  return ScalarMatrixDifference<Scal, Mat>(lhs.asDerived(), rhs.asDerived());
+//  GP GP
+template <class Lhs, class Rhs>
+const BinaryOp<op::Difference, Lhs, Rhs> operator-(const GPBase<Lhs>& lhs,
+                                                   const GPBase<Rhs>& rhs) {
+  return BinaryOp<op::Difference, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
-//  Matix - Scalar (only matrix is 1x1)
+//  Scalar Matrix
+template <class Scal, class Mat>
+const BinaryOp<op::Difference, Scal, ScalarFromMatrix<Mat> > operator-(
+    const ScalarBase<Scal>& lhs, const MatrixBase<Mat>& rhs) {
+  return BinaryOp<op::Difference, Scal, ScalarFromMatrix<Mat> >(
+      lhs.asDerived(), rhs.asDerived());
+}
+//  Matrix Scalar
 template <class Mat, class Scal>
-const MatrixScalarDifference<Mat, Scal> operator-(const MatrixBase<Mat>& lhs,
-                                           const ScalarBase<Scal>& rhs) {
-  return MatrixScalarDifference<Mat, Scal>(lhs.asDerived(), rhs.asDerived());
+const BinaryOp<op::Difference, ScalarFromMatrix<Mat>, Scal> operator-(
+    const MatrixBase<Mat>& lhs, const ScalarBase<Scal>& rhs) {
+  return BinaryOp<op::Difference, ScalarFromMatrix<Mat>, Scal>(lhs.asDerived(),
+                                                               rhs.asDerived());
 }
 
 //products

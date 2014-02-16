@@ -104,12 +104,6 @@ operator+(const MatrixBase<MatrixExpression>& lhs, double rhs) {
 }
 
 // differences
-//  Matrix Matrix
-template <class Lhs, class Rhs>
-const MatrixDifference<Lhs, Rhs> operator-(const MatrixBase<Lhs>& lhs,
-                                           const MatrixBase<Rhs>& rhs) {
-  return MatrixDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
-}
 //  double Matrix
 template <class MatrixExpression>
 const MatrixBuiltinDifference<MatrixExpression> operator-(

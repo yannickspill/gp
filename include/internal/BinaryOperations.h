@@ -11,8 +11,7 @@ namespace GP {
 namespace internal {
 namespace op {
 
-// Sums
-// general case
+// Sum
 template <class Lhs, class Rhs>
 struct Sum : base::BinaryCoeffWiseOperation<Lhs, Rhs> {
   typedef decltype(std::declval<typename Sum::lhs_type>() + std::declval
@@ -20,6 +19,17 @@ struct Sum : base::BinaryCoeffWiseOperation<Lhs, Rhs> {
   static result_type apply(const typename Sum::lhs_type& lhs,
                            const typename Sum::rhs_type& rhs) {
     return lhs + rhs;
+  }
+};
+
+// Difference
+template <class Lhs, class Rhs>
+struct Difference : base::BinaryCoeffWiseOperation<Lhs, Rhs> {
+  typedef decltype(std::declval<typename Difference::lhs_type>() - std::declval
+                   <typename Difference::rhs_type>()) result_type;
+  static result_type apply(const typename Difference::lhs_type& lhs,
+                           const typename Difference::rhs_type& rhs) {
+    return lhs - rhs;
   }
 };
 }  // op

@@ -42,24 +42,21 @@ const BinaryOp<op::Sum, ScalarExpression, ConstScalar> operator+(
   return BinaryOp<op::Sum, ScalarExpression, ConstScalar>(lhs.asDerived(), rhs);
 }
 // differences
-//    Scalar - Scalar
-template <class Lhs, class Rhs>
-const ScalarScalarDifference<Lhs, Rhs> operator-(const ScalarBase<Lhs>& lhs,
-                                           const ScalarBase<Rhs>& rhs) {
-  return ScalarScalarDifference<Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+//  double Scalar
+template <class ScalarExpression>
+const BinaryOp<op::Difference, ConstScalar, ScalarExpression> operator-(
+    double lhs, const ScalarBase<ScalarExpression>& rhs) {
+  return BinaryOp
+      <op::Difference, ConstScalar, ScalarExpression>(lhs, rhs.asDerived());
 }
-//    Scalar - Builtin
-template <class Lhs>
-const ScalarBuiltinDifference<Lhs> operator-(const ScalarBase<Lhs>& lhs,
-                                             double rhs) {
-  return ScalarBuiltinDifference<Lhs>(lhs.asDerived(), rhs);
+//  Scalar double
+template <class ScalarExpression>
+const BinaryOp<op::Difference, ScalarExpression, ConstScalar> operator-(
+    const ScalarBase<ScalarExpression>& lhs, double rhs) {
+  return BinaryOp
+      <op::Difference, ScalarExpression, ConstScalar>(lhs.asDerived(), rhs);
 }
-//    Builtin - Scalar
-template <class Rhs>
-const BuiltinScalarDifference<Rhs> operator-(double lhs,
-                                           const ScalarBase<Rhs>& rhs) {
-  return BuiltinScalarDifference<Rhs>(lhs, rhs.asDerived());
-}
+
 // Scalar opposite
 template <class ScalarExpression>
 const UnaryOp<op::Opposite, ScalarExpression> operator-(
