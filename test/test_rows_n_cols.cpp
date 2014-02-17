@@ -59,27 +59,27 @@ int main(){
     if FAILS(scal+small, 1, 1, 1, 1) return 33;
     if FAILS(mxx+mxx, Eigen::Dynamic, Eigen::Dynamic, 5, 3) return 34;
     //ApplyMatrix
-    //auto f = GP::make_function(1./scal,scal);
-    //if FAILS(GP::Matrix::Apply(f,vx), Eigen::Dynamic, 1, 5, 1) return 35;
+    auto f = GP::make_functor(1./scal,scal);
+    if FAILS(GP::MatrixXd::Apply(f,vx), Eigen::Dynamic, 1, 5, 1) return 35;
     //LogDet
-    if FAILS(Id.decomposition().logdet(), 1, 1, 1, 1) return 35;
+    if FAILS(Id.decomposition().logdet(), 1, 1, 1, 1) return 36;
     //Solve
-    //if FAILS(Id.decomposition().solve(vx), Eigen::Dynamic, 1, 5, 1) return 36;
+    if FAILS(Id.decomposition().solve(vx), Eigen::Dynamic, 1, 5, 1) return 37;
     //Trace
-    if FAILS(Id.trace(), 1, 1, 1, 1) return 36;
+    if FAILS(Id.trace(), 1, 1, 1, 1) return 38;
     //Transpose
-    if FAILS(vx.transpose(), 1, Eigen::Dynamic, 1, 5) return 37;
+    if FAILS(vx.transpose(), 1, Eigen::Dynamic, 1, 5) return 39;
     //scalar exponential
-    if FAILS(scal.exp(), 1, 1, 1, 1) return 38;
+    if FAILS(scal.exp(), 1, 1, 1, 1) return 40;
     //diagonal matrix from vector
-    if FAILS(vx.asDiagonal(), Eigen::Dynamic, Eigen::Dynamic, 5, 5) return 39;
+    if FAILS(vx.asDiagonal(), Eigen::Dynamic, Eigen::Dynamic, 5, 5) return 41;
     //matrix from scalar
     if FAILS(GP::MatrixXd::Broadcast(scal, 4, 2),
-            Eigen::Dynamic, Eigen::Dynamic, 4, 2) return 40;
+            Eigen::Dynamic, Eigen::Dynamic, 4, 2) return 42;
     if FAILS(GP::VectorXd::Broadcast(scal, 4, 1),
-            Eigen::Dynamic, 1, 4, 1) return 41;
+            Eigen::Dynamic, 1, 4, 1) return 43;
     if FAILS(GP::RowVectorXd::Broadcast(scal, 1, 4),
-            1, Eigen::Dynamic, 1, 4) return 42;
+            1, Eigen::Dynamic, 1, 4) return 44;
 
 
     return 0;
