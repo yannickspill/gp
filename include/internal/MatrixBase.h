@@ -26,6 +26,9 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   unsigned rows() const { return asDerived().get().rows(); }
   unsigned cols() const { return asDerived().get().cols(); }
 
+  // conversion of 1x1 matrix to Scalar
+  ScalarFromMatrix<Derived> scalar() const { return asDerived(); }
+
   // trace
   UnaryExpr<op::Trace, Derived> trace() const {
     return UnaryExpr<op::Trace, Derived>(asDerived());

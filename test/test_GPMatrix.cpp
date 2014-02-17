@@ -30,7 +30,6 @@ int main(int, char * []) {
   Eigen::MatrixXd sd(L * L.transpose());
   MatrixXd msd(sd);
 
-  /*
   // matrix basics
   if (vx.get() != x) return 1;
   vx.transpose();
@@ -60,7 +59,7 @@ int main(int, char * []) {
   MatrixXd vsum(vy + vx);
   if (vsum.get() != x + y) return 2;
   if ((vx + vy).get() != x + y) return 3;
-  internal::BinaryOp
+  internal::BinaryExpr
       <internal::op::Sum, MatrixXd, MatrixXd> s(vx, vy);  // type is defined
   if (s.get() != vsum.get()) return 4;                // works as expected
   // product
@@ -134,7 +133,7 @@ int main(int, char * []) {
   if ((vx - vx).transpose().get() != (x - x).transpose()) return 19;
   if ((vx - scal * vx).transpose().get() != (x - scal.get() * x).transpose())
     return 20;
-*/
+
   // ldlt
   auto ldlt = msd.decomposition();
   ldlt.get();
@@ -301,6 +300,12 @@ int main(int, char * []) {
   if (Eigen::MatrixXd(bcv.asDiagonal().get())
       != Eigen::MatrixXd(2. * Eigen::MatrixXd::Identity(szx, szx)))
     return 73;
+
+  //test implicit cast to scalar for exp()
+  GP::VectorXd vleft(Eigen::VectorXd::Random(5));
+  if ((vleft.transpose() * vleft).scalar().exp().get()
+      != std::exp(vleft.get().squaredNorm()))
+    return 81;
 
   return 0;
 }
