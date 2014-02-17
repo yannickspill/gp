@@ -53,6 +53,9 @@ Eigen::MatrixXd read_input_data(char* fname, unsigned ncols) {
     data.push_back(get_float_tokens(line, ncols));
   }
   Eigen::MatrixXd ret(data.size(), data[0].size());
+  for (unsigned i=0; i<data.size(); i++)
+      for (unsigned j=0; j<data[0].size(); j++)
+          ret(i,j)=data[i][j];
   return ret;
 }
 
@@ -136,7 +139,7 @@ int main(int argc, char* argv[]) {
         std::cout << "get" << std::endl;
         double observed = gpi_lik.get();
         std::cout << "done" << std::endl;
-        if (std::abs(expected-observed) > 1e-5) {
+        if (std::abs(expected-observed)/std::abs(expected) > 1e-3) {
             std::cout << "discrepancy observed at " << i << " "
                 << observed << " " << expected << std::endl;
             return 2;
