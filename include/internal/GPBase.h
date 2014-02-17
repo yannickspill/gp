@@ -20,90 +20,85 @@ template <class Derived> class GPBase {
     return static_cast<const Derived&>(*this);
   }
 
-  //caching
-  Cache<Derived> cache() const {
-      return Cache<Derived>(asDerived());
-  }
+  // caching
+  Cache<Derived> cache() const { return Cache<Derived>(asDerived()); }
 
-  //Eigen stuff
+  // Eigen stuff
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 // sums
 //  GP GP
 template <class Lhs, class Rhs>
-const BinaryOp<op::Sum, Lhs, Rhs> operator+(const GPBase<Lhs>& lhs,
-                                    const GPBase<Rhs>& rhs) {
-  return BinaryOp<op::Sum, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+const BinaryExpr<op::Sum, Lhs, Rhs> operator+(const GPBase<Lhs>& lhs,
+                                              const GPBase<Rhs>& rhs) {
+  return BinaryExpr<op::Sum, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 //  Scalar Matrix
 template <class Scal, class Mat>
-const BinaryOp<op::Sum, Scal, ScalarFromMatrix<Mat> > operator+(const ScalarBase
-                                                                <Scal>& lhs,
-                                                                const MatrixBase
-                                                                <Mat>& rhs) {
-  return BinaryOp
+const BinaryExpr<op::Sum, Scal, ScalarFromMatrix<Mat> > operator+(
+    const ScalarBase<Scal>& lhs, const MatrixBase<Mat>& rhs) {
+  return BinaryExpr
       <op::Sum, Scal, ScalarFromMatrix<Mat> >(lhs.asDerived(), rhs.asDerived());
 }
 //  Matrix Scalar
 template <class Mat, class Scal>
-const BinaryOp<op::Sum, ScalarFromMatrix<Mat>, Scal> operator+(const MatrixBase
-                                                               <Mat>& lhs,
-                                                               const ScalarBase
-                                                               <Scal>& rhs) {
-  return BinaryOp
+const BinaryExpr<op::Sum, ScalarFromMatrix<Mat>, Scal> operator+(
+    const MatrixBase<Mat>& lhs, const ScalarBase<Scal>& rhs) {
+  return BinaryExpr
       <op::Sum, ScalarFromMatrix<Mat>, Scal>(lhs.asDerived(), rhs.asDerived());
 }
 
-//differences
+// differences
 //  GP GP
 template <class Lhs, class Rhs>
-const BinaryOp<op::Difference, Lhs, Rhs> operator-(const GPBase<Lhs>& lhs,
-                                                   const GPBase<Rhs>& rhs) {
-  return BinaryOp<op::Difference, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
+const BinaryExpr<op::Difference, Lhs, Rhs> operator-(const GPBase<Lhs>& lhs,
+                                                     const GPBase<Rhs>& rhs) {
+  return BinaryExpr<op::Difference, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 //  Scalar Matrix
 template <class Scal, class Mat>
-const BinaryOp<op::Difference, Scal, ScalarFromMatrix<Mat> > operator-(
+const BinaryExpr<op::Difference, Scal, ScalarFromMatrix<Mat> > operator-(
     const ScalarBase<Scal>& lhs, const MatrixBase<Mat>& rhs) {
-  return BinaryOp<op::Difference, Scal, ScalarFromMatrix<Mat> >(
+  return BinaryExpr<op::Difference, Scal, ScalarFromMatrix<Mat> >(
       lhs.asDerived(), rhs.asDerived());
 }
 //  Matrix Scalar
 template <class Mat, class Scal>
-const BinaryOp<op::Difference, ScalarFromMatrix<Mat>, Scal> operator-(
+const BinaryExpr<op::Difference, ScalarFromMatrix<Mat>, Scal> operator-(
     const MatrixBase<Mat>& lhs, const ScalarBase<Scal>& rhs) {
-  return BinaryOp<op::Difference, ScalarFromMatrix<Mat>, Scal>(lhs.asDerived(),
-                                                               rhs.asDerived());
+  return BinaryExpr<op::Difference, ScalarFromMatrix<Mat>, Scal>(
+      lhs.asDerived(), rhs.asDerived());
 }
 
 // GP opposite
 template <class Derived>
-const UnaryOp<op::Opposite, Derived> operator-(
-    const GPBase<Derived>& val) {
-  return UnaryOp<op::Opposite, Derived> (val.asDerived());
+const UnaryExpr<op::Opposite, Derived> operator-(const GPBase<Derived>& val) {
+  return UnaryExpr<op::Opposite, Derived>(val.asDerived());
 }
 
-//products
+// products
 //  Scalar * Matrix
 template <class Scal, class Mat>
-const BinaryOp<op::Product, Scal, Mat> operator*(const ScalarBase<Scal>& lhs,
-                                               const MatrixBase<Mat>& rhs) {
-  return BinaryOp<op::Product, Scal, Mat>(lhs.asDerived(), rhs.asDerived());
+const BinaryExpr<op::Product, Scal, Mat> operator*(const ScalarBase<Scal>& lhs,
+                                                   const MatrixBase<Mat>& rhs) {
+  return BinaryExpr<op::Product, Scal, Mat>(lhs.asDerived(), rhs.asDerived());
 }
 //  Matrix * Scalar
 template <class Mat, class Scal>
-const BinaryOp<op::Product, Mat, Scal> operator*(const MatrixBase<Mat>& lhs,
-                                               const ScalarBase<Scal>& rhs) {
-  return BinaryOp<op::Product, Mat, Scal>(lhs.asDerived(), rhs.asDerived());
+const BinaryExpr<op::Product, Mat, Scal> operator*(const MatrixBase<Mat>& lhs,
+                                                   const ScalarBase
+                                                   <Scal>& rhs) {
+  return BinaryExpr<op::Product, Mat, Scal>(lhs.asDerived(), rhs.asDerived());
 }
 
-//quotients
+// quotients
 // Matrix / Scalar
 template <class Mat, class Scal>
-const BinaryOp<op::Quotient, Mat, Scal> operator/(const MatrixBase<Mat>& lhs,
-                                                  const ScalarBase<Scal>& rhs) {
-  return BinaryOp<op::Quotient, Mat, Scal>(lhs.asDerived(), rhs.asDerived());
+const BinaryExpr<op::Quotient, Mat, Scal> operator/(const MatrixBase<Mat>& lhs,
+                                                    const ScalarBase
+                                                    <Scal>& rhs) {
+  return BinaryExpr<op::Quotient, Mat, Scal>(lhs.asDerived(), rhs.asDerived());
 }
 }
 }

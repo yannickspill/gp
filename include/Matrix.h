@@ -1,21 +1,21 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include "UnaryOp.h"
-#include "UnaryOperations.h"
-#include "BinaryOp.h"
-#include "BinaryOperations.h"
+#include "internal/UnaryExpr.h"
+#include "internal/UnaryOperations.h"
 
-#include "ScalarFromMatrix.h"
+#include "internal/BinaryExpr.h"
+#include "internal/BinaryOperations.h"
 
-//base classes
-#include "internal/ForwardDeclarations.h"
-#include "internal/GPBase.h"
-#include "internal/MatrixBase.h"
+#include "internal/ScalarFromMatrix.h"
 #include "internal/ConstScalar.h"
 
-// matrix matrix ops
+//base classes
+#include "internal/GPBase.h"
+#include "internal/MatrixBase.h"
 #include "internal/Matrix.h"
+
+// matrix matrix ops
 #include "internal/LDLTPolicy.h"
 #include "internal/Decomposition.h"
 #include "internal/LogDeterminant.h"

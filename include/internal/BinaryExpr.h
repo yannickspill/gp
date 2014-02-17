@@ -1,5 +1,5 @@
-#ifndef BINARY_OP_H
-#define BINARY_OP_H
+#ifndef BINARY_EXPR_H
+#define BINARY_EXPR_H
 
 #include "macros.h"
 #include "internal/ForwardDeclarations.h"
@@ -8,11 +8,11 @@ namespace GP {
 namespace internal {
 
 //! expression for binary operations
-template <template <class,class> class BinaryOperator, class Lhs, class Rhs>
-class BinaryOp : public BinaryOperator<Lhs, Rhs>::template Parent
-                 <BinaryOp<BinaryOperator, Lhs, Rhs> > {
+template <template <class, class> class BinaryExprerator, class Lhs, class Rhs>
+class BinaryExpr : public BinaryExprerator<Lhs, Rhs>::template Parent
+                   <BinaryExpr<BinaryExprerator, Lhs, Rhs> > {
 
-  typedef BinaryOperator<Lhs, Rhs> Op;
+  typedef BinaryExprerator<Lhs, Rhs> Op;
 
  public:
   typedef typename Op::scalar_type scalar_type;
@@ -38,7 +38,7 @@ class BinaryOp : public BinaryOperator<Lhs, Rhs>::template Parent
   mutable std::shared_ptr<Data> data_;
 
  public:
-  BinaryOp(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
+  BinaryExpr(const Lhs& lhs, const Rhs& rhs) : lhs_(lhs), rhs_(rhs) {}
   const result_type& get() const {
     data_ = std::make_shared<Data>(lhs_.get(), rhs_.get());
     return data_->out_val_;
@@ -49,4 +49,4 @@ class BinaryOp : public BinaryOperator<Lhs, Rhs>::template Parent
 };
 }
 }
-#endif /* BINARY_OP_H */
+#endif /* BINARY_EXPR_H */

@@ -27,13 +27,13 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   unsigned cols() const { return asDerived().get().cols(); }
 
   // trace
-  UnaryOp<op::Trace, Derived> trace() const {
-    return UnaryOp<op::Trace, Derived>(asDerived());
+  UnaryExpr<op::Trace, Derived> trace() const {
+    return UnaryExpr<op::Trace, Derived>(asDerived());
   }
 
   // transposition
-  UnaryOp<op::Transpose, Derived> transpose() const {
-    return UnaryOp<op::Transpose, Derived>(asDerived());
+  UnaryExpr<op::Transpose, Derived> transpose() const {
+    return UnaryExpr<op::Transpose, Derived>(asDerived());
   }
 
   // decompose matrix, use Cholesky LDLT decomposition by default
@@ -43,25 +43,25 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   }
 
   //! build diagonal matrix from vector
-  UnaryOp<op::DiagonalMatrixFromVector, Derived> asDiagonal() {
-      return UnaryOp<op::DiagonalMatrixFromVector, Derived>(asDerived());
+  UnaryExpr<op::DiagonalMatrixFromVector, Derived> asDiagonal() {
+    return UnaryExpr<op::DiagonalMatrixFromVector, Derived>(asDerived());
   }
-  
+
   //! Yield a matrix by applying a univariate function to every row of an input
-  //matrix. Will not check whether func is compatible with the rows of the
-  //matrix. Will only compile if the function returns a row vector
+  // matrix. Will not check whether func is compatible with the rows of the
+  // matrix. Will only compile if the function returns a row vector
   template <class Functor, class InMat>
-  static MatrixFromUnivariateFunctor<Functor, InMat>
-  Apply(const Functor& func, const InMat& mat) {
+  static MatrixFromUnivariateFunctor<Functor, InMat> Apply(const Functor& func,
+                                                           const InMat& mat) {
     return MatrixFromUnivariateFunctor<Functor, InMat>(func, mat);
   }
 
   //! Yield a matrix by applying a bivariate function to every row of two input
-  //matrices. Will not check whether func is compatible with the rows of the
-  //matrix. Will only compile if the function returns a scalar, or 1x1 matrix.
+  // matrices. Will not check whether func is compatible with the rows of the
+  // matrix. Will only compile if the function returns a scalar, or 1x1 matrix.
   template <class Functor, class InMat1, class InMat2>
-  static MatrixFromBivariateFunctor<Functor, InMat1, InMat2>
-  Apply(const Functor& func, const InMat1& mat1, const InMat2& mat2) {
+  static MatrixFromBivariateFunctor<Functor, InMat1, InMat2> Apply(
+      const Functor& func, const InMat1& mat1, const InMat2& mat2) {
     return MatrixFromBivariateFunctor
         <Functor, InMat1, InMat2>(func, mat1, mat2);
   }
@@ -71,17 +71,18 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
   // will not check whether func is compatible with the rows of the matrix
   // will only compile if the function returns a double or a 1x1 matrix
   template <class Functor, class InMat>
-  static SymmetricMatrixFromBivariateFunctor<Functor, InMat>
-  SymmetricApply(const Functor& func, const InMat& mat) {
+  static SymmetricMatrixFromBivariateFunctor<Functor, InMat> SymmetricApply(
+      const Functor& func, const InMat& mat) {
     return SymmetricMatrixFromBivariateFunctor<Functor, InMat>(func, mat);
   }
 
   //! Broadcast a constant Scalar expression to a matrix/vector
   //\see declaration in
   template <class ScalarExpr>
-  static MatrixFromScalar<ScalarExpr, Derived>
-  Broadcast(const ScalarBase<ScalarExpr>& scal, unsigned nrows,
-            unsigned ncols) {
+  static MatrixFromScalar<ScalarExpr, Derived> Broadcast(const ScalarBase
+                                                         <ScalarExpr>& scal,
+                                                         unsigned nrows,
+                                                         unsigned ncols) {
     return MatrixFromScalar
         <ScalarExpr, Derived>(scal.asDerived(), nrows, ncols);
   }
@@ -90,33 +91,35 @@ template <class Derived> class MatrixBase : public GPBase<Derived> {
 // sums
 //  double Matrix
 template <class MatrixExpression>
-const BinaryOp<op::Sum, ConstScalar, ScalarFromMatrix<MatrixExpression> >
+const BinaryExpr<op::Sum, ConstScalar, ScalarFromMatrix<MatrixExpression> >
 operator+(double lhs, const MatrixBase<MatrixExpression>& rhs) {
-  return BinaryOp<op::Sum, ConstScalar, ScalarFromMatrix<MatrixExpression> >(
+  return BinaryExpr<op::Sum, ConstScalar, ScalarFromMatrix<MatrixExpression> >(
       lhs, rhs.asDerived());
 }
 //  Matrix double
 template <class MatrixExpression>
-const BinaryOp<op::Sum, ScalarFromMatrix<MatrixExpression>, ConstScalar>
+const BinaryExpr<op::Sum, ScalarFromMatrix<MatrixExpression>, ConstScalar>
 operator+(const MatrixBase<MatrixExpression>& lhs, double rhs) {
-  return BinaryOp<op::Sum, ScalarFromMatrix<MatrixExpression>, ConstScalar>(
+  return BinaryExpr<op::Sum, ScalarFromMatrix<MatrixExpression>, ConstScalar>(
       lhs.asDerived(), rhs);
 }
 
 // differences
 //  double Matrix
 template <class MatrixExpression>
-const BinaryOp<op::Difference, ConstScalar, ScalarFromMatrix<MatrixExpression> >
+const BinaryExpr
+    <op::Difference, ConstScalar, ScalarFromMatrix<MatrixExpression> >
 operator-(double lhs, const MatrixBase<MatrixExpression>& rhs) {
-  return BinaryOp
+  return BinaryExpr
       <op::Difference, ConstScalar, ScalarFromMatrix<MatrixExpression> >(
           lhs, rhs.asDerived());
 }
 //  Matrix double
 template <class MatrixExpression>
-const BinaryOp<op::Difference, ScalarFromMatrix<MatrixExpression>, ConstScalar>
+const BinaryExpr
+    <op::Difference, ScalarFromMatrix<MatrixExpression>, ConstScalar>
 operator-(const MatrixBase<MatrixExpression>& lhs, double rhs) {
-  return BinaryOp
+  return BinaryExpr
       <op::Difference, ScalarFromMatrix<MatrixExpression>, ConstScalar>(
           lhs.asDerived(), rhs);
 }
@@ -124,34 +127,34 @@ operator-(const MatrixBase<MatrixExpression>& lhs, double rhs) {
 // products
 //  Matrix Matrix
 template <class Lhs, class Rhs>
-const BinaryOp<op::MatrixProduct, Lhs, Rhs> operator*(const MatrixBase
-                                                      <Lhs>& lhs,
-                                                      const MatrixBase
-                                                      <Rhs>& rhs) {
-  return BinaryOp
+const BinaryExpr<op::MatrixProduct, Lhs, Rhs> operator*(const MatrixBase
+                                                        <Lhs>& lhs,
+                                                        const MatrixBase
+                                                        <Rhs>& rhs) {
+  return BinaryExpr
       <op::MatrixProduct, Lhs, Rhs>(lhs.asDerived(), rhs.asDerived());
 }
 //  double Matrix
 template <class Rhs>
-const BinaryOp<op::Product, ConstScalar, Rhs> operator*(double lhs,
-                                                        const MatrixBase
-                                                        <Rhs>& rhs) {
-  return BinaryOp<op::Product, ConstScalar, Rhs>(lhs, rhs.asDerived());
+const BinaryExpr<op::Product, ConstScalar, Rhs> operator*(double lhs,
+                                                          const MatrixBase
+                                                          <Rhs>& rhs) {
+  return BinaryExpr<op::Product, ConstScalar, Rhs>(lhs, rhs.asDerived());
 }
 //  Matrix double
 template <class Lhs>
-const BinaryOp<op::Product, Lhs, ConstScalar> operator*(const MatrixBase
-                                                        <Lhs>& lhs,
-                                                        double rhs) {
-  return BinaryOp<op::Product, Lhs, ConstScalar>(lhs.asDerived(), rhs);
+const BinaryExpr<op::Product, Lhs, ConstScalar> operator*(const MatrixBase
+                                                          <Lhs>& lhs,
+                                                          double rhs) {
+  return BinaryExpr<op::Product, Lhs, ConstScalar>(lhs.asDerived(), rhs);
 }
 
 //    Matrix / double
 template <class Lhs>
-const BinaryOp<op::Quotient, Lhs, ConstScalar> operator/(const MatrixBase
-                                                         <Lhs>& lhs,
-                                                         double rhs) {
-  return BinaryOp<op::Quotient, Lhs, ConstScalar>(lhs.asDerived(), rhs);
+const BinaryExpr<op::Quotient, Lhs, ConstScalar> operator/(const MatrixBase
+                                                           <Lhs>& lhs,
+                                                           double rhs) {
+  return BinaryExpr<op::Quotient, Lhs, ConstScalar>(lhs.asDerived(), rhs);
 }
 }
 }

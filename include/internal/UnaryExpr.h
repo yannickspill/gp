@@ -1,5 +1,5 @@
-#ifndef UNARY_OP_H
-#define UNARY_OP_H
+#ifndef UNARY_EXPR_H
+#define UNARY_EXPR_H
 
 #include "macros.h"
 #include "internal/ForwardDeclarations.h"
@@ -7,12 +7,12 @@
 namespace GP {
 namespace internal {
 
-//expression for unary operations
-template <template <class> class UnaryOperator, class Operand>
-class UnaryOp : public UnaryOperator<Operand>::template Parent
-                <UnaryOp<UnaryOperator, Operand> > {
+// expression for unary operations
+template <template <class> class UnaryExprerator, class Operand>
+class UnaryExpr : public UnaryExprerator<Operand>::template Parent
+                  <UnaryExpr<UnaryExprerator, Operand> > {
 
-  typedef UnaryOperator<Operand> Op;
+  typedef UnaryExprerator<Operand> Op;
 
  public:
   typedef typename Op::scalar_type scalar_type;
@@ -34,7 +34,7 @@ class UnaryOp : public UnaryOperator<Operand>::template Parent
   mutable std::shared_ptr<Data> data_;
 
  public:
-  UnaryOp(const Operand& in) : in_(in) {}
+  UnaryExpr(const Operand& in) : in_(in) {}
   const result_type& get() const {
     data_ = std::make_shared<Data>(in_.get());
     return data_->out_val_;
@@ -43,4 +43,4 @@ class UnaryOp : public UnaryOperator<Operand>::template Parent
 };
 }
 }
-#endif /* UNARY_OP_H */
+#endif /* UNARY_EXPR_H */

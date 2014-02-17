@@ -150,7 +150,6 @@ int main(int, char * []) {
   if (std::abs(ldlt.logdet().get() - std::log(sd.determinant())) > 1e-5)
     return 22;
 
-  /*
   // solve AX=B
   Eigen::MatrixXd B(Eigen::MatrixXd::Random(szy, szx));
   MatrixXd mB(B);
@@ -302,7 +301,6 @@ int main(int, char * []) {
   if (Eigen::MatrixXd(bcv.asDiagonal().get())
       != Eigen::MatrixXd(2. * Eigen::MatrixXd::Identity(szx, szx)))
     return 73;
-  */
 
   return 0;
 }
