@@ -1,6 +1,8 @@
 #ifndef GPI_H
 #define GPI_H
 
+#include "macros.h"
+#include "Functor.h"
 #include "Scalar.h"
 #include "Matrix.h"
 #include "MVN.h"
@@ -105,16 +107,11 @@ class GPI {
         Omega_(sigma_ * sigma_
                * (S_ / nr_ + tau_ * tau_ * MatrixXd::SymmetricApply(cov_, X_))),
         mvn_lik_(make_mvn(y_, mx_, Omega_)) {
-            assert(X_.rows() == y_.rows());
-            assert(S_.rows() == y_.rows());
-            assert(S_.rows() == S_.cols());
-            std::cout << " === " << std::endl;
-            std::cout << MatrixXd::SymmetricApply(cov_,X_).get() << std::endl;
-            std::cout << " --- " << std::endl;
-            std::cout << (tau*MatrixXd::SymmetricApply(cov_,X_)).get() << std::endl;
-            std::cout << " === " << std::endl;
-            assert(S_.rows() == Omega_.cols());
-            assert(Omega_.rows() == Omega_.cols());
+            CHECK(X_.rows() == y_.rows(), "X and y should have same row count");
+            CHECK(S_.rows() == y_.rows(), "S and y should have same row count");
+            CHECK(S_.rows() == S_.cols(), "S should be square");
+            CHECK(S_.rows() == Omega_.cols(), "Weird error 1");
+            CHECK(Omega_.rows() == Omega_.cols(), "Weird error 2");
         }
 
   /** Simplified constructor
@@ -129,7 +126,7 @@ class GPI {
    */
   GPI(const XType& X, const YType& y, Scalar sigma, Scalar tau,
       const MeanFunctionType& m, const CovarianceFunctionType& k)
-      : GPI(X, y, internal::Matrix
+      : GPI(X, y, Matrix
             <Eigen::Matrix
              <typename YType::scalar_type, YType::RowsAtCompileTime,
               YType::RowsAtCompileTime> >(
@@ -213,12 +210,12 @@ template <class X, class Y, class M, class C>
 auto make_gpi(const X& x, const Y& y, Scalar sigma, Scalar tau, const M& m,
               const C& c)
     -> GPI
-    <X, Y, internal::Matrix
+    <X, Y, Matrix
      <Eigen::Matrix
       <typename Y::scalar_type, Y::RowsAtCompileTime, Y::RowsAtCompileTime> >,
      M, C> {
   return GPI
-      <X, Y, internal::Matrix
+      <X, Y, Matrix
        <Eigen::Matrix
         <typename Y::scalar_type, Y::RowsAtCompileTime, Y::RowsAtCompileTime> >,
        M, C>(x, y, sigma, tau, m, c);

@@ -82,7 +82,7 @@ auto squared_exponential(Scalar len, unsigned dims)
      <Eigen::Matrix<typename Scalar::scalar_type, DimsAtCompileTime, 1> >,
      GP::Matrix
      <Eigen::Matrix<typename Scalar::scalar_type, DimsAtCompileTime, 1> > > {
-  assert(dims>0);
+  CHECK(dims>0, "dimensions should be positive");
   typedef Eigen::Matrix
       <typename Scalar::scalar_type, DimsAtCompileTime, 1> in_base_type;
   typedef Matrix<in_base_type> in_type;

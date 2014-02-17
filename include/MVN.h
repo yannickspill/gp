@@ -1,6 +1,7 @@
 #ifndef MVN_H
 #define MVN_H
 
+#include "macros.h"
 #include "Matrix.h"
 #include "Scalar.h"
 
@@ -41,10 +42,12 @@ template <class YVectorType, class MVectorType, class MatrixType> class MVN {
   MVN(const YVectorType& y, const MVectorType& mu, const MatrixType& Sigma)
       : y_(y), mu_(mu), Sigma_(Sigma), eps_(y - mu),
         ldlt_(Sigma.decomposition().cache()) {
-            assert(y_.cols() == 1);
-            assert(y_.cols() == mu_.cols());
-            assert(y_.rows() == mu_.rows());
-            assert(eps_.rows() == Sigma_.rows());
+            CHECK(y_.cols() == 1, "y should be a vector");
+            CHECK(y_.cols() == mu_.cols(), "mu should be a vector");
+            CHECK(y_.rows() == mu_.rows(),
+                    "y and mu should have same number of rows");
+            CHECK(eps_.rows() == Sigma_.rows(),
+                    "eps and Sigma are incompatible");
         }
 
   /// return -log(p)
