@@ -4,6 +4,8 @@
 #include <Eigen/Dense>
 #include <type_traits>
 #include <math.h>
+#include <time.h>
+#include <stdlib.h>
 
 using namespace GP;
 
@@ -16,6 +18,7 @@ int main(int, char * []) {
 
   //declarations
   const unsigned int szx = 100, szy = 30;
+  std::srand(std::time(NULL));
   Eigen::MatrixXd x(Eigen::MatrixXd::Random(szx, szy));
   MatrixXd vx(x);
   Eigen::MatrixXd y(Eigen::MatrixXd::Random(szx, szy));
@@ -23,7 +26,11 @@ int main(int, char * []) {
   Scalar scal(3.2);
   MatrixXd dummy(Eigen::MatrixXd::Random(szx, szy));
   MatrixXd small(Eigen::Matrix<double, 1, 1>::Constant(3.));
+  Eigen::MatrixXd L(Eigen::MatrixXd::Random(szy, szy));
+  Eigen::MatrixXd sd(L * L.transpose());
+  MatrixXd msd(sd);
 
+  /*
   // matrix basics
   if (vx.get() != x) return 1;
   vx.transpose();
@@ -127,29 +134,23 @@ int main(int, char * []) {
   if ((vx - vx).transpose().get() != (x - x).transpose()) return 19;
   if ((vx - scal * vx).transpose().get() != (x - scal.get() * x).transpose())
     return 20;
-
+*/
   // ldlt
-  Eigen::MatrixXd L(Eigen::MatrixXd::Random(szy, szy));
-  L.diagonal() = L.diagonal().array().abs();
-  L = L.triangularView<Eigen::Lower>();
-  Eigen::MatrixXd sd(L * L.transpose());
-  MatrixXd msd(sd);
   auto ldlt = msd.decomposition();
   ldlt.get();
   (sd * sd).ldlt();
   (msd * msd).decomposition();
   (msd * msd).decomposition().get();
 
-  /*
   // determinant
   internal::LogDeterminant<decltype(ldlt)> det(ldlt);
   static_assert(std::is_same<decltype(det), decltype(ldlt.logdet())>::value,
                 "MatrixBase passes wrong type to LogDeterminant");
   if (std::abs(det.get() - std::log(sd.determinant())) > 1e-5) return 21;
-
   if (std::abs(ldlt.logdet().get() - std::log(sd.determinant())) > 1e-5)
     return 22;
 
+  /*
   // solve AX=B
   Eigen::MatrixXd B(Eigen::MatrixXd::Random(szy, szx));
   MatrixXd mB(B);
