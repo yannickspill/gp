@@ -102,7 +102,12 @@ template <class Lhs, class Rhs> struct SetCommonParent {
 
 // Matrix -> Scalar
 template <class GPDerived>
-struct ScalarOperation : SetShapeFromInput<GPDerived> {
+struct ScalarOperation : SetScalarAndInput<GPDerived> {
+  // shape is 1x1
+  enum {
+    RowsAtCompileTime = 1,
+    ColsAtCompileTime = 1
+  };
   // Parent class is always ScalarBase
   template <class OtherDerived> using Parent = ScalarBase<OtherDerived>;
 };
