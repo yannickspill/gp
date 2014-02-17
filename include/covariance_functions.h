@@ -40,7 +40,7 @@ auto squared_exponential(const SymMat& M)
             - std::declval
             <GP::Matrix<Eigen::Matrix<typename SymMat::scalar_type,
                                       SymMat::RowsAtCompileTime, 1> > >()))
-             .exp())>::type,
+             .scalar().exp())>::type,
      GP::Matrix<Eigen::Matrix
                 <typename SymMat::scalar_type, SymMat::RowsAtCompileTime, 1> >,
      GP::Matrix<Eigen::Matrix<typename SymMat::scalar_type,
@@ -51,7 +51,7 @@ auto squared_exponential(const SymMat& M)
   in_type x(in_base_type(M.rows()));
   in_type y(in_base_type(M.rows()));
   return GP::internal::make_functor(
-      (-0.5 * (x - y).transpose() * M * (x - y)).exp(), x, y);
+      (-0.5 * (x - y).transpose() * M * (x - y)).scalar().exp(), x, y);
 }
 
 /** Simplfied case in which the input is the persistence length and the
@@ -77,7 +77,7 @@ auto squared_exponential(Scalar len, unsigned dims)
             - std::declval
             <GP::Matrix<Eigen::Matrix<typename Scalar::scalar_type,
                                       DimsAtCompileTime, 1> > >()))
-                                             .exp())>::type,
+                                             .scalar().exp())>::type,
      GP::Matrix
      <Eigen::Matrix<typename Scalar::scalar_type, DimsAtCompileTime, 1> >,
      GP::Matrix
@@ -90,7 +90,7 @@ auto squared_exponential(Scalar len, unsigned dims)
   in_type y((in_base_type(dims)));
   auto M = in_type::Broadcast(1. / (len * len), dims, 1).asDiagonal();
   return GP::internal::make_functor(
-      (-0.5 * (x - y).transpose() * M * (x - y)).exp(), x, y);
+      (-0.5 * (x - y).transpose() * M * (x - y)).scalar().exp(), x, y);
 }
 
 ///simplified constructor for 1-D squared exponential
