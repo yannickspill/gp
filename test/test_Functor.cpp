@@ -1,7 +1,6 @@
 #include "Scalar.h"
 #include "Matrix.h"
-
-#include "internal/Functor.h"
+#include "Functor.h"
 
 #include <Eigen/Dense>
 #include <iostream>
@@ -13,11 +12,11 @@ int main(int, char*[]){
     Scalar x(1.0);
     Scalar y(2.0);
     auto xy = x*y;
-    auto f1 = internal::make_functor(xy, x);
+    auto f1 = make_functor(xy, x);
     if (f1(1.0) != 2.0) return 1;
     if (f1(2.0) != 4.0) return 2;
     //from scalar to scalar using temp expression
-    auto f2 = internal::make_functor(x*y, x, y);
+    auto f2 = make_functor(x*y, x, y);
     if (f2(1.0,5.0) != 5.0) return 3;
     if (f2(2,-5.0) != -10.0) return 4;
     //functor of vector to matrix product
@@ -27,7 +26,7 @@ int main(int, char*[]){
     RowVectorXd gplvec(lvec);
     Eigen::VectorXd rvec(Eigen::VectorXd::LinSpaced(4,0,1));
     VectorXd gprvec(rvec);
-    auto f3 = internal::make_functor(gplvec*gpmat*gprvec, gplvec);
+    auto f3 = make_functor(gplvec*gpmat*gprvec, gplvec);
     if (f3(lvec) != lvec*mat*rvec) return 5;
     if (gplvec.get() != lvec) return 6;
     // change input
@@ -37,14 +36,14 @@ int main(int, char*[]){
     // mixing scalar and matrix : f(matrix) -> matrix
     RowVectorXd rowvec(Eigen::RowVectorXd::LinSpaced(5,0,1));
     Scalar scaltest(2.0);
-    auto f4 = internal::make_functor(rowvec*scaltest, rowvec);
+    auto f4 = make_functor(rowvec*scaltest, rowvec);
     Eigen::RowVectorXd rowtest(Eigen::RowVectorXd::Random(5));
     if (f4(rowtest) != rowtest*scaltest.get()) return 9;
     // check whether other parameters can vascaltest
     scaltest.set(5.0);
     if (f4(rowtest) != rowtest*scaltest.get()) return 10;
     // mixing scalar and matrix : f(scalar) -> matrix
-    auto f5 = internal::make_functor(rowvec*scaltest, scaltest);
+    auto f5 = make_functor(rowvec*scaltest, scaltest);
     if (f5(1.0) != rowvec.get()) return 11;
     Eigen::RowVectorXd rowtest2(Eigen::RowVectorXd::Random(5));
     rowvec.set(rowtest2);
@@ -71,10 +70,10 @@ int main(int, char*[]){
                                decltype(randvec * mat * rvec)>::value,
                   "f3 has wrong result type");
     // most stupid functor ever
-    auto f6 = internal::make_functor(scaltest, scaltest);
+    auto f6 = make_functor(scaltest, scaltest);
     if (f6(99.0) != 99.0) return 14;
     // beaten by this one
-    auto f7 = internal::make_functor(scaltest);
+    auto f7 = make_functor(scaltest);
     scaltest.set(4.5);
     if (f7() != 4.5) return 15;
 

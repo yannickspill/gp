@@ -26,19 +26,11 @@
 #include "internal/CachePlugins.h"
 
 //functor related
-#include "internal/Functor.h"
-#include "internal/MatrixFromUnivariateFunctor.h"
-#include "internal/MatrixFromBivariateFunctor.h"
-#include "internal/SymmetricMatrixFromBivariateFunctor.h"
 #include "internal/MatrixFromScalar.h"
 
-//external libs
-#include <Eigen/Dense>
-
 namespace GP {
-// promote some internal things to GP namespace
+// promote Matrix to GP namespace
 using internal::Matrix;
-using internal::make_functor;
 
 //convenience typedefs
 typedef Matrix<Eigen::RowVectorXd> RowVectorXd;

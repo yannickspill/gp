@@ -1,5 +1,6 @@
 #include "Matrix.h"
 #include "Scalar.h"
+#include "Functor.h"
 
 #include <Eigen/Dense>
 

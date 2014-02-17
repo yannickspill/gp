@@ -2,7 +2,7 @@
 
 #include <Eigen/Dense>
 
-using namespace GP::internal;
+using namespace GP;
 
 int main(int, char * []) {
   const unsigned int szx=10, szy=3;

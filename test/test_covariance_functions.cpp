@@ -1,6 +1,6 @@
 #include "covariance_functions.h"
 #include "Matrix.h"
-#include "internal/Functor.h"
+#include "Functor.h"
 
 #include <Eigen/Dense>
 #include <math.h>

@@ -1,5 +1,6 @@
 #include "Scalar.h"
 #include "Matrix.h"
+#include "Functor.h"
 #include "covariance_functions.h"
 
 #include <Eigen/Dense>
@@ -11,7 +12,7 @@ int main(int, char * []) {
   // function returns double
   Scalar x(1.0);
   Scalar y(2.0);
-  auto f1 = internal::make_functor(x * y, x, y);
+  auto f1 = make_functor(x * y, x, y);
   Eigen::VectorXd Vec(Eigen::VectorXd::LinSpaced(5, 0, 1));
   VectorXd inVec(Vec);
   auto m1 = MatrixXd::SymmetricApply(f1, inVec);
@@ -31,7 +32,7 @@ int main(int, char * []) {
   Eigen::RowVectorXd left(Eigen::RowVectorXd::Random(5));
   Eigen::RowVectorXd right(Eigen::RowVectorXd::Random(5));
   RowVectorXd vleft(left), vright(right);
-  auto f2 = internal::make_functor(vleft * vright.transpose(), vleft, vright);
+  auto f2 = make_functor(vleft * vright.transpose(), vleft, vright);
   Eigen::MatrixXd Mat(Eigen::MatrixXd::Random(3, 5));
   MatrixXd inMat(Mat);
   auto m2 = MatrixXd::SymmetricApply(f2, inMat);
