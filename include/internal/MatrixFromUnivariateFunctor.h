@@ -38,10 +38,7 @@ class MatrixFromUnivariateFunctor
     typename InMat::result_type mat_;
     result_type val_;
     Data(const Functor& func, const typename InMat::result_type& mat)
-        : mat_(mat), val_(fill_val(func, is_vector_t())) {
-      std::cout << "MFUF Data constructor, at " << this << std::endl;
-      std::cout << "   MFUF val at " << &val_ << std::endl;
-    }
+        : mat_(mat), val_(fill_val(func, is_vector_t())) {}
 
    private:
     // the univariate functor returns a scalar, construct a vector
@@ -66,23 +63,7 @@ class MatrixFromUnivariateFunctor
 
  public:
   explicit MatrixFromUnivariateFunctor(const Functor& func, const InMat& mat)
-      : func_(func), mat_(mat), data_(nullptr) {
-    std::cout << "MFUF created at " << this << std::endl;
-    std::cout << "   MFUF Functor at " << &func_ << std::endl;
-    std::cout << "   MFUF InMat at " << &mat_ << std::endl;
-  }
-
-  MatrixFromUnivariateFunctor(const MatrixFromUnivariateFunctor& other)
-      : func_(other.func_), mat_(other.mat_), data_(other.data_) {
-    std::cout << "MFUF copied from " << &other << " to " << this << std::endl;
-    std::cout << "   MFUF Functor at " << &func_ << std::endl;
-    std::cout << "   MFUF InMat at " << &mat_ << std::endl;
-    std::cout << "   MFUF data at " << &data_ << std::endl;
-  }
-
-  ~MatrixFromUnivariateFunctor() {
-    std::cout << "MFUF destructor " << this << std::endl;
-  }
+      : func_(func), mat_(mat), data_(nullptr) {}
 
   result_type get() const {
     data_ = std::make_shared<Data>(func_, mat_.get());

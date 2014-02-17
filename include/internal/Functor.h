@@ -33,23 +33,7 @@ class Functor {
 
  public:
   Functor(const OutExpr& out_expr, InExprs&... in_exprs)
-      : in_exprs_{in_exprs...}, out_expr_(out_expr) {
-          std::cout << "Functor created at " << this << std::endl;
-          std::cout << "   Functor OutExpr at " << &out_expr_ << std::endl;
-          std::cout << "   Functor InExprs at " << &in_exprs_ << std::endl;
-      }
-
-      Functor(const Functor& other)
-          : in_exprs_(other.in_exprs_), out_expr_(other.out_expr_) {
-        std::cout << "Functor copied from " << &other << " to " << this
-                  << std::endl;
-        std::cout << "   Functor OutExpr at " << &out_expr_ << std::endl;
-        std::cout << "   Functor InExprs at " << &in_exprs_ << std::endl;
-      }
-
-      ~Functor() {
-        std::cout << "Functor destructor " << this << std::endl;
-      }
+      : in_exprs_{in_exprs...}, out_expr_(out_expr) {}
 
   template <class... InVals>
   typename OutExpr::result_type operator()(InVals&&... in_vals) const {
