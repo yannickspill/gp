@@ -18,7 +18,7 @@ int main(int, char * []) {
 
   //declarations
   const unsigned int szx = 100, szy = 30;
-  std::srand(std::time(NULL));
+  //std::srand(std::time(NULL));
   Eigen::MatrixXd x(Eigen::MatrixXd::Random(szx, szy));
   MatrixXd vx(x);
   Eigen::MatrixXd y(Eigen::MatrixXd::Random(szx, szy));
