@@ -17,6 +17,7 @@
 namespace GP {
 // promote Scalar to GP namespace
 using internal::Scalar;
+using internal::make_functor;
 }
 
 #endif /* SCALAR_H */

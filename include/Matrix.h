@@ -38,6 +38,7 @@
 namespace GP {
 // promote some internal things to GP namespace
 using internal::Matrix;
+using internal::make_functor;
 
 //convenience typedefs
 typedef Matrix<Eigen::RowVectorXd> RowVectorXd;
