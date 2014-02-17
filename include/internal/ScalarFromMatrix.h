@@ -39,7 +39,7 @@ class ScalarFromMatrix : public ScalarBase<ScalarFromMatrix<Derived> > {
   // pass as value because it is a double
   result_type get() const {
       auto mat = mat_.get();
-      assert(mat.rows() == 1 && mat.cols() == 1 && "Matrix should be 1x1!");
+      CHECK(mat.rows() == 1 && mat.cols() == 1, "Matrix should be 1x1!");
       val_ = mat_.get()(0, 0);
       return val_;
   }
