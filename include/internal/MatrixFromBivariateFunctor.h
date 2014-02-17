@@ -33,8 +33,8 @@ class MatrixFromBivariateFunctor
     typename InMat1::result_type mat1_;
     typename InMat2::result_type mat2_;
     result_type val_;
-    Data(const Functor& func, const typename InMat1::result_type mat1,
-         const typename InMat2::result_type mat2)
+    Data(const Functor& func, const typename InMat1::result_type& mat1,
+         const typename InMat2::result_type& mat2)
         : mat1_(mat1), mat2_(mat2), val_(fill_val(func)) {}
 
    private:

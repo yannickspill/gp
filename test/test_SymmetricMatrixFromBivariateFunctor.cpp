@@ -53,10 +53,12 @@ int main(int, char * []) {
       > 1e-5)
     return 6;
   //more ops
-  if ((Eigen::MatrixXd((inVec.transpose() * m2 * inVec).get())
-       - Vec.transpose()
+  Eigen::VectorXd dummy(Eigen::VectorXd::Random(3));
+  GP::VectorXd vdummy(dummy);
+  if ((Eigen::MatrixXd((vdummy.transpose() * m2 * vdummy).get())
+       - dummy.transpose()
          * Eigen::MatrixXd(expected2.selfadjointView<Eigen::Upper>())
-         * Vec).norm() > 1e-5)
+         * dummy).norm() > 1e-5)
     return 7;
   return 0;
 }

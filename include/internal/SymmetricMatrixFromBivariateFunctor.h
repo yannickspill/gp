@@ -37,7 +37,7 @@ class SymmetricMatrixFromBivariateFunctor
   struct Data {
     typename InMat::result_type mat_;
     result_type val_;
-    Data(const Functor& func, const typename InMat::result_type mat)
+    Data(const Functor& func, const typename InMat::result_type& mat)
         : mat_(mat), val_(fill_val(func)) {}
 
    private:

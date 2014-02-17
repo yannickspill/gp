@@ -30,7 +30,7 @@ class MatrixFromUnivariateFunctor
 
  private:
   typedef typename std::conditional<ColsAtCompileTime == 1, std::true_type,
-                                    std::false_type>::type is_vector_t;
+                                    std::false_type>::type is_degenerate;
 
   Functor func_;
   InMat mat_;
@@ -38,10 +38,11 @@ class MatrixFromUnivariateFunctor
     typename InMat::result_type mat_;
     result_type val_;
     Data(const Functor& func, const typename InMat::result_type& mat)
-        : mat_(mat), val_(fill_val(func, is_vector_t())) {}
+        : mat_(mat), val_(fill_val(func, is_degenerate())) {}
 
    private:
-    // the univariate functor returns a scalar, construct a vector
+    // the univariate functor returns a scalar or a 1x1 matrix
+    // construct a vector
     result_type fill_val(const Functor& func, std::true_type) const {
       result_type retval(mat_.rows());  // using vector constructor
       for (unsigned i = 0; i < mat_.rows(); ++i) retval(i) = func(mat_.row(i));
