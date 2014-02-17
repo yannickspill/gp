@@ -7,14 +7,13 @@
 
 //logging macro
 #ifdef LOGGING
-#define LOG(msg) \
-    { std::cout << msg; }
+#define LOG(msg) { std::cout << msg; }
 #else
-#define LOG(msg) \
-    {}
+#define LOG(msg) {}
 #endif
 
 //runtime check
+#ifdef CHECKS
 #define CHECK(expr, message)                   \
     {                                          \
         if (!(expr)) {                         \
@@ -22,6 +21,9 @@
             abort();                           \
         }                                      \
     }
+#else
+#define CHECK(expr, message) {}
+#endif
 
 //arithmetic operations
 #define SQUARE(expr) ((expr) * (expr))
